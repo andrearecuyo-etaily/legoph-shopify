@@ -9,8 +9,11 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/brand-lego.svg",
     "logo_height": 36,
     "logo_height_mobile": 28,
+    "brickline_card_radius": 0,
+    "brickline_shadow_intensity": "subtle",
     "type_body_font": "nunito_sans_n4",
     "type_subheading_font": "nunito_sans_n6",
     "type_heading_font": "poppins_n7",
@@ -47,6 +50,7 @@
     "card_hover_effect": "none",
     "badge_position": "top-right",
     "badge_corner_radius": 100,
+    "badge_sold_out_background_color": "#f7f7f7",
     "badge_text_transform": "none",
     "primary_button_border_width": 0,
     "button_border_radius_primary": 14,
@@ -57,6 +61,7 @@
     "show_cart_note": false,
     "show_add_discount_code": true,
     "icon_stroke": "default",
+    "palette_input_border": "#d9d9d9",
     "input_border_width": 1,
     "inputs_border_radius": 4,
     "popover_border_radius": 14,
@@ -69,22 +74,11 @@
     "variant_swatch_width": 34,
     "variant_swatch_height": 34,
     "variant_swatch_radius": 32,
+    "palette_variant_border": "#d9d9d9",
     "variant_button_border_width": 1,
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
-    "badge_sold_out_background_color": "#f7f7f7",
-    "palette_input_border": "#d9d9d9",
-    "palette_variant_border": "#d9d9d9",
-    "color_palette": {
-      "background": "#ffffff",
-      "foreground": "#141414",
-      "color1": "#fafafa",
-      "color2": "#f7f7f7",
-      "color3": "#d9d9d9"
-    },
-    "brickline_card_radius": 0,
-    "brickline_shadow_intensity": "subtle",
     "color_schemes": {
       "scheme-white": {
         "settings": {
@@ -240,6 +234,13 @@
           "icon": "#000000"
         }
       }
+    },
+    "color_palette": {
+      "background": "#ffffff",
+      "foreground": "#141414",
+      "color1": "#fafafa",
+      "color2": "#f7f7f7",
+      "color3": "#d9d9d9"
     }
   },
   "presets": {
