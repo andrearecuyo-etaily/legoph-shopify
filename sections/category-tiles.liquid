@@ -1,0 +1,459 @@
+{% liquid
+  assign tabs = section.blocks | where: 'type', 'tab'
+  assign tiles = section.blocks | where: 'type', 'tile'
+  assign is_solid = false
+  if section.settings.style == 'solid'
+    assign is_solid = true
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
+<div
+  class="category-tiles category-tiles--{{ section.settings.style }} spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --brickline-card-radius: {{ settings.brickline_card_radius }}px;
+    --category-tiles-columns: {{ section.settings.columns_desktop }};
+    --category-tiles-bg: {{ section.settings.color_scheme.settings.background }};
+    --category-tiles-text: {{ section.settings.color_scheme.settings.text }};
+  "
+>
+  {% if section.settings.heading != blank or section.settings.subheading != blank %}
+    <div class="category-tiles__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="category-tiles__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="category-tiles__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if tabs.size > 0 %}
+    <div class="category-tiles__tabs">
+      {% for tab in tabs %}
+        <a
+          href="{{ tab.settings.link | default: '#' }}"
+          class="category-tiles__tab{% if forloop.first %} is-active{% endif %}"
+          {{ tab.shopify_attributes }}
+        >
+          {{ tab.settings.label }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if tiles.size > 0 %}
+    <div class="category-tiles__grid">
+      {% for block in tiles %}
+        {% liquid
+          assign tile_collection = block.settings.collection
+          assign tile_url = '#'
+          if tile_collection != blank
+            assign tile_url = tile_collection.url
+          endif
+          if block.settings.link != blank
+            assign tile_url = block.settings.link
+          endif
+
+          assign tile_label = block.settings.label
+          if tile_label == blank and tile_collection != blank
+            assign tile_label = tile_collection.title
+          endif
+
+          assign tile_image = block.settings.image
+          if tile_image == blank and tile_collection != blank
+            assign tile_image = tile_collection.featured_image
+          endif
+
+          assign tile_scheme = block.settings.color_scheme
+        %}
+        <a
+          href="{{ tile_url }}"
+          class="category-tiles__tile"
+          {{ block.shopify_attributes }}
+          {% if is_solid %}
+            style="--tile-bg: {{ tile_scheme.settings.background }}; --tile-text: {{ tile_scheme.settings.text }};"
+          {% endif %}
+        >
+          {% if is_solid %}
+            <span class="category-tiles__label">{{ tile_label }}</span>
+          {% else %}
+            <span class="category-tiles__media">
+              {% if tile_image %}
+                <img
+                  src="{{ tile_image | image_url: width: 700 }}"
+                  srcset="{{ tile_image | image_url: width: 350 }} 350w, {{ tile_image | image_url: width: 500 }} 500w, {{ tile_image | image_url: width: 700 }} 700w"
+                  sizes="(min-width: 990px) 20vw, 50vw"
+                  alt="{{ tile_image.alt | escape }}"
+                  width="{{ tile_image.width }}"
+                  height="{{ tile_image.height }}"
+                  loading="lazy"
+                  class="category-tiles__image"
+                >
+              {% else %}
+                <span class="category-tiles__placeholder"></span>
+              {% endif %}
+              <span class="category-tiles__scrim"></span>
+              <span class="category-tiles__overlay-text">
+                <span class="category-tiles__label">{{ tile_label }}</span>
+                {% if block.settings.meta != blank %}
+                  <span class="category-tiles__meta">{{ block.settings.meta }}</span>
+                {% endif %}
+              </span>
+            </span>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script
+  src="{{ 'lazy-image-fade.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  .category-tiles {
+    background: var(--category-tiles-bg);
+    color: var(--category-tiles-text);
+  }
+
+  .category-tiles--solid {
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  }
+
+  .category-tiles__header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-block-end: 24px;
+  }
+
+  .category-tiles__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+
+    @media screen and (min-width: 750px) {
+      font-size: 32px;
+    }
+  }
+
+  .category-tiles__subheading {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 16px;
+    opacity: 0.75;
+  }
+
+  .category-tiles__subheading p {
+    margin: 0;
+  }
+
+  .category-tiles__tabs {
+    display: flex;
+    gap: 28px;
+    margin-block-end: 28px;
+    overflow-x: auto;
+  }
+
+  .category-tiles__tab {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: rgb(from currentColor r g b / 0.6);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    border-bottom: 2px solid transparent;
+  }
+
+  .category-tiles__tab.is-active {
+    color: currentColor;
+    border-bottom-color: currentColor;
+  }
+
+  .category-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+
+    @media screen and (min-width: 750px) and (max-width: 989px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: repeat(var(--category-tiles-columns, 5), 1fr);
+    }
+  }
+
+  .category-tiles__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: 3 / 4;
+    padding: 14px 8px;
+    transition: opacity 200ms ease, box-shadow 200ms ease;
+  }
+
+  .category-tiles--solid .category-tiles__tile {
+    background: var(--tile-bg);
+    color: var(--tile-text);
+  }
+
+  .category-tiles--image .category-tiles__tile {
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--brickline-card-radius, 0px);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .category-tiles__tile:hover {
+      opacity: 0.92;
+    }
+  }
+
+  .category-tiles__label {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .category-tiles__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .category-tiles__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #f2f2f2;
+  }
+
+  .category-tiles__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .category-tiles__image.is-loaded {
+    opacity: 1;
+  }
+
+  .category-tiles__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.75) 100%);
+  }
+
+  .category-tiles__overlay-text {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #ffffff;
+  }
+
+  .category-tiles__meta {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 11px;
+    opacity: 0.75;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Category tiles",
+  "class": "section--category-tiles",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid color tiles (category strip)"
+        },
+        {
+          "value": "image",
+          "label": "Image tiles with gradient (shop by theme)"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-black"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "What's new"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Defaults to the collection title if left blank"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Defaults to the collection's page if left blank"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Tile color (solid style only)",
+          "default": "scheme-blue",
+          "visible_if": "{{ section.settings.style == 'solid' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (image style only)",
+          "info": "Defaults to the collection's featured image if left blank",
+          "visible_if": "{{ section.settings.style == 'image' }}"
+        },
+        {
+          "type": "text",
+          "id": "meta",
+          "label": "Meta text (image style only)",
+          "info": "e.g. an age range like \"6+\"",
+          "visible_if": "{{ section.settings.style == 'image' }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category tiles",
+      "settings": {
+        "style": "solid",
+        "color_scheme": "scheme-black",
+        "columns_desktop": 8
+      },
+      "blocks": [
+        { "type": "tab", "settings": { "label": "What's new" } },
+        { "type": "tab", "settings": { "label": "Gifting" } },
+        { "type": "tab", "settings": { "label": "Themes" } },
+        { "type": "tile", "settings": { "label": "All new sets", "color_scheme": "scheme-blue" } },
+        { "type": "tile", "settings": { "label": "Exclusives", "color_scheme": "scheme-earth-blue" } },
+        { "type": "tile", "settings": { "label": "Offers", "color_scheme": "scheme-pink" } },
+        { "type": "tile", "settings": { "label": "Technic Line", "color_scheme": "scheme-black" } },
+        { "type": "tile", "settings": { "label": "Signature Editions", "color_scheme": "scheme-white" } },
+        { "type": "tile", "settings": { "label": "Retiring Soon", "color_scheme": "scheme-orange" } },
+        { "type": "tile", "settings": { "label": "Speed Circuit", "color_scheme": "scheme-black" } },
+        { "type": "tile", "settings": { "label": "Smart Play Sets", "color_scheme": "scheme-yellow" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

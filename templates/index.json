@@ -1,0 +1,300 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_slider": {
+      "type": "hero-slider",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "heading": "Shop a piece of it",
+            "subheading": "<p>From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-earth-blue"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "heading": "New sets have landed",
+            "subheading": "<p>Explore the latest arrivals across every theme, from Everfrost to Critter Quest.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-green"
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "heading": "Build something amazing",
+            "subheading": "<p>Discover Exclusives and Signature Editions made for serious collectors.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-blue"
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2", "slide_3"],
+      "name": "Hero slider",
+      "settings": {
+        "color_scheme": "scheme-earth-blue",
+        "section_width": "full-width",
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "category_strip": {
+      "type": "category-tiles",
+      "blocks": {
+        "tab_1": { "type": "tab", "settings": { "label": "What's new" } },
+        "tab_2": { "type": "tab", "settings": { "label": "Gifting" } },
+        "tab_3": { "type": "tab", "settings": { "label": "Themes" } },
+        "tile_1": { "type": "tile", "settings": { "label": "All new sets", "color_scheme": "scheme-blue", "link": "shopify://collections/all" } },
+        "tile_2": { "type": "tile", "settings": { "label": "Exclusives", "color_scheme": "scheme-earth-blue" } },
+        "tile_3": { "type": "tile", "settings": { "label": "Offers", "color_scheme": "scheme-purple" } },
+        "tile_4": { "type": "tile", "settings": { "label": "Technic Line", "color_scheme": "scheme-charcoal" } },
+        "tile_5": { "type": "tile", "settings": { "label": "Signature Editions", "color_scheme": "scheme-muted" } },
+        "tile_6": { "type": "tile", "settings": { "label": "Retiring Soon", "color_scheme": "scheme-orange" } },
+        "tile_7": { "type": "tile", "settings": { "label": "Speed Circuit", "color_scheme": "scheme-charcoal" } },
+        "tile_8": { "type": "tile", "settings": { "label": "Smart Play Sets", "color_scheme": "scheme-yellow" } }
+      },
+      "block_order": ["tab_1", "tab_2", "tab_3", "tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6", "tile_7", "tile_8"],
+      "name": "Category strip",
+      "settings": {
+        "style": "solid",
+        "color_scheme": "scheme-black",
+        "columns_desktop": 8,
+        "section_width": "full-width",
+        "padding-block-start": 32,
+        "padding-block-end": 80
+      }
+    },
+    "recommended_rail": {
+      "type": "product-rail",
+      "blocks": {
+        "tab_featured": { "type": "tab", "settings": { "label": "Featured", "collection": "all" } },
+        "tab_popular": { "type": "tab", "settings": { "label": "Popular", "collection": "all" } },
+        "tab_kids": { "type": "tab", "settings": { "label": "Kids' sets", "collection": "all" } }
+      },
+      "block_order": ["tab_featured", "tab_popular", "tab_kids"],
+      "name": "Recommended for you",
+      "settings": {
+        "heading": "Recommended For You",
+        "products_to_show": 5,
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 32
+      }
+    },
+    "promo_new_arrivals": {
+      "type": "promo-banner",
+      "name": "New arrivals banner",
+      "settings": {
+        "layout": "band",
+        "content_position": "left",
+        "heading": "<h2>New Arrivals</h2>",
+        "subheading": "<p>The latest sets this month</p>",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "color_scheme": "scheme-green",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 0
+      }
+    },
+    "builder_gallery": {
+      "type": "feature-grid",
+      "blocks": {
+        "build_1": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
+        "build_2": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
+        "build_3": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
+        "build_4": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
+        "build_5": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } }
+      },
+      "block_order": ["build_1", "build_2", "build_3", "build_4", "build_5"],
+      "name": "Builder gallery",
+      "settings": {
+        "heading": "<h2>See What Everyone's Building</h2>",
+        "subheading": "<p>Real builds from real builders, shared with the community.</p>",
+        "layout": "featured",
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 32
+      }
+    },
+    "promo_themed": {
+      "type": "promo-banner",
+      "blocks": {
+        "pill_1": { "type": "pill", "settings": { "label": "Everfrost" } },
+        "pill_2": { "type": "pill", "settings": { "label": "New sets for kids" } },
+        "pill_3": { "type": "pill", "settings": { "label": "Smart Play Sets" } }
+      },
+      "block_order": ["pill_1", "pill_2", "pill_3"],
+      "name": "Themed banner",
+      "settings": {
+        "layout": "banner",
+        "content_position": "right",
+        "heading": "<h2>Frosty adventures await with Everfrost</h2>",
+        "subheading": "<p>Explore icy new sets built for imaginative winter play.</p>",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "color_scheme": "scheme-blue",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 0
+      }
+    },
+    "new_releases": {
+      "type": "feature-grid",
+      "blocks": {
+        "release_1": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "heading": "Let your imagination bloom with customizable elements.",
+            "subtext": "Position the petals and leaves, then change the lengths of the stems to create wonderful arrangements for the home.",
+            "button_label": "Shop now"
+          }
+        },
+        "release_2": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "heading": "Help kids develop key life skills",
+            "subtext": "What's in the box? Everything kids need to create a toy watermill, tall bird, squid, pear tree, and let their imagination run free.",
+            "button_label": "Shop now"
+          }
+        },
+        "release_3": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "heading": "Recognize your child's hard work",
+            "subtext": "This kit is ideal for kids with a passion for arts and crafts who want to express themselves through design.",
+            "button_label": "Shop now"
+          }
+        }
+      },
+      "block_order": ["release_1", "release_2", "release_3"],
+      "name": "New releases",
+      "settings": {
+        "heading": "<h2>New Releases</h2>",
+        "layout": "uniform",
+        "columns": 3,
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 32
+      }
+    },
+    "shop_by_theme": {
+      "type": "category-tiles",
+      "blocks": {
+        "theme_1": { "type": "tile", "settings": { "label": "Super Heroes", "meta": "5+" } },
+        "theme_2": { "type": "tile", "settings": { "label": "City", "meta": "6+" } },
+        "theme_3": { "type": "tile", "settings": { "label": "Everfrost", "meta": "5+" } },
+        "theme_4": { "type": "tile", "settings": { "label": "Shadowkin", "meta": "6+" } },
+        "theme_5": { "type": "tile", "settings": { "label": "Little Builders", "meta": "1.5-5" } }
+      },
+      "block_order": ["theme_1", "theme_2", "theme_3", "theme_4", "theme_5"],
+      "name": "Shop by theme",
+      "settings": {
+        "style": "image",
+        "heading": "<h2>Shop by Theme</h2>",
+        "columns_desktop": 5,
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 32
+      }
+    },
+    "discover_more": {
+      "type": "feature-grid",
+      "blocks": {
+        "discover_1": {
+          "type": "item",
+          "settings": {
+            "style": "color",
+            "color_scheme": "scheme-blue",
+            "heading": "Get gifting",
+            "subtext": "Shop ideas by occasion, age and price. Plus gift cards, too.",
+            "button_label": "Shop now"
+          }
+        },
+        "discover_2": {
+          "type": "item",
+          "settings": {
+            "style": "color",
+            "color_scheme": "scheme-green",
+            "heading": "Read all about it",
+            "subtext": "See our library of articles for ideas and inspiration.",
+            "button_label": "Discover"
+          }
+        },
+        "discover_3": {
+          "type": "item",
+          "settings": {
+            "style": "color",
+            "color_scheme": "scheme-black",
+            "heading": "Membership perks at your fingertips",
+            "subtext": "Shop new sets, stack up points and unlock rewards.",
+            "button_label": "Learn more"
+          }
+        }
+      },
+      "block_order": ["discover_1", "discover_2", "discover_3"],
+      "name": "Discover more",
+      "settings": {
+        "heading": "<h2>Discover More</h2>",
+        "layout": "uniform",
+        "columns": 3,
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 32
+      }
+    },
+    "newsletter": {
+      "type": "newsletter-band",
+      "name": "Newsletter band",
+      "settings": {
+        "heading": "Subscribe to Brickline Certified Store",
+        "subheading": "Be the first to hear about new sets, exclusive products and promotions.",
+        "placeholder": "Your email address here",
+        "button_label": "Go",
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    }
+  },
+  "order": [
+    "hero_slider",
+    "category_strip",
+    "recommended_rail",
+    "promo_new_arrivals",
+    "builder_gallery",
+    "promo_themed",
+    "new_releases",
+    "shop_by_theme",
+    "discover_more",
+    "newsletter"
+  ]
+}

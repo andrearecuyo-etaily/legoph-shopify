@@ -1,0 +1,122 @@
+{%- comment -%}
+  Renders a single product tile for sections/product-rail.liquid.
+  Accepts:
+    product: {Product}
+  Optional product metafields (namespace "custom"): age, pieces, rating — each
+  rendered only if populated; the meta row is omitted entirely if none are set.
+{%- endcomment -%}
+
+{% liquid
+  assign variant = product.selected_or_first_available_variant
+  assign compare_at_price = variant.compare_at_price
+  assign price = variant.price
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign meta_age = product.metafields.custom.age
+  assign meta_pieces = product.metafields.custom.pieces
+  assign meta_rating = product.metafields.custom.rating
+  assign has_meta = false
+  if meta_age != blank or meta_pieces != blank or meta_rating != blank
+    assign has_meta = true
+  endif
+%}
+
+<div class="product-rail-card" style="--brickline-card-radius: {{ settings.brickline_card_radius }}px;">
+  <a
+    href="{{ product.url }}"
+    class="product-rail-card__media-link"
+    aria-label="{{ product.title | escape }}"
+  >
+    <span class="product-rail-card__media">
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          srcset="{{ product.featured_image | image_url: width: 300 }} 300w, {{ product.featured_image | image_url: width: 450 }} 450w, {{ product.featured_image | image_url: width: 600 }} 600w"
+          sizes="(min-width: 990px) 20vw, 70vw"
+          alt="{{ product.featured_image.alt | escape }}"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+          loading="lazy"
+          class="product-rail-card__image"
+        >
+      {% else %}
+        <span class="product-rail-card__placeholder"></span>
+      {% endif %}
+      {% if on_sale %}
+        <span class="product-rail-card__badge">Sale</span>
+      {% elsif product.available == false %}
+        <span class="product-rail-card__badge product-rail-card__badge--neutral">{{ 'products.product.sold_out' | t }}</span>
+      {% endif %}
+    </span>
+  </a>
+  <div class="product-rail-card__body">
+    {% if has_meta %}
+      <div class="product-rail-card__meta">
+        {% if meta_age != blank %}
+          <span class="product-rail-card__meta-item">
+            <span class="svg-wrapper">{{- 'icon-available.svg' | inline_asset_content -}}</span>
+            {{ meta_age }}
+          </span>
+        {% endif %}
+        {% if meta_pieces != blank %}
+          <span class="product-rail-card__meta-item">
+            <span class="svg-wrapper">{{- 'icon-inventory.svg' | inline_asset_content -}}</span>
+            {{ meta_pieces }}
+          </span>
+        {% endif %}
+        {% if meta_rating != blank %}
+          <span class="product-rail-card__meta-item">
+            <span class="svg-wrapper">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+            {{ meta_rating }}
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+    <a
+      href="{{ product.url }}"
+      class="product-rail-card__title"
+    >
+      {{ product.title }}
+    </a>
+    <div class="product-rail-card__price">
+      {% if on_sale %}
+        <span class="product-rail-card__price-compare">{{ compare_at_price | money }}</span>
+        <span class="product-rail-card__price-sale">{{ price | money }}</span>
+      {% else %}
+        <span class="product-rail-card__price-regular">{{ price | money }}</span>
+      {% endif %}
+    </div>
+    <div class="product-rail-card__actions">
+      <add-to-cart-pill
+        class="product-rail-card__add"
+        data-variant-id="{{ variant.id }}"
+      >
+        <button
+          type="button"
+          class="product-rail-card__add-button"
+          {% if variant.available == false %}disabled{% endif %}
+        >
+          <span class="product-rail-card__add-label">
+            {% if variant.available == false %}
+              {{ 'products.product.sold_out' | t }}
+            {% else %}
+              Add to Bag
+            {% endif %}
+          </span>
+          <span class="product-rail-card__add-label product-rail-card__add-label--added">{{ 'actions.added' | t }}</span>
+        </button>
+      </add-to-cart-pill>
+      <button
+        type="button"
+        class="product-rail-card__wishlist"
+        aria-label="Wishlist"
+        data-wishlist-toggle
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.1 8.64l-.1.1-.1-.1C10.14 6.6 7.1 6.6 5.14 8.5c-2 2-2 5.3 0 7.3l6.6 6.5c.15.15.4.15.55 0l6.6-6.5c2-2 2-5.3 0-7.3-1.96-1.9-5-1.9-6.9.14z"></path></svg>
+      </button>
+    </div>
+  </div>
+</div>

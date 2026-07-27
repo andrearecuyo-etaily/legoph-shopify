@@ -1,0 +1,363 @@
+{% liquid
+  assign pills = section.blocks | where: 'type', 'pill'
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
+<div
+  class="promo-banner spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="{% render 'spacing-padding', settings: section.settings %};"
+>
+  <div
+    class="promo-banner__inner promo-banner__inner--{{ section.settings.layout }} promo-banner__inner--content-{{ section.settings.content_position }}"
+    style="
+      --promo-bg: {{ section.settings.color_scheme.settings.background }};
+      --promo-text: {{ section.settings.color_scheme.settings.text }};
+      --promo-button-bg: {{ section.settings.color_scheme.settings.button_background }};
+      --promo-button-label: {{ section.settings.color_scheme.settings.button_label }};
+    "
+  >
+    {% if section.settings.image %}
+      <img
+        src="{{ section.settings.image | image_url: width: 1600 }}"
+        srcset="{{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1200 }} 1200w, {{ section.settings.image | image_url: width: 1600 }} 1600w"
+        sizes="100vw"
+        alt=""
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+        loading="lazy"
+        class="promo-banner__image"
+      >
+    {% endif %}
+
+    {% if pills.size > 0 %}
+      <div class="promo-banner__pills">
+        {% for pill in pills %}
+          <a
+            href="{{ pill.settings.link | default: '#' }}"
+            class="promo-banner__pill{% if forloop.first %} is-active{% endif %}"
+            {{ pill.shopify_attributes }}
+          >
+            {{ pill.settings.label }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="promo-banner__content">
+      {% if section.settings.heading != blank %}
+        <h2 class="promo-banner__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="promo-banner__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+      {% if section.settings.button_label != blank %}
+        <a
+          href="{{ section.settings.button_link | default: '#' }}"
+          class="promo-banner__button"
+        >
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .promo-banner__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--promo-bg);
+    color: var(--promo-text);
+    overflow: hidden;
+  }
+
+  .promo-banner__inner--band {
+    padding: 32px 24px;
+    gap: 20px;
+
+    @media screen and (min-width: 750px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px;
+    }
+  }
+
+  .promo-banner__inner--banner {
+    aspect-ratio: 4 / 5;
+    justify-content: flex-end;
+    padding: 20px 20px 32px;
+
+    @media screen and (min-width: 750px) {
+      aspect-ratio: 21 / 8;
+      padding: 20px 48px 0;
+    }
+  }
+
+  .promo-banner__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .promo-banner__pills {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-block: 4px 0;
+
+    .promo-banner__inner--band & {
+      display: none;
+    }
+  }
+
+  .promo-banner__pill {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--promo-text);
+    background: rgb(from var(--promo-text) r g b / 0.15);
+  }
+
+  .promo-banner__pill.is-active {
+    background: var(--promo-button-bg);
+    color: var(--promo-button-label);
+  }
+
+  .promo-banner__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .promo-banner__inner--content-left & {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .promo-banner__inner--content-center & {
+      align-items: center;
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    .promo-banner__inner--content-right & {
+      align-items: flex-end;
+      text-align: right;
+      margin-inline-start: auto;
+    }
+
+    .promo-banner__inner--banner & {
+      max-width: 460px;
+      flex: 1;
+      justify-content: center;
+      padding-block: 24px;
+    }
+  }
+
+  .promo-banner__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4vw, 46px);
+    line-height: 1.1;
+  }
+
+  .promo-banner__subheading {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .promo-banner__subheading p {
+    margin: 0;
+  }
+
+  .promo-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--promo-button-bg);
+    color: var(--promo-button-label);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 28px;
+    text-decoration: none;
+    margin-top: 4px;
+    transition: transform 150ms ease;
+  }
+
+  .promo-banner__button:active {
+    transform: scale(0.97);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "class": "section--promo-banner",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "band",
+          "label": "Compact band (e.g. New Arrivals)"
+        },
+        {
+          "value": "banner",
+          "label": "Tall banner with tag pills (e.g. themed promo)"
+        }
+      ],
+      "default": "band"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "Optional — the color scheme is used as a solid background if left blank"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<h2>New Arrivals</h2>"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-green"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Tag pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "New sets for kids"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo banner",
+      "settings": {
+        "layout": "band",
+        "heading": "<h2>New Arrivals</h2>",
+        "subheading": "<p>The latest sets this month</p>",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "color_scheme": "scheme-green"
+      }
+    }
+  ]
+}
+{% endschema %}

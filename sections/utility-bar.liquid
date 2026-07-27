@@ -1,0 +1,175 @@
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
+<div
+  class="utility-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="{% render 'spacing-padding', settings: section.settings %};"
+>
+  <div class="utility-bar__inner">
+    {% if section.settings.badge_text != blank %}
+      <span class="utility-bar__badge">{{ section.settings.badge_text }}</span>
+    {% endif %}
+    {% if section.settings.store_finder_text != blank %}
+      <a
+        href="{{ section.settings.store_finder_link | default: '#' }}"
+        class="utility-bar__link utility-bar__link--store"
+      >
+        {{ section.settings.store_finder_text }}
+      </a>
+    {% endif %}
+    <div class="utility-bar__links">
+      <a
+        href="{{ routes.account_url }}"
+        class="utility-bar__link"
+      >
+        {{ 'accessibility.account' | t }}
+      </a>
+      <a
+        href="{{ section.settings.wishlist_link | default: '#' }}"
+        class="utility-bar__link"
+      >
+        Wishlist
+      </a>
+      <a
+        href="{{ routes.cart_url }}"
+        class="utility-bar__link utility-bar__link--bag"
+      >
+        In Bag
+      </a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .utility-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+  }
+
+  .utility-bar__badge {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgb(from currentColor r g b / 0.08);
+    padding: 4px 10px;
+  }
+
+  .utility-bar__link {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.85;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .utility-bar__link--store {
+    display: none;
+
+    @media screen and (min-width: 750px) {
+      display: inline;
+    }
+  }
+
+  .utility-bar__links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .utility-bar__link--bag {
+    font-weight: 700;
+    opacity: 1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Utility bar",
+  "class": "section--utility-bar",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Certified Store"
+    },
+    {
+      "type": "text",
+      "id": "store_finder_text",
+      "label": "Store finder text",
+      "default": "Find a store near you"
+    },
+    {
+      "type": "url",
+      "id": "store_finder_link",
+      "label": "Store finder link"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_link",
+      "label": "Wishlist link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-white"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Utility bar"
+    }
+  ]
+}
+{% endschema %}

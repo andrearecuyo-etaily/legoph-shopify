@@ -1,0 +1,422 @@
+{% liquid
+  assign items = section.blocks
+  assign is_featured_layout = false
+  if section.settings.layout == 'featured' and items.size >= 3
+    assign is_featured_layout = true
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
+<div
+  class="feature-grid spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --brickline-card-radius: {{ settings.brickline_card_radius }}px;
+    --feature-grid-columns: {{ section.settings.columns }};
+  "
+>
+  {% if section.settings.heading != blank or section.settings.subheading != blank %}
+    <div class="feature-grid__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="feature-grid__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="feature-grid__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if items.size > 0 %}
+    <div class="feature-grid__grid{% if is_featured_layout %} feature-grid__grid--featured{% endif %}">
+      {% for block in items %}
+        {% liquid
+          assign item_url = block.settings.link
+          assign scheme = block.settings.color_scheme
+        %}
+        <div
+          class="feature-grid__item{% if is_featured_layout and forloop.first %} feature-grid__item--large{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {% if item_url != blank %}
+            <a href="{{ item_url }}" class="feature-grid__media-link">
+          {% endif %}
+            <span
+              class="feature-grid__media"
+              {% if block.settings.style == 'color' %}
+                style="background: {{ scheme.settings.background }}; color: {{ scheme.settings.text }};"
+              {% endif %}
+            >
+              {% if block.settings.style == 'image' and block.settings.image %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 900 }}"
+                  srcset="{{ block.settings.image | image_url: width: 450 }} 450w, {{ block.settings.image | image_url: width: 700 }} 700w, {{ block.settings.image | image_url: width: 900 }} 900w"
+                  sizes="(min-width: 990px) 33vw, 100vw"
+                  alt="{{ block.settings.image.alt | escape }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                  class="feature-grid__image"
+                >
+              {% elsif block.settings.style == 'image' %}
+                <span class="feature-grid__placeholder"></span>
+              {% endif %}
+              {% if block.settings.show_overlay_icon %}
+                <span class="feature-grid__overlay-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                </span>
+              {% endif %}
+            </span>
+          {% if item_url != blank %}
+            </a>
+          {% endif %}
+
+          {% if block.settings.heading != blank or block.settings.subtext != blank or block.settings.button_label != blank %}
+            <div class="feature-grid__content">
+              {% if block.settings.heading != blank %}
+                <span class="feature-grid__item-heading">{{ block.settings.heading }}</span>
+              {% endif %}
+              {% if block.settings.subtext != blank %}
+                <span class="feature-grid__item-subtext">{{ block.settings.subtext }}</span>
+              {% endif %}
+              {% if block.settings.button_label != blank %}
+                <a
+                  href="{{ item_url | default: '#' }}"
+                  class="feature-grid__button"
+                >
+                  {{ block.settings.button_label }}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .feature-grid__header {
+    text-align: center;
+    margin-block-end: 40px;
+  }
+
+  .feature-grid__heading {
+    margin: 0 0 6px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+  }
+
+  .feature-grid__subheading {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .feature-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: repeat(var(--feature-grid-columns, 3), 1fr);
+    }
+  }
+
+  .feature-grid__grid--featured {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+
+  .feature-grid__grid--featured .feature-grid__item--large {
+    grid-column: span 2;
+
+    @media screen and (min-width: 750px) {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+  }
+
+  .feature-grid__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .feature-grid__media-link {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .feature-grid__media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--brickline-card-radius, 0px);
+    overflow: hidden;
+    background: #f7f7f7;
+  }
+
+  .feature-grid__grid--featured .feature-grid__item--large .feature-grid__media {
+    aspect-ratio: 3 / 4;
+    height: 100%;
+  }
+
+  .feature-grid__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #f2f2f2;
+  }
+
+  .feature-grid__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .feature-grid__image.is-loaded {
+    opacity: 1;
+  }
+
+  .feature-grid__overlay-icon {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #141414;
+  }
+
+  .feature-grid__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    max-width: 320px;
+  }
+
+  .feature-grid__item-heading {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .feature-grid__item-subtext {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .feature-grid__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 2px solid #141414;
+    background: transparent;
+    color: #141414;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 20px;
+    text-decoration: none;
+    margin-top: 4px;
+    transition: transform 150ms ease;
+  }
+
+  .feature-grid__button:active {
+    transform: scale(0.97);
+  }
+{% endstylesheet %}
+
+<script
+  src="{{ 'lazy-image-fade.js' | asset_url }}"
+  type="module"
+></script>
+
+{% schema %}
+{
+  "name": "Feature grid",
+  "class": "section--feature-grid",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "uniform",
+          "label": "Uniform columns"
+        },
+        {
+          "value": "featured",
+          "label": "Featured (first item large)"
+        }
+      ],
+      "default": "uniform"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (uniform layout, desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.layout == 'uniform' }}"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-white"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Media style",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "color",
+              "label": "Solid color"
+            }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "visible_if": "{{ block.settings.style == 'image' }}"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color",
+          "default": "scheme-blue",
+          "visible_if": "{{ block.settings.style == 'color' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_overlay_icon",
+          "label": "Show \"+\" overlay icon",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature grid",
+      "blocks": [
+        { "type": "item", "settings": { "heading": "New releases", "button_label": "Shop now" } },
+        { "type": "item", "settings": { "heading": "New releases", "button_label": "Shop now" } },
+        { "type": "item", "settings": { "heading": "New releases", "button_label": "Shop now" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

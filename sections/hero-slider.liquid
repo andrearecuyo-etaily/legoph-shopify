@@ -1,0 +1,503 @@
+{% liquid
+  assign slide_count = section.blocks.size
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
+<hero-slider-component
+  class="hero-slider spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="{% render 'spacing-padding', settings: section.settings %}"
+  data-autoplay="{% if section.settings.autoplay and slide_count > 1 %}{{ section.settings.autoplay_speed | times: 1000 }}{% else %}0{% endif %}"
+>
+  <div
+    class="hero-slider__track"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="{{ 'accessibility.slideshow' | t }}"
+  >
+    {% for block in section.blocks %}
+      {% liquid
+        assign scheme = block.settings.color_scheme
+        assign is_first = true
+        if forloop.index0 > 0
+          assign is_first = false
+        endif
+      %}
+      <div
+        class="hero-slider__slide{% if is_first %} is-active{% endif %}"
+        data-slide-index="{{ forloop.index0 }}"
+        aria-hidden="{% if is_first %}false{% else %}true{% endif %}"
+        {{ block.shopify_attributes }}
+        style="
+          --slide-bg: {{ scheme.settings.background }};
+          --slide-text: {{ scheme.settings.text }};
+          --slide-button-bg: {{ scheme.settings.button_background }};
+          --slide-button-label: {{ scheme.settings.button_label }};
+        "
+      >
+        {% if block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 1600 }}"
+            srcset="{{ block.settings.image | image_url: width: 800 }} 800w, {{ block.settings.image | image_url: width: 1200 }} 1200w, {{ block.settings.image | image_url: width: 1600 }} 1600w, {{ block.settings.image | image_url: width: 2000 }} 2000w"
+            sizes="100vw"
+            alt=""
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+            loading="{% if forloop.index == 1 %}eager{% else %}lazy{% endif %}"
+            class="hero-slider__image{% unless forloop.index == 1 %} hero-slider__image--lazy{% endunless %}"
+          >
+        {% endif %}
+        <div class="hero-slider__content">
+          {% if block.settings.heading != blank %}
+            <h2 class="hero-slider__heading">{{ block.settings.heading }}</h2>
+          {% endif %}
+          {% if block.settings.subheading != blank %}
+            <div class="hero-slider__subheading">{{ block.settings.subheading }}</div>
+          {% endif %}
+          {% if block.settings.button_label != blank or block.settings.button_label_2 != blank %}
+            <div class="hero-slider__actions">
+              {% if block.settings.button_label != blank %}
+                <a
+                  href="{{ block.settings.button_link | default: '#' }}"
+                  class="hero-slider__button hero-slider__button--primary"
+                >
+                  {{ block.settings.button_label }}
+                </a>
+              {% endif %}
+              {% if block.settings.button_label_2 != blank %}
+                <a
+                  href="{{ block.settings.button_link_2 | default: '#' }}"
+                  class="hero-slider__button hero-slider__button--secondary"
+                >
+                  {{ block.settings.button_label_2 }}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if slide_count > 1 %}
+    <div class="hero-slider__controls">
+      <button
+        type="button"
+        class="hero-slider__arrow hero-slider__arrow--prev"
+        aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+      >
+        <span class="svg-wrapper">{{- 'icon-chevron-left.svg' | inline_asset_content -}}</span>
+      </button>
+      <div
+        class="hero-slider__dots"
+        role="tablist"
+      >
+        {% for block in section.blocks %}
+          <button
+            type="button"
+            class="hero-slider__dot{% if forloop.first %} is-active{% endif %}"
+            data-dot-index="{{ forloop.index0 }}"
+            aria-label="{{ 'accessibility.slide_status' | t: index: forloop.index, length: slide_count }}"
+            role="tab"
+          ></button>
+        {% endfor %}
+      </div>
+      <button
+        type="button"
+        class="hero-slider__arrow hero-slider__arrow--next"
+        aria-label="{{ 'accessibility.slideshow_next' | t }}"
+      >
+        <span class="svg-wrapper">{{- 'icon-chevron-right.svg' | inline_asset_content -}}</span>
+      </button>
+    </div>
+  {% endif %}
+</hero-slider-component>
+
+<script
+  src="{{ 'hero-slider.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  hero-slider-component {
+    display: block;
+  }
+
+  .hero-slider {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-slider__track {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'stack';
+  }
+
+  .hero-slider__slide {
+    grid-area: stack;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 62vh;
+    background: var(--slide-bg);
+    color: var(--slide-text);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 150ms ease, visibility 150ms ease;
+
+    @media screen and (min-width: 750px) {
+      min-height: 50vh;
+    }
+  }
+
+  .hero-slider__slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    position: relative;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slider__slide {
+      transition: none;
+    }
+  }
+
+  .hero-slider__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.001;
+    transition: opacity 300ms ease;
+  }
+
+  .hero-slider__image::after {
+    content: '';
+  }
+
+  .hero-slider__slide:has(.hero-slider__image) {
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgb(from var(--slide-bg) r g b / 0.55);
+      z-index: 1;
+    }
+  }
+
+  .hero-slider__image.is-loaded {
+    opacity: 1;
+  }
+
+  .hero-slider__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+    max-width: 620px;
+    margin-inline: auto;
+    padding: 32px 24px;
+  }
+
+  .hero-slider__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.1;
+  }
+
+  .hero-slider__subheading {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 480px;
+  }
+
+  .hero-slider__subheading p {
+    margin: 0;
+  }
+
+  .hero-slider__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .hero-slider__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 24px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 150ms ease;
+    border: 2px solid transparent;
+  }
+
+  .hero-slider__button:active {
+    transform: scale(0.97);
+  }
+
+  .hero-slider__button--primary {
+    background: var(--slide-button-bg);
+    color: var(--slide-button-label);
+    border-color: var(--slide-button-bg);
+  }
+
+  .hero-slider__button--secondary {
+    background: transparent;
+    color: var(--slide-text);
+    border-color: var(--slide-text);
+  }
+
+  .hero-slider__controls {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 3;
+  }
+
+  .hero-slider__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    color: #141414;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hero-slider__arrow .svg-wrapper {
+    width: 16px;
+    height: 16px;
+    display: flex;
+  }
+
+  .hero-slider__dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .hero-slider__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 150ms ease, width 150ms ease;
+  }
+
+  .hero-slider__dot.is-active {
+    background: #ffffff;
+    width: 22px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero slider",
+  "class": "section--hero-slider",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Default color scheme",
+      "default": "scheme-earth-blue"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "default": 5,
+      "visible_if": "{{ section.settings.autoplay }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image",
+          "info": "Optional — the color scheme is used as a solid background if left blank, or as a tint overlay on top of the image"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-earth-blue"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop a piece of it"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "<p>From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Primary button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Secondary button (optional)"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Label",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Shop a piece of it",
+            "subheading": "<p>From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-earth-blue"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "New sets have landed",
+            "subheading": "<p>Explore the latest arrivals across every theme.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-green"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Build something amazing",
+            "subheading": "<p>Discover Exclusives and Signature Editions made for serious collectors.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all",
+            "button_label_2": "Learn more",
+            "color_scheme": "scheme-blue"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

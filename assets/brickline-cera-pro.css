@@ -1,0 +1,13 @@
+/* Cera Pro — real licensed font files (TypeMates), self-hosted. */
+@font-face { font-family: "Cera Pro"; font-weight: 100; font-style: normal; src: url("CeraPro-Thin.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 100; font-style: italic; src: url("CeraPro-ThinItalic.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 300; font-style: normal; src: url("CeraPro-Light.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 300; font-style: italic; src: url("CeraPro-LightItalic.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 400; font-style: normal; src: url("CeraPro-Regular.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 400; font-style: italic; src: url("CeraPro-RegularItalic.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 500; font-style: normal; src: url("CeraPro-Medium.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 500; font-style: italic; src: url("CeraPro-MediumItalic.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 700; font-style: normal; src: url("CeraPro-Bold.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 700; font-style: italic; src: url("CeraPro-BoldItalic.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 900; font-style: normal; src: url("CeraPro-Black.otf") format("opentype"); font-display: swap; }
+@font-face { font-family: "Cera Pro"; font-weight: 900; font-style: italic; src: url("CeraPro-BlackItalic.otf") format("opentype"); font-display: swap; }
