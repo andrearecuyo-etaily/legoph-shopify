@@ -17,8 +17,10 @@
       "settings": {
         "badge_text": "Certified Store",
         "store_finder_text": "Find a store near you",
+        "store_finder_link": "",
+        "wishlist_link": "",
         "color_scheme": "scheme-white",
-        "section_width": "full-width",
+        "section_width": "page-width",
         "padding-block-start": 8,
         "padding-block-end": 8
       }
@@ -35,7 +37,8 @@
             "font_size": "0.75rem",
             "weight": "600",
             "letter_spacing": "normal",
-            "case": "uppercase"
+            "case": "uppercase",
+            "text_color": ""
           },
           "blocks": {}
         },
@@ -48,7 +51,8 @@
             "font_size": "0.75rem",
             "weight": "600",
             "letter_spacing": "normal",
-            "case": "uppercase"
+            "case": "uppercase",
+            "text_color": ""
           },
           "blocks": {}
         },
@@ -61,7 +65,8 @@
             "font_size": "0.75rem",
             "weight": "600",
             "letter_spacing": "normal",
-            "case": "uppercase"
+            "case": "uppercase",
+            "text_color": ""
           },
           "blocks": {}
         }
@@ -75,11 +80,11 @@
       "settings": {
         "speed": 5,
         "section_width": "page-width",
-        "divider_width": 1,
-        "padding-block-start": 12,
-        "padding-block-end": 12,
         "background_color": "#141414",
-        "divider_color": "#141414"
+        "divider_width": 1,
+        "divider_color": "#141414",
+        "padding-block-start": 12,
+        "padding-block-end": 12
       }
     },
     "header_section": {
@@ -88,6 +93,7 @@
       "settings": {
         "menu": "main-menu",
         "search_placeholder": "Search sets…",
+        "wishlist_link": "",
         "color_scheme": "scheme-yellow",
         "section_width": "full-width",
         "padding-block-start": 20,
