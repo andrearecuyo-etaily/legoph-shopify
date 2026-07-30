@@ -1,0 +1,42 @@
+/* Cera Pro — real licensed font files, self-hosted. */
+@font-face { font-family: "Cera Pro"; font-weight: 100; font-style: normal; src: url('../fonts/CeraPro-Thin.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 100; font-style: italic; src: url('../fonts/CeraPro-ThinItalic.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 300; font-style: normal; src: url('../fonts/CeraPro-Light.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 300; font-style: italic; src: url('../fonts/CeraPro-LightItalic.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 400; font-style: normal; src: url('../fonts/CeraPro-Regular.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 400; font-style: italic; src: url('../fonts/CeraPro-RegularItalic.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 500; font-style: normal; src: url('../fonts/CeraPro-Medium.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 500; font-style: italic; src: url('../fonts/CeraPro-MediumItalic.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 700; font-style: normal; src: url('../fonts/CeraPro-Bold.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 700; font-style: italic; src: url('../fonts/CeraPro-BoldItalic.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 900; font-style: normal; src: url('../fonts/CeraPro-Black.otf') format('opentype'); }
+@font-face { font-family: "Cera Pro"; font-weight: 900; font-style: italic; src: url('../fonts/CeraPro-BlackItalic.otf') format('opentype'); }
+
+:root {
+  --font-display: "Cera Pro", sans-serif;
+  --font-body: "Cera Pro", sans-serif;
+
+  /* Base body */
+  --text-body-size: 16px;
+  --text-body-line: 24px;
+  --text-body-weight: 400;
+
+  /* Fluid-ish type scale (static px steps per brief) */
+  --text-label-sm: 12px;
+  --text-label-md: 14px;
+  --text-label-lg: 16px;
+  --text-heading-sm: 16px;
+  --text-heading-md: 20px;
+  --text-heading-lg: 25px;
+  --text-heading-2xl: 32px;
+  --text-heading-3xl: 39px;
+  --text-heading-4xl: 44px;
+  --text-heading-5xl: 64px;
+  --text-heading-6xl: 95px;
+  --text-display: 160px;
+
+  --font-weight-body: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+}

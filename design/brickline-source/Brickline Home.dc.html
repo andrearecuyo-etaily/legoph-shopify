@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/shape.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/styles.css">
+  <script src="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/_ds_bundle.js"></script>
+  <style>
+    span { font-family: var(--font-body); }
+    input, textarea, select, button, label { font-family: var(--font-body); }
+    body { margin: 0; background: var(--surface-page); }
+    a { color: var(--text-link); font-family: var(--font-body); }
+    a:hover { color: var(--text-link-hover); }
+  </style>
+</helmet>
+
+<div style="font-family: var(--font-body); background: var(--surface-page); color: var(--text-default);">
+
+  <!-- Utility bar -->
+  <div style="background: var(--surface-tertiary); border-bottom: 1px solid var(--color-border-default); display: flex; align-items: center; justify-content: space-between; padding: 8px 24px; font-size: 12px; color: var(--text-subtle);">
+    <span style="font-family: var(--font-display); font-weight: 700; font-size: 11px; text-transform: uppercase; background: var(--surface-muted); padding: 4px 10px; border-radius: 0;">Certified Store</span>
+    <span>Find a store near you</span>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <span>Account</span>
+      <span>Wishlist</span>
+      <span style="font-weight: 700;">In Bag</span>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <header style="background: var(--brand-yellow);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 28px; padding-top: 20px; padding-bottom: 20px">
+      <a href="Brickline Home.dc.html" style="width: 120px; height: 32px; background: rgba(0,0,0,0.15); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; text-decoration:none;">
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand-black); opacity: 0.6;">Logo</span>
+      </a>
+      <nav style="display: flex; gap: 18px; flex: 1; min-width: 0; flex-wrap: wrap;">
+        <a href="Brickline Collections.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">Themes</a>
+        <a href="Brickline Collections.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">Shop By</a>
+        <a href="Brickline Blog.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">Interest</a>
+        <a href="Free Shipping.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">Offers &amp; Sale</a>
+        <a href="Brickline Collections.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">All Products</a>
+        <a href="Brickline Collection 1.dc.html" style="color: var(--brand-black); font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; text-decoration: none; white-space: nowrap;">Exclusives</a>
+      </nav>
+      <a href="Brickline Search.dc.html" style="background: var(--surface-page); border-radius: var(--radius-pill); padding: 10px 18px; font-size: 14px; color: var(--text-subtle); width: 200px; flex-shrink: 0; text-decoration:none; display:block;">Search sets…</a>
+      <a href="Brickline Account.dc.html" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer;" aria-label="Wishlist">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="1.5"><path d="M12.1 8.64l-.1.1-.1-.1C10.14 6.6 7.1 6.6 5.14 8.5c-2 2-2 5.3 0 7.3l6.6 6.5c.15.15.4.15.55 0l6.6-6.5c2-2 2-5.3 0-7.3-1.96-1.9-5-1.9-6.9.14z"></path></svg>
+      </a>
+      <a href="Brickline Cart.dc.html" style="width:44px; height:44px; display:flex; align-items:center; justify-content:center; cursor:pointer;" aria-label="Bag">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.5" fill="var(--brand-black)"></circle><circle cx="18" cy="20" r="1.5" fill="var(--brand-black)"></circle></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero: split promo -->
+  <section style="position: relative; height: 50vh; overflow: hidden; background-color: {{ activeHero.bg }}; transition: background-color 0.6s ease;">
+    <div style="max-width: 620px; margin: 0 auto; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; position: relative; z-index: 1;">
+      <span style="font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4vw, 42px); color: var(--color-bg-page)">{{ activeHero.title }}</span>
+      <span style="font-size: 15px; color: var(--color-bg-page); max-width: 480px; line-height: 1.5">{{ activeHero.subtitle }}</span>
+      <div style="display: flex; gap: 12px; margin-top: 6px;">
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" size="md" style="border-radius: var(--radius-pill); width: auto;" hint-size="auto,44px">Shop now</x-import>
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="md" style="border-radius: var(--radius-pill); width: auto;" hint-size="auto,44px">Learn more</x-import>
+      </div>
+    </div>
+    <div style="position: absolute; bottom: 20px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; z-index: 1;">
+      <sc-for list="{{ heroSlides }}" as="slide" hint-placeholder-count="3">
+        <div onclick="{{ goToHero($index) }}" style="width: {{ slide.active ? '22px' : '8px' }}; height: 8px; border-radius: var(--radius-pill); background: {{ slide.active ? 'var(--color-bg-page)' : 'rgba(255,255,255,0.5)' }}; cursor: pointer; transition: width 0.3s ease;"></div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- Category strip -->
+  <section style="background: var(--brand-black); padding: 32px 24px 80px; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: flex; gap: 28px; margin-bottom: 28px;">
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--text-inverse); padding-bottom: 10px; border-bottom: 2px solid var(--text-inverse);">What's new</span>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 17px; color: rgba(255,255,255,0.6); padding-bottom: 10px;">Gifting</span>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 17px; color: rgba(255,255,255,0.6); padding-bottom: 10px;">Themes</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px;">
+        <a href="Brickline Collections.dc.html" style="background: var(--brand-blue); aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text-inverse); text-align: center;">All new sets</span>
+        </a>
+        <a href="Brickline Collection 1.dc.html" style="background: var(--brand-earth-blue); aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text-inverse); text-align: center;">Exclusives</span>
+        </a>
+        <a href="Free Shipping.dc.html" style="background: #5A2E8C; aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text-inverse); text-align: center;">Offers</span>
+        </a>
+        <a href="Brickline Collection 2.dc.html" style="background: #1A1A1A; aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: rgba(255,255,255,0.85); text-align: center;">Technic Line</span>
+        </a>
+        <a href="Brickline Collection 1.dc.html" style="background: #F2F2F2; aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--brand-black); text-align: center;">Signature Editions</span>
+        </a>
+        <a href="Brickline Collections.dc.html" style="background: var(--brand-orange); aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text-inverse); text-align: center;">Retiring Soon</span>
+        </a>
+        <a href="Brickline Collection 2.dc.html" style="background: #1A1A1A; aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: rgba(255,255,255,0.85); text-align: center;">Speed Circuit</span>
+        </a>
+        <a href="Brickline Collections.dc.html" style="background: var(--brand-yellow); aspect-ratio: 3/4; border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px; text-decoration: none;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--brand-black); text-align: center;">Smart Play Sets</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Find the perfect set -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0; padding-bottom: 32px">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 32px; color: var(--text-default)">Recommended For You</span>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; border-bottom: 1px solid var(--color-border-default);">
+      <div style="display: flex; gap: 28px;">
+        <sc-for list="{{ recTabs }}" as="t" hint-placeholder-count="3">
+          <span onclick="{{ setRecTab(t.id) }}" style="font-family: var(--font-display); font-weight: 700; font-size: 15px; cursor: pointer; color: {{ t.active ? 'var(--text-default)' : 'var(--text-meta)' }}; padding-bottom: 12px; border-bottom: {{ t.active ? '2px solid var(--brand-black)' : '2px solid transparent' }};">{{ t.label }}</span>
+        </sc-for>
+      </div>
+      <div style="display: flex; gap: 10px; padding-bottom: 12px;">
+        <div onclick="{{ scrollRec(-1) }}" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--color-border-default); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-meta)" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg>
+        </div>
+        <div onclick="{{ scrollRec(1) }}" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--brand-black); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
+        </div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;">
+      <sc-for list="{{ visibleRecommended }}" as="p" hint-placeholder-count="5">
+        <div style="border: 1px solid var(--color-border-default); display: flex; flex-direction: column;">
+          <div style="background: var(--surface-tertiary); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; position: relative;">
+            <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ true }}">
+              <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Badge" tone="{{ p.badgeTone }}" style="position:absolute; top:10px; right:10px; border-radius:0;" hint-size="auto,24px">{{ p.badge }}</x-import>
+            </sc-if>
+            <span style="color: var(--text-meta); font-size: 12px;">Set image</span>
+          </div>
+          <div style="padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 12px; font-size: 12px; color: var(--text-meta); align-items: center;">
+              <span style="display:flex; align-items:center; gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M8 4v2M16 4v2M4 10h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><circle cx="12" cy="9" r="1" fill="currentColor" stroke="none"></circle></svg>{{ p.age }}</span><span style="display:flex; align-items:center; gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"></path></svg>{{ p.pieces }}</span><span style="display:flex; align-items:center; gap:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l2.9 6.26L21 9.27l-4.5 4.4L17.8 21 12 17.77 6.2 21l1.3-7.33L3 9.27l6.1-1.01z"></path></svg>{{ p.rating }}</span>
+            </div>
+            <span style="font-family: var(--font-display); font-weight: 700; font-size: 15px;">{{ p.name }}</span>
+            <x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{{ p.price }}" hint-size="auto,24px"></x-import>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:4px;">
+              <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="accent" size="sm" style="width:auto; border-radius:var(--radius-pill); white-space:nowrap; flex-shrink:0; padding:8px 14px; font-size:12px;" hint-size="auto,36px">Add to Bag</x-import>
+              <div style="width:36px; height:36px; border-radius:50%; border:1px solid var(--color-border-default); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;" aria-label="Wishlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-default)" stroke-width="1.5"><path d="M12.1 8.64l-.1.1-.1-.1C10.14 6.6 7.1 6.6 5.14 8.5c-2 2-2 5.3 0 7.3l6.6 6.5c.15.15.4.15.55 0l6.6-6.5c2-2 2-5.3 0-7.3-1.96-1.9-5-1.9-6.9.14z"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="width: 100%; height: 3px; background: var(--color-border-default); border-radius: var(--radius-pill); margin-top: 32px; position: relative; overflow: hidden;">
+      <div style="width: {{ recProgress }}%; height: 100%; background: var(--text-meta); border-radius: var(--radius-pill); transition: width 0.3s ease;"></div>
+    </div>
+  </section>
+
+  <!-- New arrivals banner -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="background: var(--brand-green); border-radius: 0; padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 8px; color: var(--text-inverse);">
+        <span style="font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 4vw, 46px); line-height: 1;">New Arrivals</span>
+        <span style="font-size: 14px; opacity: 0.85;">The latest sets this month</span>
+      </div>
+      <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="inverse" size="md" style="border-radius:0; width:auto; flex-shrink:0; align-self:center;" hint-size="auto,48px">Shop now</x-import>
+    </div>
+  </section>
+
+  <!-- Builder gallery -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 28px; color: var(--text-default); display: block; margin-bottom: 6px;">See What Everyone's Building</span>
+      <span style="font-size: 14px; color: var(--text-subtle);">Real builds from real builders, shared with the community.</span>
+    </div>
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 16px;">
+      <div style="background: var(--surface-tertiary); border-radius: 0; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; position: relative;">
+        <span style="color: var(--text-meta); font-size: 12px;">Community build image</span>
+        <div style="position: absolute; bottom: 14px; left: 14px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 16px;">
+        <div style="background: var(--surface-tertiary); border-radius: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+          <span style="color: var(--text-meta); font-size: 12px;">Community build image</span>
+          <div style="position: absolute; bottom: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+        </div>
+        <div style="background: var(--surface-tertiary); border-radius: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+          <span style="color: var(--text-meta); font-size: 12px;">Community build image</span>
+          <div style="position: absolute; bottom: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 16px;">
+        <div style="background: var(--surface-tertiary); border-radius: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+          <span style="color: var(--text-meta); font-size: 12px;">Community build image</span>
+          <div style="position: absolute; bottom: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+        </div>
+        <div style="background: var(--surface-tertiary); border-radius: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+          <span style="color: var(--text-meta); font-size: 12px;">Community build image</span>
+          <div style="position: absolute; bottom: 10px; left: 10px; width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sliding themed banner -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="position: relative; border-radius: 0; overflow: hidden; aspect-ratio: 21/8; background: var(--brand-blue); display: flex; flex-direction: column;">
+      <div style="display: flex; gap: 8px; padding: 20px 28px 0; position: relative; z-index: 1; justify-content: center">
+        <div style="background: var(--brand-black); border-radius: var(--radius-pill); padding: 10px 22px;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--text-inverse);">Everfrost</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.5); border-radius: var(--radius-pill); padding: 10px 22px;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--brand-black);">New sets for kids</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.5); border-radius: var(--radius-pill); padding: 10px 22px;">
+          <span style="font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--brand-black);">Smart Play Sets</span>
+        </div>
+      </div>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; padding: 0 48px; position: relative; z-index: 1;">
+        <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-end; text-align: right; max-width: 460px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 3vw, 34px); line-height: 1.15; color: var(--brand-black);">Frosty adventures await with Everfrost</span>
+          <span style="font-size: 14px; color: rgba(0,0,0,0.7);">Explore icy new sets built for imaginative winter play.</span>
+          <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" size="md" style="border-radius: var(--radius-pill); width: auto;" hint-size="auto,44px">Shop now</x-import>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- New releases -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="padding: 0; margin-bottom: 48px; text-align: center;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 28px; color: var(--text-default);">New Releases</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="aspect-ratio: 4/3; border-radius: 0; background: var(--surface-tertiary); display: flex; align-items: center; justify-content: center; width: 100%;">
+        <span style="color: var(--text-meta); font-size: 12px;">Lifestyle image</span></div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Let your imagination bloom with customizable elements.</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">Position the petals and leaves, then change the lengths of the stems to create wonderful arrangements for the home.</span><x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self: center; border-radius: 0; width:auto;" hint-size="auto,40px">Shop now</x-import>
+
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="aspect-ratio: 4/3; border-radius: 0; background: var(--surface-tertiary); display: flex; align-items: center; justify-content: center; width:100%;">
+          <span style="color: var(--text-meta); font-size: 12px;">Lifestyle image</span>
+        </div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Help kids develop key life skills</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">What's in the box? Everything kids need to create a toy watermill, tall bird, squid, pear tree, and let their imagination run free.</span><x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self:center; border-radius:0; width:auto;" hint-size="auto,40px">Shop now</x-import>
+
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="aspect-ratio: 4/3; border-radius: 0; background: var(--surface-tertiary); display: flex; align-items: center; justify-content: center; width:100%;">
+          <span style="color: var(--text-meta); font-size: 12px;">Lifestyle image</span>
+        </div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Recognize your child's hard work</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">This kit is ideal for kids with a passion for arts and crafts who want to express themselves through design.</span>
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self:center; border-radius:0; width:auto;" hint-size="auto,40px">Shop now</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lifestyle banner -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+
+  </section>
+
+  <!-- City unlocks -->
+
+
+  <!-- Shop by theme -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="padding: 0; margin-bottom: 48px; text-align: center;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 28px; color: var(--text-default);">Shop by Theme</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+      <div style="aspect-ratio: 3/4; border-radius: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12px; gap: 4px">
+        <div style="position:absolute; inset:0; background: var(--surface-tertiary);"></div>
+        <div style="position:absolute; inset:0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; color: #fff; text-align: center;">Super Heroes</span>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.75);">5+</span>
+        </div>
+      </div>
+      <div style="aspect-ratio: 3/4; border-radius: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12px; gap: 4px">
+        <div style="position:absolute; inset:0; background: var(--surface-tertiary);"></div>
+        <div style="position:absolute; inset:0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; color: #fff; text-align: center;">City</span>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.75);">6+</span>
+        </div>
+      </div>
+      <div style="aspect-ratio: 3/4; border-radius: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12px; gap: 4px">
+        <div style="position:absolute; inset:0; background: var(--surface-tertiary);"></div>
+        <div style="position:absolute; inset:0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; color: #fff; text-align: center;">Everfrost</span>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.75);">5+</span>
+        </div>
+      </div>
+      <div style="aspect-ratio: 3/4; border-radius: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12px; gap: 4px">
+        <div style="position:absolute; inset:0; background: var(--surface-tertiary);"></div>
+        <div style="position:absolute; inset:0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; color: #fff; text-align: center;">Shadowkin</span>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.75);">6+</span>
+        </div>
+      </div>
+      <div style="aspect-ratio: 3/4; border-radius: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 12px; gap: 4px">
+        <div style="position:absolute; inset:0; background: var(--surface-tertiary);"></div>
+        <div style="position:absolute; inset:0; background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);"></div>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; color: #fff; text-align: center;">Little Builders</span>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.75);">1.5-5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured sets -->
+
+
+  <!-- Discover more -->
+  <section style="max-width: 1280px; margin: 0 auto; padding: 64px 24px 0;">
+    <div style="text-align: center; margin-bottom: 40px;">
+      <span style="font-family: var(--font-display); font-weight: 600; font-size: 28px; color: var(--text-default);">Discover More</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="width: 100%; aspect-ratio: 4/3; border-radius: 0; background: var(--brand-blue); display: flex; align-items: center; justify-content: center;">
+          <span style="color: var(--text-inverse); opacity: 0.7; font-size: 12px;">Gifting image</span>
+        </div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Get gifting</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">Shop ideas by occasion, age and price. Plus gift cards, too.</span>
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self:center; border-radius:0; width:auto;" hint-size="auto,40px">Shop now</x-import>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="width: 100%; aspect-ratio: 4/3; border-radius: 0; background: var(--brand-green); display: flex; align-items: center; justify-content: center;">
+          <span style="color: var(--text-inverse); opacity: 0.7; font-size: 12px;">Blog image</span>
+        </div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Read all about it</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">See our library of articles for ideas and inspiration.</span>
+        <a href="Brickline Blog.dc.html" style="text-decoration: none;">
+          <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self:center; border-radius:0; width:auto;" hint-size="auto,40px">Discover</x-import>
+        </a>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <div style="width: 100%; aspect-ratio: 4/3; border-radius: 0; background: var(--brand-black); display: flex; align-items: center; justify-content: center;">
+          <span style="color: var(--text-inverse); opacity: 0.7; font-size: 12px;">Membership image</span>
+        </div>
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; text-align: center;">Membership perks at your fingertips</span>
+        <span style="color: var(--text-subtle); font-size: 13px; text-align: center;">Shop new sets, stack up points and unlock rewards.</span>
+        <a href="Brickline Loyalty.dc.html" style="text-decoration: none;">
+          <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm" style="align-self:center; border-radius:0; width:auto;" hint-size="auto,40px">Learn more</x-import>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loyalty program -->
+
+
+  <!-- Subscribe band -->
+  <section style="background: var(--surface-page); padding: 32px 24px; border-top: 1px solid var(--color-border-default); border-bottom: 1px solid var(--color-border-default); margin-top: 40px">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <div style="color: var(--text-default); display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em;">Subscribe to Brickline Certified Store</span>
+        <span style="font-family: var(--font-body); font-size: 13px; color: var(--text-subtle);">Be the first to hear about new sets, exclusive products and promotions.</span>
+      </div>
+      <div style="display: flex; gap: 12px; width: 395px; height: 43px">
+        <div style="background: var(--surface-page); border: 1px solid var(--color-border-default); border-radius: var(--radius-pill); padding: 12px 20px; font-size: 14px; color: var(--text-subtle); width: 267px; height: 18px; font-family: var(--font-body)">Your email address here</div>
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" size="md" style="border-radius: var(--radius-pill);" hint-size="auto,44px">Go</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #1A1A1A; color: var(--text-inverse); padding: 64px 24px 28px;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1.1fr repeat(4, 1fr); gap: 32px; padding-bottom: 40px;">
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="width: 96px; height: 96px; background: var(--brand-orange); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--text-inverse);">BL</span>
+          </div>
+          <div style="background: #F2F2F2; border-radius: var(--radius-pill); padding: 10px 16px; display: flex; align-items: center; gap: 8px; width: fit-content;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+            <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--brand-black);">Philippines</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <a href="Brickline Gift Card.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Gift cards</a>
+            <a href="Brickline Collections.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sitemap</a>
+            <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Find inspiration</a>
+            <a href="Brickline Our Stores.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Find a store</a>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">About Us</span>
+          <a href="Brickline About Us.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">About Brickline</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Brickline news</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sustainability</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Supply chain statement</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Product certification</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Support</span>
+          <a href="Brickline Contact Us.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Contact us</a>
+          <a href="Brickline FAQs.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">FAQ</a>
+          <a href="Brickline Returns.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Returns</a>
+          <a href="Brickline Shipping Information.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Delivery &amp; shipping</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Payment methods</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Terms &amp; conditions</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">My Account</span>
+          <a href="Brickline Account.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sign-in / Sign-up</a>
+          <a href="Brickline Account.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Account</a>
+          <a href="Brickline Order History.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Orders</a>
+          <a href="Brickline Addresses.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Addresses</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">More From Us</span>
+          <a href="Brickline Loyalty.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Loyalty program</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Ideas &amp; inspiration</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Affiliate program</a>
+          <a href="Brickline Loyalty.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Student &amp; exclusive offers</a>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; padding-bottom: 40px; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Subscribe to Digital Marketing Emails</span>
+          <div style="display: flex; gap: 0; width: 340px; background: #F2F2F2; border-radius: var(--radius-pill); padding: 4px 4px 4px 18px; align-items: center;">
+            <span style="font-size: 14px; color: var(--text-meta); flex: 1;">Your email address</span>
+            <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" size="sm" style="border-radius: var(--radius-pill); width: auto;" hint-size="auto,36px">Subscribe</x-import>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Follow Us</span>
+          <div style="display: flex; gap: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><path d="M16 8h-2a2 2 0 0 0-2 2v2h4l-.5 4H12v8h-4v-8H6v-4h2v-2.5A4.5 4.5 0 0 1 12.5 3H16v5z"></path></svg>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="var(--text-inverse)" stroke="none"></circle></svg>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M9 9l6 3-6 3z" fill="var(--text-inverse)" stroke="none"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; display: flex; gap: 24px; flex-wrap: wrap;">
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Privacy policy</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Cookies</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Cookie settings</a>
+        <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Legal notice</a>
+        <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Terms of use</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Digital wellbeing</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Accessibility</a>
+        <a href="Brickline Privacy Policy.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Do not sell/share my personal information</a>
+      </div>
+
+      <div style="padding-top: 16px;">
+        <span style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6">Brickline Trading Co., Makati City, Metro Manila, Philippines. Must be 18 years or older to purchase online. Brickline and the Brickline logo are trademarks of Brickline Trading Co. ©2026 Brickline. All rights reserved. Use of this site signifies your agreement to the Terms of Use.</span>
+      </div>
+    </div>
+  </footer>
+
+
+
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroBg&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2E7D5B&quot;,&quot;options&quot;:[&quot;#4A7A96&quot;,&quot;#2E7D5B&quot;,&quot;#C94F4F&quot;,&quot;#1A1A1A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;categoryTileBg&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#FFD400&quot;,&quot;options&quot;:[&quot;#FFD400&quot;,&quot;#FFFFFF&quot;,&quot;#F2F2F2&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Category tiles&quot;},&quot;heroCtaVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;accent&quot;,&quot;options&quot;:[&quot;accent&quot;,&quot;primary&quot;,&quot;inverse&quot;,&quot;secondary&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
+class Component extends DCLogic {
+  state = { heroIndex: 0, recTab: 'featured', recPage: 0 };
+
+  heroSlides = [
+    { bg: 'var(--brand-earth-blue)', title: 'Shop a piece of it', subtitle: "From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector." },
+    { bg: 'var(--brand-green)', title: 'New sets have landed', subtitle: 'Explore the latest arrivals across every theme, from Everfrost to Critter Quest.' },
+    { bg: 'var(--brand-blue)', title: 'Build something amazing', subtitle: 'Discover Exclusives and Signature Editions made for serious collectors.' },
+  ];
+
+  allRecommended = [
+    { name: 'Rally Racer Supra Concept', price: '29.99', age: '10+', pieces: '292', rating: '4.9', badge: 'New', badgeTone: 'new', tab: 'featured' },
+    { name: 'Baby Piglet with Blossom', price: '69.99', age: '9+', pieces: '885', rating: '5.0', badge: 'New', badgeTone: 'new', tab: 'featured' },
+    { name: 'Crimson Guardian Armor Display', price: '129.99', age: '18+', pieces: '1297', rating: '4.5', badge: null, badgeTone: null, tab: 'featured' },
+    { name: "Enchanted Wizard's Peak", price: '99.99', age: '18+', pieces: '561', rating: '4.6', badge: 'Retiring soon', badgeTone: 'discount', tab: 'popular' },
+    { name: 'Snack Shack Rocket Rider', price: '59.99', age: '9+', pieces: '714', rating: '4.7', badge: null, badgeTone: null, tab: 'popular' },
+    { name: 'Arcade Pinball Machine', price: '229.99', age: '14+', pieces: '2418', rating: '4.8', badge: null, badgeTone: null, tab: 'popular' },
+    { name: 'Little Builders Farm Animals', price: '19.99', age: '4+', pieces: '48', rating: '4.9', badge: 'New', badgeTone: 'new', tab: "kids" },
+    { name: 'Junior Fire Truck', price: '24.99', age: '5+', pieces: '65', rating: '4.8', badge: null, badgeTone: null, tab: "kids" },
+    { name: 'My First Zoo Playset', price: '34.99', age: '4+', pieces: '112', rating: '5.0', badge: null, badgeTone: null, tab: "kids" },
+  ];
+
+  goToHero = (i) => this.setState({ heroIndex: i });
+  setRecTab = (id) => this.setState({ recTab: id, recPage: 0 });
+  scrollRec = (dir) => this.setState(s => {
+    const total = this.allRecommended.filter(p => p.tab === s.recTab).length;
+    const pages = Math.max(1, Math.ceil(total / 5));
+    return { recPage: (s.recPage + dir + pages) % pages };
+  });
+
+  componentDidMount() {
+    this._heroTimer = setInterval(() => {
+      this.setState(s => ({ heroIndex: (s.heroIndex + 1) % this.heroSlides.length }));
+    }, 5000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._heroTimer);
+  }
+
+  topCategories = [
+    { label: 'Best Sellers' },
+    { label: 'Exclusives' },
+    { label: 'New Arrivals' },
+    { label: 'Sale' },
+  ];
+
+  recommended = [
+    { name: 'Starter Birthday Train (39 Pieces)', price: '2599', original: null },
+    { name: 'Classic Medium Creative Brick Box, Toys for Kids, Gift', price: '1850', original: '2799' },
+    { name: 'Classic Brick Box (65 Pcs)', price: '2299', original: null },
+  ];
+
+  newReleases = [
+    { title: 'Let your imagination bloom with customizable elements.', subtitle: 'Position the petals and leaves, then change the lengths of the stems to create wonderful arrangements for the home.' },
+    { title: 'Help kids develop key life skills', subtitle: "What's in the box? Everything kids need to create a toy watermill, tall bird, squid, pear tree, and let their imagination run free." },
+    { title: "Recognize your child's hard work", subtitle: 'This kit is ideal for kids with a passion for arts and crafts who want to express themselves through design.' },
+  ];
+
+  cityUnlocks = [
+    { title: 'Realistic Functions', subtitle: 'A treat for kids aged 6 and up. Includes road plates and all kids need to build a toy plaza, car wash, depot, park, recycling station, truck, EV, motorcycle and bicycle, plus 8 minifigures and baby and guide dog figures.' },
+    { title: 'Inspiring vehicle for imaginative role play', subtitle: 'A treat for kids who love cool cars. Awesome design with eye-catching bodywork, an adjustable rear toy spoiler, sporty black rims with ground-gripping tires and a detailed tinted cockpit with seating for the included minifigure driver.' },
+    { title: 'Discover the world', subtitle: 'Everything kids need to build a toy helicopter, motorbike, power station setting and city fire figures, plus 3 minifigures from the City Adventures TV series.' },
+  ];
+
+  themes = [
+    { label: 'Super Heroes', age: '5+', color: 'var(--brand-blue)' },
+    { label: 'City', age: '6+', color: 'var(--brand-blue)' },
+    { label: 'Everfrost', age: '5+', color: 'var(--brand-earth-blue)' },
+    { label: 'Shadowkin', age: '6+', color: 'var(--brand-black)' },
+    { label: 'Little Builders', age: '1.5-5', color: 'var(--brand-green)' },
+  ];
+
+  featuredSets = [
+    { name: 'City Mountain Bike Adventure Van (260 pieces), Building Blocks', price: '1799' },
+    { name: 'City Vintage Steam Train (575 pieces), Building Blocks', price: '7799' },
+    { name: 'City Harbor Freight Train with Crane & Truck (803 pieces), Building Blocks', price: '8999' },
+    { name: 'City Classic Beach Streetcar (695 pieces), Building Blocks', price: '6299' },
+  ];
+
+  footerColumns = [
+    { heading: 'Popular Links', links: ['Our City', 'Our Classic', 'Our Little Builders', 'Our Explorers'], social: false },
+    { heading: 'Support', links: ['Our Stores', 'Privacy Policy', 'FAQ', 'Terms and Conditions'], social: false },
+    { heading: 'My Account', links: ['Sign-in / Sign-up', 'My Account', 'My Orders', 'My Addresses'], social: false },
+    { heading: 'Follow Us', links: [], social: true },
+  ];
+
+  socialIcons = [
+    { label: 'Fb' },
+    { label: 'Tw' },
+    { label: 'Ig' },
+  ];
+
+  renderVals() {
+    const heroSlides = this.heroSlides.map((s, i) => ({ ...s, active: i === this.state.heroIndex }));
+    const tabMeta = [{ id: 'featured', label: 'Featured' }, { id: 'popular', label: 'Popular' }, { id: 'kids', label: "Kids' sets" }];
+    const recTabs = tabMeta.map(t => ({ ...t, active: t.id === this.state.recTab }));
+    const filtered = this.allRecommended.filter(p => p.tab === this.state.recTab);
+    const pages = Math.max(1, Math.ceil(filtered.length / 5));
+    const page = this.state.recPage % pages;
+    const visibleRecommended = filtered.length > 5 ? filtered.slice(page * 5, page * 5 + 5).concat(filtered.slice(0, Math.max(0, page * 5 + 5 - filtered.length))) : filtered;
+    return {
+      heroBg: this.props.heroBg ?? 'var(--brand-earth-blue)',
+      categoryTileBg: this.props.categoryTileBg ?? 'var(--brand-yellow)',
+      heroCtaVariant: this.props.heroCtaVariant ?? 'accent',
+      topCategories: this.topCategories,
+      heroSlides,
+      activeHero: heroSlides[this.state.heroIndex],
+      recTabs,
+      visibleRecommended,
+      recProgress: Math.round(((page + 1) / pages) * 100),
+      goToHero: this.goToHero,
+      setRecTab: this.setRecTab,
+      scrollRec: this.scrollRec,
+      recommended: this.recommended,
+      newReleases: this.newReleases,
+      cityUnlocks: this.cityUnlocks,
+      themes: this.themes,
+      featuredSets: this.featuredSets,
+      footerColumns: this.footerColumns,
+      linkColumns: this.footerColumns.filter(c => !c.social),
+      socialIcons: this.socialIcons,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
