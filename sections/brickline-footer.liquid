@@ -134,7 +134,11 @@
 
 {% stylesheet %}
   .brickline-footer {
-    background: #1a1a1a;
+    /* !important: Horizon forces `background: transparent` on any element
+       carrying `.section` (base.css) since it expects a separate
+       `.section-background` sibling to paint color instead. This section
+       paints its own literal background directly, so it must win that fight. */
+    background: #1a1a1a !important;
     color: var(--text-inverse, #ffffff);
   }
 
