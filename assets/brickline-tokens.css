@@ -1,0 +1,49 @@
+/* Brickline design tokens — mirrors the source design system's colors.css / shape.css / spacing.css */
+:root {
+  /* Brand */
+  --brand-yellow: #ffd400;
+  --brand-black: #000000;
+  --brand-green: #00af4d;
+  --brand-blue: #006cb7;
+  --brand-pink: #e3599d;
+  --brand-orange: #c3622c;
+  --brand-earth-blue: #00395d;
+
+  /* Status / accent */
+  --status-discount-red: #dd0000;
+  --status-price-red: #bd0000;
+  --status-success-green: #008439;
+
+  /* Neutrals / surfaces */
+  --surface-page: #ffffff;
+  --surface-secondary: #fafafa;
+  --surface-tertiary: #f7f7f7;
+  --surface-muted: #f2f2f2;
+  --surface-strong-neutral: #d9d9d9;
+
+  /* Text */
+  --text-default: #141414;
+  --text-subtle: #636363;
+  --text-meta: #939393;
+  --text-inverse: #ffffff;
+
+  /* Semantic aliases */
+  --color-bg-page: var(--surface-page);
+  --color-border-default: var(--surface-strong-neutral);
+
+  /* Shape */
+  --radius-pill: 999px;
+}
+
+/* Brickline sections use a 1280px / 24px container instead of Horizon's page-width system. */
+.brickline-section.section--page-width {
+  --full-page-grid-central-column-width: min(1280px, 100% - 48px);
+  --full-page-grid-margin: minmax(24px, 1fr);
+}
+
+.brickline-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}

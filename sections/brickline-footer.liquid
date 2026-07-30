@@ -1,0 +1,463 @@
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+{% liquid
+  assign brand_menu = linklists[section.settings.brand_menu]
+  assign about_menu = linklists[section.settings.about_menu]
+  assign support_menu = linklists[section.settings.support_menu]
+  assign account_menu = linklists[section.settings.account_menu]
+  assign more_menu = linklists[section.settings.more_menu]
+  assign legal_menu = linklists[section.settings.legal_menu]
+%}
+
+<footer
+  class="brickline-footer brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %};"
+>
+  <div class="brickline-footer__inner brickline-container">
+    <div class="brickline-footer__columns">
+      <div class="brickline-footer__brand-col">
+        <div class="brickline-footer__logo-mark">
+          <span>BL</span>
+        </div>
+        <div class="brickline-footer__location-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black, #000000)" stroke-width="2">
+            <path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"></path>
+            <circle cx="12" cy="10" r="2.5"></circle>
+          </svg>
+          <span>{{ section.settings.location_label | default: 'Philippines' }}</span>
+        </div>
+        {% if brand_menu %}
+          <div class="brickline-footer__links">
+            {% for link in brand_menu.links %}
+              <a href="{{ link.url }}" class="brickline-footer__link">{{ link.title }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if about_menu %}
+        <div class="brickline-footer__col">
+          <span class="brickline-footer__col-heading">{{ about_menu.title }}</span>
+          {% for link in about_menu.links %}
+            <a href="{{ link.url }}" class="brickline-footer__link">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if support_menu %}
+        <div class="brickline-footer__col">
+          <span class="brickline-footer__col-heading">{{ support_menu.title }}</span>
+          {% for link in support_menu.links %}
+            <a href="{{ link.url }}" class="brickline-footer__link">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if account_menu %}
+        <div class="brickline-footer__col">
+          <span class="brickline-footer__col-heading">{{ account_menu.title }}</span>
+          {% for link in account_menu.links %}
+            <a href="{{ link.url }}" class="brickline-footer__link">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if more_menu %}
+        <div class="brickline-footer__col">
+          <span class="brickline-footer__col-heading">{{ more_menu.title }}</span>
+          {% for link in more_menu.links %}
+            <a href="{{ link.url }}" class="brickline-footer__link">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="brickline-footer__row2">
+      <div class="brickline-footer__newsletter">
+        <span class="brickline-footer__col-heading">{{ section.settings.newsletter_heading | default: 'Subscribe to Digital Marketing Emails' }}</span>
+        {% form 'customer', class: 'brickline-footer__newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {% if form.posted_successfully? %}
+            <p class="brickline-footer__newsletter-success">{{ 'blocks.email_signup.success' | t }}</p>
+          {% else %}
+            <label for="brickline-footer-email-{{ section.id }}" class="visually-hidden">
+              {{ 'blocks.email_signup.label' | t }}
+            </label>
+            <input
+              type="email"
+              name="contact[email]"
+              id="brickline-footer-email-{{ section.id }}"
+              class="brickline-footer__newsletter-input"
+              placeholder="{{ section.settings.newsletter_placeholder | default: 'Your email address' }}"
+              required
+            >
+            <button type="submit" class="brickline-footer__newsletter-button">
+              {{ section.settings.newsletter_button_label | default: 'Subscribe' }}
+            </button>
+          {% endif %}
+        {% endform %}
+      </div>
+
+      <div class="brickline-footer__social">
+        <span class="brickline-footer__col-heading">{{ section.settings.follow_heading | default: 'Follow Us' }}</span>
+        <div class="brickline-footer__social-icons">
+          {% if section.settings.facebook_url != blank %}
+            <a href="{{ section.settings.facebook_url }}" class="brickline-footer__social-icon" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8h-2a2 2 0 0 0-2 2v2h4l-.5 4H12v8h-4v-8H6v-4h2v-2.5A4.5 4.5 0 0 1 12.5 3H16v5z"></path></svg>
+            </a>
+          {% endif %}
+          {% if section.settings.instagram_url != blank %}
+            <a href="{{ section.settings.instagram_url }}" class="brickline-footer__social-icon" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg>
+            </a>
+          {% endif %}
+          {% if section.settings.youtube_url != blank %}
+            <a href="{{ section.settings.youtube_url }}" class="brickline-footer__social-icon" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M9 9l6 3-6 3z" fill="currentColor" stroke="none"></path></svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if legal_menu %}
+      <div class="brickline-footer__legal-links">
+        {% for link in legal_menu.links %}
+          <a href="{{ link.url }}" class="brickline-footer__legal-link">{{ link.title }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="brickline-footer__boilerplate">
+      {{ section.settings.boilerplate_text }}
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .brickline-footer {
+    background: #1a1a1a;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .brickline-footer__columns {
+    display: grid;
+    grid-template-columns: 1.1fr repeat(4, 1fr);
+    gap: 32px;
+    padding-bottom: 40px;
+
+    @media screen and (max-width: 749px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .brickline-footer__brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    grid-column: 1 / -1;
+
+    @media screen and (min-width: 750px) {
+      grid-column: auto;
+    }
+  }
+
+  .brickline-footer__logo-mark {
+    width: 96px;
+    height: 96px;
+    background: var(--brand-orange, #c3622c);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .brickline-footer__location-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    background: #f2f2f2;
+    border-radius: var(--radius-pill, 999px);
+    padding: 10px 16px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--brand-black, #000000);
+  }
+
+  .brickline-footer__col,
+  .brickline-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .brickline-footer__brand-col .brickline-footer__links {
+    gap: 14px;
+  }
+
+  .brickline-footer__col-heading {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .brickline-footer__link {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-inverse, #ffffff);
+    text-decoration: none;
+    opacity: 0.85;
+  }
+
+  .brickline-footer__link:hover {
+    opacity: 1;
+  }
+
+  .brickline-footer__row2 {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 32px;
+    padding-bottom: 40px;
+    align-items: start;
+
+    @media screen and (max-width: 749px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .brickline-footer__newsletter,
+  .brickline-footer__social {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .brickline-footer__newsletter-form {
+    display: flex;
+    align-items: center;
+    width: 340px;
+    max-width: 100%;
+    background: #f2f2f2;
+    border-radius: var(--radius-pill, 999px);
+    padding: 4px 4px 4px 18px;
+  }
+
+  .brickline-footer__newsletter-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-meta, #939393);
+  }
+
+  .brickline-footer__newsletter-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--radius-pill, 999px);
+    background: var(--brand-yellow, #ffd400);
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .brickline-footer__newsletter-success {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+  }
+
+  .brickline-footer__social-icons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .brickline-footer__social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .brickline-footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 20px;
+  }
+
+  .brickline-footer__legal-link {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-inverse, #ffffff);
+    text-decoration: none;
+    opacity: 0.85;
+  }
+
+  .brickline-footer__boilerplate {
+    padding-top: 16px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+  }
+
+  .brickline-footer__boilerplate p {
+    margin: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brickline footer",
+  "class": "footer-section",
+  "tag": "footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "location_label",
+      "label": "Location chip label",
+      "default": "Philippines"
+    },
+    {
+      "type": "link_list",
+      "id": "brand_menu",
+      "label": "Column 1 links",
+      "default": "footer-brand-links"
+    },
+    {
+      "type": "link_list",
+      "id": "about_menu",
+      "label": "About Us menu",
+      "default": "footer-about-us"
+    },
+    {
+      "type": "link_list",
+      "id": "support_menu",
+      "label": "Support menu",
+      "default": "footer"
+    },
+    {
+      "type": "link_list",
+      "id": "account_menu",
+      "label": "My Account menu",
+      "default": "footer-my-account"
+    },
+    {
+      "type": "link_list",
+      "id": "more_menu",
+      "label": "More From Us menu",
+      "default": "footer-more-from-us"
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal links menu",
+      "default": "footer-policy-list"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Subscribe to Digital Marketing Emails"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Newsletter placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Newsletter button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "follow_heading",
+      "label": "Follow Us heading",
+      "default": "Follow Us"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "richtext",
+      "id": "boilerplate_text",
+      "label": "Boilerplate text",
+      "default": "<p>Brickline Trading Co., Makati City, Metro Manila, Philippines. Must be 18 years or older to purchase online. Brickline and the Brickline logo are trademarks of Brickline Trading Co. ©2026 Brickline. All rights reserved. Use of this site signifies your agreement to the Terms of Use.</p>"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brickline footer"
+    }
+  ]
+}
+{% endschema %}

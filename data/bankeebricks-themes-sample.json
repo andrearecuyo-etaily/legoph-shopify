@@ -1,0 +1,114 @@
+{
+  "source": "https://www.bankeebricks.ph/",
+  "scraped_at": "2026-07-28",
+  "platform": "PrestaShop",
+  "note": "One sample product per theme/category, scraped from each theme's landing page. Themes with no current stock show product: null.",
+  "themes": [
+    { "theme": "Architecture", "url": "https://www.bankeebricks.ph/43-architecture", "product": null },
+    { "theme": "Art", "url": "https://www.bankeebricks.ph/70-art", "product": null },
+    { "theme": "Brick Sketches", "url": "https://www.bankeebricks.ph/118-brick-sketches", "product": null },
+    { "theme": "BrickHeadz", "url": "https://www.bankeebricks.ph/131-brickheadz", "product": null },
+    { "theme": "Chinese Festivals/Seasons", "url": "https://www.bankeebricks.ph/52-chinese-festivalsseasons", "product": null },
+    {
+      "theme": "City",
+      "url": "https://www.bankeebricks.ph/20-city",
+      "product": {
+        "title": "LEGO City 60512 Mountain Bike Adventure Van (260 pieces)",
+        "price_php": 1799.00,
+        "url": "https://www.bankeebricks.ph/city/3727-lego-city-60512-mountain-bike-adventure-van-260-pieces-building-blocks-60512.html"
+      }
+    },
+    { "theme": "Classic", "url": "https://www.bankeebricks.ph/21-classic", "product": null, "note": "Page shows a DUPLO cross-sell item, but no Classic-tagged products currently in stock" },
+    { "theme": "Creator 3 in 1", "url": "https://www.bankeebricks.ph/31-creator-3-in-1", "product": null },
+    { "theme": "DC", "url": "https://www.bankeebricks.ph/72-dc", "product": null },
+    { "theme": "Disney", "url": "https://www.bankeebricks.ph/130-disney", "product": null },
+    { "theme": "Disney Princess", "url": "https://www.bankeebricks.ph/44-disney-princess", "product": null },
+    { "theme": "DOTS", "url": "https://www.bankeebricks.ph/42-dots", "product": null },
+    {
+      "theme": "Duplo",
+      "url": "https://www.bankeebricks.ph/22-duplo",
+      "product": {
+        "title": "LEGO DUPLO 10478 3 in 1 Creative Ramps with Vehicles (111 pieces)",
+        "price_php": 6299.00,
+        "url": "https://www.bankeebricks.ph/duplo/3656-lego-duplo-10478-3-in-1-creative-ramps-with-vehicles-111-pieces-building-blocks-10478.html"
+      }
+    },
+    { "theme": "Friends", "url": "https://www.bankeebricks.ph/18-friends", "product": null },
+    {
+      "theme": "Harry Potter",
+      "url": "https://www.bankeebricks.ph/50-harry-potter",
+      "product": {
+        "title": "LEGO Harry Potter 76464 Cauldron: Secret Potions Classroom (652 pieces)",
+        "price_php": 4599.00,
+        "url": "https://www.bankeebricks.ph/indiana-jones/3538-lego-harry-potter-76464-cauldron-secret-potions-classroom-652-pieces-building-blocks-76464.html"
+      }
+    },
+    { "theme": "Horizon", "url": "https://www.bankeebricks.ph/149-horizon", "product": null },
+    {
+      "theme": "Iconic",
+      "url": "https://www.bankeebricks.ph/119-iconic",
+      "product": {
+        "title": "LEGO D2C Icons 10338 Bumblebee (950 pieces)",
+        "price_php": 6499.00,
+        "url": "https://www.bankeebricks.ph/iconic/2894-lego-d2c-icons-10338-bumblebee-age-18-building-blocks-2024-950pcs-multicolor-10338.html"
+      }
+    },
+    { "theme": "Ideas", "url": "https://www.bankeebricks.ph/30-ideas", "product": null },
+    { "theme": "Jurassic World", "url": "https://www.bankeebricks.ph/135-jurassic-world", "product": null },
+    { "theme": "Lightyear", "url": "https://www.bankeebricks.ph/148-lightyear", "product": null },
+    { "theme": "Marvel", "url": "https://www.bankeebricks.ph/19-marvel", "product": null },
+    { "theme": "Mickey and Friends", "url": "https://www.bankeebricks.ph/126-mickey-and-friends", "product": null },
+    { "theme": "Minifigures", "url": "https://www.bankeebricks.ph/46-minifigures", "product": null },
+    { "theme": "Minions", "url": "https://www.bankeebricks.ph/102-minions", "product": null },
+    {
+      "theme": "Ninjago",
+      "url": "https://www.bankeebricks.ph/34-ninjago",
+      "product": {
+        "title": "LEGO Ninjago 71868 Wyldfyre's Transforming Dragon Mech (821 pieces)",
+        "price_php": 7499.00,
+        "url": "https://www.bankeebricks.ph/ninjago/3733-lego-ninjago-71868-wyldfyre-s-transforming-dragon-mech-821-pieces-building-blocks-71868.html"
+      }
+    },
+    {
+      "theme": "Speed Champions",
+      "url": "https://www.bankeebricks.ph/48-speed-champions",
+      "product": {
+        "title": "LEGO Speed Champions 77243 Oracle Red Bull Racing RB20 F1 Race Car (251 pieces)",
+        "price_php": 1999.00,
+        "url": "https://www.bankeebricks.ph/speed-champions/3162-lego-speed-champions-77243-oracle-red-bull-racing-rb20-f1-race-car-251-pieces-building-blocks-f1-car-gift-77243.html"
+      }
+    },
+    {
+      "theme": "Star Wars",
+      "url": "https://www.bankeebricks.ph/32-star-wars",
+      "product": {
+        "title": "LEGO D2C Star Wars 75367 Venator-Class Republic Attack Cruiser (5374 pieces)",
+        "price_php": 42999.00,
+        "url": "https://www.bankeebricks.ph/star-wars/2534-lego-d2c-star-wars-75367-venator-class-republic-attack-cruiser-5374-pieces-75367.html"
+      }
+    },
+    {
+      "theme": "Super Heroes",
+      "url": "https://www.bankeebricks.ph/41-super-heroes",
+      "product": {
+        "title": "LEGO Super Heroes 76346 Spider-Man Hero Figure (813 pieces)",
+        "price_php": 8999.00,
+        "url": "https://www.bankeebricks.ph/super-heroes/3741-lego-super-heroes-76346-spider-man-hero-figure-813-pieces-building-blocks-76346.html"
+      }
+    },
+    { "theme": "Super Mario", "url": "https://www.bankeebricks.ph/73-super-mario", "product": null },
+    {
+      "theme": "Technic",
+      "url": "https://www.bankeebricks.ph/45-technic",
+      "product": {
+        "title": "LEGO D2C Technic 42172 McLaren Supercar (3893 pieces)",
+        "price_php": 30999.00,
+        "url": "https://www.bankeebricks.ph/technic/2899-lego-d2c-technic-42172-mclaren-supercar-age-18-building-blocks-2024-3893pcs-multicolor-42172.html"
+      }
+    },
+    { "theme": "The LEGO Movie 2", "url": "https://www.bankeebricks.ph/51-the-lego-movie-2", "product": null },
+    { "theme": "Toy Story 4", "url": "https://www.bankeebricks.ph/49-toy-story-4", "product": null },
+    { "theme": "Trolls", "url": "https://www.bankeebricks.ph/47-trolls", "product": null },
+    { "theme": "Xtra", "url": "https://www.bankeebricks.ph/136-xtra", "product": null }
+  ]
+}

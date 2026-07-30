@@ -1,0 +1,263 @@
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+{% liquid
+  assign menu = linklists[section.settings.menu]
+%}
+
+<header
+  class="brickline-header brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  style="{% render 'spacing-padding', settings: section.settings %};"
+>
+  <div class="brickline-header__inner brickline-container">
+    {% if settings.logo %}
+      <a href="{{ routes.root_url }}" class="brickline-header__logo">
+        <img
+          src="{{ settings.logo | image_url: width: 240 }}"
+          alt="{{ shop.name }}"
+          width="120"
+          height="32"
+          loading="eager"
+        >
+      </a>
+    {% else %}
+      <a href="{{ routes.root_url }}" class="brickline-header__logo brickline-header__logo--placeholder">
+        <span>Logo</span>
+      </a>
+    {% endif %}
+
+    {% if menu %}
+      <nav class="brickline-header__nav" aria-label="Main menu">
+        {% for link in menu.links limit: 6 %}
+          <a href="{{ link.url }}" class="brickline-header__nav-link">
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <search-button class="brickline-header__search">
+      <button
+        type="button"
+        on:click="#search-modal/showDialog"
+        class="brickline-header__search-trigger"
+        aria-haspopup="dialog"
+        aria-label="{{ 'content.search_input_label' | t }}"
+      >
+        {{ section.settings.search_placeholder | default: 'Search sets…' }}
+      </button>
+    </search-button>
+
+    <a
+      href="{{ section.settings.wishlist_link | default: '#' }}"
+      class="brickline-header__icon-btn brickline-header__icon-btn--wishlist"
+      aria-label="Wishlist"
+    >
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12.1 8.64l-.1.1-.1-.1C10.14 6.6 7.1 6.6 5.14 8.5c-2 2-2 5.3 0 7.3l6.6 6.5c.15.15.4.15.55 0l6.6-6.5c2-2 2-5.3 0-7.3-1.96-1.9-5-1.9-6.9.14z"></path>
+      </svg>
+    </a>
+
+    {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+      <button
+        type="button"
+        on:click="#cart-drawer/toggle"
+        class="brickline-header__icon-btn brickline-header__icon-btn--cart"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="cart-drawer"
+        aria-label="{{ 'accessibility.cart' | t }}"
+        data-testid="cart-drawer-trigger"
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 6h15l-1.5 9h-12z"></path>
+          <circle cx="9" cy="20" r="1.5" fill="currentColor"></circle>
+          <circle cx="18" cy="20" r="1.5" fill="currentColor"></circle>
+        </svg>
+      </button>
+    {% else %}
+      <a
+        href="{{ routes.cart_url }}"
+        class="brickline-header__icon-btn brickline-header__icon-btn--cart"
+        aria-label="{{ 'accessibility.cart' | t }}"
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 6h15l-1.5 9h-12z"></path>
+          <circle cx="9" cy="20" r="1.5" fill="currentColor"></circle>
+          <circle cx="18" cy="20" r="1.5" fill="currentColor"></circle>
+        </svg>
+      </a>
+    {% endif %}
+  </div>
+</header>
+
+{% stylesheet %}
+  .brickline-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .brickline-header__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 32px;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  .brickline-header__logo img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .brickline-header__logo--placeholder {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
+
+  .brickline-header__logo--placeholder span {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brand-black, #000000);
+    opacity: 0.6;
+  }
+
+  .brickline-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .brickline-header__nav-link {
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .brickline-header__search {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .brickline-header__search-trigger {
+    display: block;
+    width: 200px;
+    background: var(--surface-page, #ffffff);
+    border: none;
+    border-radius: var(--radius-pill, 999px);
+    padding: 10px 18px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .brickline-header__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--brand-black, #000000);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .brickline-header__icon-btn--wishlist {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brickline-header__icon-btn--cart {
+    width: 44px;
+    height: 44px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brickline header",
+  "class": "header-section",
+  "tag": "header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search sets…"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_link",
+      "label": "Wishlist link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-yellow"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brickline header"
+    }
+  ]
+}
+{% endschema %}
