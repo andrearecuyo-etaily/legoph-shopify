@@ -7,9 +7,10 @@
 %}
 
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="feature-grid spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="feature-grid brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
     --brickline-card-radius: {{ settings.brickline_card_radius }}px;
@@ -203,6 +204,13 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     color: #141414;
+  }
+
+  .feature-grid__grid--featured .feature-grid__item:not(.feature-grid__item--large) .feature-grid__overlay-icon {
+    width: 26px;
+    height: 26px;
+    bottom: 10px;
+    left: 10px;
   }
 
   .feature-grid__content {

@@ -4,9 +4,10 @@
 %}
 
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="product-rail spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="product-rail brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="{% render 'spacing-padding', settings: section.settings %}; --brickline-card-radius: {{ settings.brickline_card_radius }}px;"
 >
   {% if section.settings.heading != blank %}

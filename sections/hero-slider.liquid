@@ -3,9 +3,10 @@
 %}
 
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <hero-slider-component
-  class="hero-slider spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="hero-slider brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="{% render 'spacing-padding', settings: section.settings %}"
   data-autoplay="{% if section.settings.autoplay and slide_count > 1 %}{{ section.settings.autoplay_speed | times: 1000 }}{% else %}0{% endif %}"
 >

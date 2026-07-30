@@ -164,6 +164,20 @@
           "icon": "#ffffff"
         }
       },
+      "scheme-blue-dark-text": {
+        "settings": {
+          "background": "#006cb7",
+          "text": "#000000",
+          "button_background": "#ffffff",
+          "button_label": "#006cb7",
+          "secondary_button_background": "#006cb7",
+          "secondary_button_label": "#ffffff",
+          "button_border": "#ffffff",
+          "secondary_button_border": "#ffffff",
+          "link": "#000000",
+          "icon": "#000000"
+        }
+      },
       "scheme-earth-blue": {
         "settings": {
           "background": "#00395d",

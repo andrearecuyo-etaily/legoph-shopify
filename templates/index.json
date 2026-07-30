@@ -154,7 +154,7 @@
         "subheading": "<p>Explore icy new sets built for imaginative winter play.</p>",
         "button_label": "Shop now",
         "button_link": "shopify://collections/all",
-        "color_scheme": "scheme-blue",
+        "color_scheme": "scheme-blue-dark-text",
         "section_width": "page-width",
         "padding-block-start": 64,
         "padding-block-end": 0

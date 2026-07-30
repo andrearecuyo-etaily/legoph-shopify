@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="utility-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="utility-bar brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="{% render 'spacing-padding', settings: section.settings %};"
 >
   <div class="utility-bar__inner">
@@ -57,6 +58,7 @@
     letter-spacing: 0.03em;
     background: rgb(from currentColor r g b / 0.08);
     padding: 4px 10px;
+    border-radius: 0;
   }
 
   .utility-bar__link {
