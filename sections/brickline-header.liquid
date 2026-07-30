@@ -7,7 +7,11 @@
 
 <header
   class="brickline-header brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
-  style="{% render 'spacing-padding', settings: section.settings %};"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --header-bg: {{ section.settings.color_scheme.settings.background }};
+    --header-text: {{ section.settings.color_scheme.settings.text }};
+  "
 >
   <div class="brickline-header__inner brickline-container">
     {% if settings.logo %}
@@ -92,6 +96,11 @@
 </header>
 
 {% stylesheet %}
+  .brickline-header {
+    background: var(--header-bg);
+    color: var(--header-text);
+  }
+
   .brickline-header__inner {
     display: flex;
     align-items: center;
@@ -125,7 +134,7 @@
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--brand-black, #000000);
+    color: currentColor;
     opacity: 0.6;
   }
 
@@ -138,7 +147,7 @@
   }
 
   .brickline-header__nav-link {
-    color: var(--brand-black, #000000);
+    color: currentColor;
     font-family: "Cera Pro", var(--font-heading--family), sans-serif;
     font-weight: 700;
     font-size: 13px;
@@ -174,7 +183,7 @@
     background: none;
     border: none;
     padding: 0;
-    color: var(--brand-black, #000000);
+    color: currentColor;
     cursor: pointer;
     text-decoration: none;
   }
