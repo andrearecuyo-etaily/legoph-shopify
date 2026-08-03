@@ -5,7 +5,7 @@
   assign menu = linklists[section.settings.menu]
 %}
 
-<header
+<brickline-header-component
   class="brickline-header brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
@@ -14,6 +14,20 @@
   "
 >
   <div class="brickline-header__inner brickline-container">
+    {% if menu %}
+      <button
+        type="button"
+        class="brickline-header__menu-toggle"
+        aria-expanded="false"
+        aria-controls="brickline-header-menu-{{ section.id }}"
+        aria-label="Menu"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    {% endif %}
+
     {% if settings.logo %}
       <a href="{{ routes.root_url }}" class="brickline-header__logo">
         <img
@@ -48,7 +62,11 @@
         aria-haspopup="dialog"
         aria-label="{{ 'content.search_input_label' | t }}"
       >
-        {{ section.settings.search_placeholder | default: 'Search sets…' }}
+        <span class="brickline-header__search-label">{{ section.settings.search_placeholder | default: 'Search sets…' }}</span>
+        <svg class="brickline-header__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M21 21l-4.3-4.3"></path>
+        </svg>
       </button>
     </search-button>
 
@@ -91,18 +109,61 @@
       </a>
     {% endif %}
   </div>
-</header>
+
+  {% if menu %}
+    <div class="brickline-header__mobile-menu" id="brickline-header-menu-{{ section.id }}" hidden>
+      <nav class="brickline-header__mobile-nav" aria-label="Main menu">
+        {% for link in menu.links limit: 6 %}
+          <a href="{{ link.url }}" class="brickline-header__mobile-link">
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </nav>
+    </div>
+  {% endif %}
+</brickline-header-component>
+
+<script
+  src="{{ 'brickline-header.js' | asset_url }}"
+  type="module"
+></script>
 
 {% stylesheet %}
   .brickline-header {
     background: var(--header-bg);
     color: var(--header-text);
+    position: relative;
   }
 
   .brickline-header__inner {
     display: flex;
     align-items: center;
     gap: 18px;
+
+    @media screen and (max-width: 749px) {
+      gap: 10px;
+    }
+  }
+
+  .brickline-header__menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    order: -1;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    color: currentColor;
+    cursor: pointer;
+    transition: background 150ms ease;
+
+    @media screen and (max-width: 749px) {
+      display: flex;
+    }
   }
 
   .brickline-header__logo {
@@ -113,6 +174,11 @@
     height: 32px;
     flex-shrink: 0;
     text-decoration: none;
+
+    @media screen and (max-width: 749px) {
+      width: 88px;
+      height: 28px;
+    }
   }
 
   .brickline-header__logo img {
@@ -142,6 +208,10 @@
     gap: 16px;
     flex: 1;
     min-width: 0;
+
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
   }
 
   .brickline-header__nav-link {
@@ -160,7 +230,10 @@
   }
 
   .brickline-header__search-trigger {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
     width: 200px;
     background: var(--surface-page, #ffffff);
     border: none;
@@ -172,6 +245,30 @@
     text-align: left;
     cursor: pointer;
     transition: filter 150ms ease;
+
+    @media screen and (max-width: 749px) {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+  }
+
+  .brickline-header__search-label {
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  .brickline-header__search-icon {
+    flex-shrink: 0;
+    display: none;
+
+    @media screen and (max-width: 749px) {
+      display: block;
+    }
   }
 
   .brickline-header__icon-btn {
@@ -204,9 +301,41 @@
       filter: brightness(0.96);
     }
 
-    .brickline-header__icon-btn:hover {
+    .brickline-header__icon-btn:hover,
+    .brickline-header__menu-toggle:hover {
       background: rgb(from currentColor r g b / 0.1);
     }
+  }
+
+  .brickline-header__mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: var(--header-bg);
+    box-shadow: var(--shadow-md, 0px 1px 2px rgba(0,0,0,0.1), 0px 4px 12px rgba(0,0,0,0.08));
+  }
+
+  .brickline-header__mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 24px 20px;
+  }
+
+  .brickline-header__mobile-link {
+    padding: 14px 0;
+    border-bottom: 1px solid rgb(from currentColor r g b / 0.15);
+    color: currentColor;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .brickline-header__mobile-link:last-child {
+    border-bottom: none;
   }
 {% endstylesheet %}
 
