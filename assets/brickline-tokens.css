@@ -35,19 +35,19 @@
   --radius-pill: 999px;
 }
 
-/* Brickline sections use a 1280px / 24px container instead of Horizon's page-width system.
-   Content width is capped at 1232px (1280px minus the 24px inline padding .brickline-container
+/* Brickline sections use a 1440px / 20px container instead of Horizon's default page-width system.
+   Content width is capped at 1400px (1440px minus the 20px inline padding .brickline-container
    applies on each side) so this grid-based path lines up exactly with sections that use
    .brickline-container directly (header, footer, category-tiles) — without this, the two
-   systems disagree by 24px per side on any viewport wider than ~1328px. */
+   systems disagree by 20px per side on any viewport wider than ~1480px. */
 .brickline-section.section--page-width {
-  --full-page-grid-central-column-width: min(1232px, 100% - 48px);
-  --full-page-grid-margin: minmax(24px, 1fr);
+  --full-page-grid-central-column-width: min(1400px, 100% - 40px);
+  --full-page-grid-margin: minmax(20px, 1fr);
 }
 
 .brickline-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin-inline: auto;
-  padding-inline: 24px;
+  padding-inline: 20px;
 }
