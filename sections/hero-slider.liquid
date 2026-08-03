@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <hero-slider-component
-  class="hero-slider brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="hero-slider hero-slider--content-{{ section.settings.content_position }} brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="{% render 'spacing-padding', settings: section.settings %}"
   data-autoplay="{% if section.settings.autoplay and slide_count > 1 %}{{ section.settings.autoplay_speed | times: 1000 }}{% else %}0{% endif %}"
 >
@@ -148,6 +148,7 @@
     visibility: hidden;
     pointer-events: none;
     overflow: hidden;
+    padding-inline: 20px;
     transition: opacity 150ms ease, visibility 150ms ease;
 
     @media screen and (min-width: 750px) {
@@ -201,13 +202,37 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 16px;
-    text-align: center;
     max-width: 620px;
-    margin-inline: auto;
     padding: 32px 24px;
+  }
+
+  .hero-slider--content-center .hero-slider__slide {
+    justify-content: center;
+  }
+
+  .hero-slider--content-center .hero-slider__content {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .hero-slider--content-left .hero-slider__slide {
+    justify-content: flex-start;
+  }
+
+  .hero-slider--content-left .hero-slider__content {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .hero-slider--content-right .hero-slider__slide {
+    justify-content: flex-end;
+  }
+
+  .hero-slider--content-right .hero-slider__content {
+    align-items: flex-end;
+    text-align: right;
   }
 
   .hero-slider__heading {
@@ -232,9 +257,20 @@
   .hero-slider__actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 12px;
     margin-top: 6px;
+  }
+
+  .hero-slider--content-center .hero-slider__actions {
+    justify-content: center;
+  }
+
+  .hero-slider--content-left .hero-slider__actions {
+    justify-content: flex-start;
+  }
+
+  .hero-slider--content-right .hero-slider__actions {
+    justify-content: flex-end;
   }
 
   .hero-slider__button {
@@ -369,6 +405,26 @@
         }
       ],
       "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
     },
     {
       "type": "header",
