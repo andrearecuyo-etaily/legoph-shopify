@@ -141,9 +141,36 @@
     "promo_themed": {
       "type": "promo-banner",
       "blocks": {
-        "pill_1": { "type": "pill", "settings": { "label": "Everfrost" } },
-        "pill_2": { "type": "pill", "settings": { "label": "New sets for kids" } },
-        "pill_3": { "type": "pill", "settings": { "label": "Smart Play Sets" } }
+        "pill_1": {
+          "type": "pill",
+          "settings": {
+            "label": "Everfrost",
+            "heading": "<h2>Frosty adventures await with Everfrost</h2>",
+            "subheading": "<p>Explore icy new sets built for imaginative winter play.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        "pill_2": {
+          "type": "pill",
+          "settings": {
+            "label": "New sets for kids",
+            "heading": "<h2>New sets built for little hands</h2>",
+            "subheading": "<p>Chunky pieces and playful builds made for the youngest builders in the family.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        "pill_3": {
+          "type": "pill",
+          "settings": {
+            "label": "Smart Play Sets",
+            "heading": "<h2>Smart play, real skills</h2>",
+            "subheading": "<p>Interactive sets that blend hands-on building with digital play.</p>",
+            "button_label": "Shop now",
+            "button_link": "shopify://collections/all"
+          }
+        }
       },
       "block_order": ["pill_1", "pill_2", "pill_3"],
       "name": "Themed banner",
