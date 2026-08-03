@@ -164,11 +164,22 @@
     color: var(--promo-text);
     background: rgb(from var(--promo-text) r g b / 0.15);
     cursor: pointer;
+    transition: background 150ms ease, filter 150ms ease;
   }
 
   .promo-banner__pill.is-active {
     background: var(--promo-button-bg);
     color: var(--promo-button-label);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .promo-banner__pill:not(.is-active):hover {
+      background: rgb(from var(--promo-text) r g b / 0.25);
+    }
+
+    .promo-banner__pill.is-active:hover {
+      filter: brightness(0.94);
+    }
   }
 
   .promo-banner__content-stack {
@@ -261,7 +272,7 @@
     padding: 12px 28px;
     text-decoration: none;
     margin-top: 4px;
-    transition: transform 150ms ease;
+    transition: transform 150ms ease, filter 150ms ease;
   }
 
   .promo-banner__button:active {
@@ -270,6 +281,12 @@
 
   .promo-banner__inner--band .promo-banner__button {
     border-radius: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .promo-banner__button:hover {
+      filter: brightness(0.92);
+    }
   }
 {% endstylesheet %}
 

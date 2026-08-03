@@ -173,6 +173,7 @@
     color: var(--text-subtle, #636363);
     text-align: left;
     cursor: pointer;
+    transition: filter 150ms ease;
   }
 
   .brickline-header__icon-btn {
@@ -182,8 +183,10 @@
     flex-shrink: 0;
     background: none;
     border: none;
+    border-radius: 50%;
     padding: 0;
     color: currentColor;
+    transition: background 150ms ease;
     cursor: pointer;
     text-decoration: none;
   }
@@ -196,6 +199,16 @@
   .brickline-header__icon-btn--cart {
     width: 44px;
     height: 44px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .brickline-header__search-trigger:hover {
+      filter: brightness(0.96);
+    }
+
+    .brickline-header__icon-btn:hover {
+      background: rgb(from currentColor r g b / 0.1);
+    }
   }
 {% endstylesheet %}
 

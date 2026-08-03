@@ -141,6 +141,7 @@
     padding: 0 0 12px;
     margin-bottom: -13px;
     border-bottom: 2px solid transparent;
+    transition: color 150ms ease;
   }
 
   .product-rail__tab.is-active {
@@ -165,10 +166,22 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
+    transition: background 150ms ease, border-color 150ms ease;
   }
 
   .product-rail__arrow--next {
     border: 2px solid #141414;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-rail__tab:not(.is-active):hover {
+      color: #141414;
+    }
+
+    .product-rail__arrow:hover {
+      background: var(--surface-tertiary, #f7f7f7);
+      border-color: #141414;
+    }
   }
 
   .product-rail__arrow .svg-wrapper {
@@ -399,11 +412,17 @@
     padding: 8px 14px;
     cursor: pointer;
     white-space: nowrap;
-    transition: transform 150ms ease, opacity 150ms ease;
+    transition: transform 150ms ease, opacity 150ms ease, filter 150ms ease;
   }
 
   .product-rail-card__add-button:active {
     transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-rail-card__add-button:not(:disabled):hover {
+      filter: brightness(0.92);
+    }
   }
 
   .product-rail-card__add-button:disabled {
@@ -440,7 +459,13 @@
     color: #141414;
     cursor: pointer;
     padding: 0;
-    transition: color 150ms ease;
+    transition: color 150ms ease, background 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-rail-card__wishlist:hover {
+      background: var(--surface-tertiary, #f7f7f7);
+    }
   }
 
   .product-rail-card__wishlist[data-active] {

@@ -146,6 +146,13 @@
     white-space: nowrap;
     border-bottom: 2px solid transparent;
     cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .category-tiles__tab:not(.is-active):hover {
+      color: rgb(from currentColor r g b / 0.85);
+    }
   }
 
   .category-tiles__tab.is-active {

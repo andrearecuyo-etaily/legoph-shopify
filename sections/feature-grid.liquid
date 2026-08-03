@@ -344,11 +344,18 @@
     padding: 9px 20px;
     text-decoration: none;
     margin-top: 4px;
-    transition: transform 150ms ease;
+    transition: transform 150ms ease, background 150ms ease, color 150ms ease;
   }
 
   .feature-grid__button:active {
     transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .feature-grid__button:hover {
+      background: #141414;
+      color: #ffffff;
+    }
   }
 {% endstylesheet %}
 

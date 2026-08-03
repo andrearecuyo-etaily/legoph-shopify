@@ -248,7 +248,7 @@
     padding: 12px 24px;
     text-decoration: none;
     cursor: pointer;
-    transition: transform 150ms ease;
+    transition: transform 150ms ease, filter 150ms ease, background 150ms ease;
     border: 2px solid transparent;
   }
 
@@ -266,6 +266,24 @@
     background: transparent;
     color: var(--slide-text);
     border-color: var(--slide-text);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero-slider__button--primary:hover {
+      filter: brightness(0.92);
+    }
+
+    .hero-slider__button--secondary:hover {
+      background: rgb(from var(--slide-text) r g b / 0.1);
+    }
+
+    .hero-slider__arrow:hover {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .hero-slider__dot:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
   }
 
   .hero-slider__controls {
