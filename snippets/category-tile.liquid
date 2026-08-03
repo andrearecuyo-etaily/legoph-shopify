@@ -1,0 +1,68 @@
+{% doc %}
+  Renders a single category-tiles tile block.
+
+  @param block {block}
+  @param is_solid {boolean}
+
+  @example
+  {% render 'category-tile', block: block, is_solid: is_solid %}
+{% enddoc %}
+
+{% liquid
+  assign tile_collection = block.settings.collection
+  assign tile_url = '#'
+  if tile_collection != blank
+    assign tile_url = tile_collection.url
+  endif
+  if block.settings.link != blank
+    assign tile_url = block.settings.link
+  endif
+
+  assign tile_label = block.settings.label
+  if tile_label == blank and tile_collection != blank
+    assign tile_label = tile_collection.title
+  endif
+
+  assign tile_image = block.settings.image
+  if tile_image == blank and tile_collection != blank
+    assign tile_image = tile_collection.featured_image
+  endif
+
+  assign tile_scheme = block.settings.color_scheme
+%}
+<a
+  href="{{ tile_url }}"
+  class="category-tiles__tile"
+  {{ block.shopify_attributes }}
+  {% if is_solid %}
+    style="--tile-bg: {{ tile_scheme.settings.background }}; --tile-text: {{ tile_scheme.settings.text }};"
+  {% endif %}
+>
+  {% if is_solid %}
+    <span class="category-tiles__label">{{ tile_label }}</span>
+  {% else %}
+    <span class="category-tiles__media">
+      {% if tile_image %}
+        <img
+          src="{{ tile_image | image_url: width: 700 }}"
+          srcset="{{ tile_image | image_url: width: 350 }} 350w, {{ tile_image | image_url: width: 500 }} 500w, {{ tile_image | image_url: width: 700 }} 700w"
+          sizes="(min-width: 990px) 20vw, 50vw"
+          alt="{{ tile_image.alt | escape }}"
+          width="{{ tile_image.width }}"
+          height="{{ tile_image.height }}"
+          loading="lazy"
+          class="category-tiles__image"
+        >
+      {% else %}
+        <span class="category-tiles__placeholder"></span>
+      {% endif %}
+      <span class="category-tiles__scrim"></span>
+      <span class="category-tiles__overlay-text">
+        <span class="category-tiles__label">{{ tile_label }}</span>
+        {% if block.settings.meta != blank %}
+          <span class="category-tiles__meta">{{ block.settings.meta }}</span>
+        {% endif %}
+      </span>
+    </span>
+  {% endif %}
+</a>

@@ -5,12 +5,16 @@
   if section.settings.style == 'solid'
     assign is_solid = true
   endif
+  assign has_tabs = false
+  if tabs.size > 0
+    assign has_tabs = true
+  endif
 %}
 
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
-<div
+<category-tiles-component
   class="category-tiles category-tiles--{{ section.settings.style }} brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
@@ -32,89 +36,53 @@
     </div>
   {% endif %}
 
-  {% if tabs.size > 0 %}
-    <div class="category-tiles__tabs">
+  {% if has_tabs %}
+    <div class="category-tiles__tabs" role="tablist">
       {% for tab in tabs %}
-        <a
-          href="{{ tab.settings.link | default: '#' }}"
+        <button
+          type="button"
           class="category-tiles__tab{% if forloop.first %} is-active{% endif %}"
+          data-tab-index="{{ forloop.index }}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
           {{ tab.shopify_attributes }}
         >
           {{ tab.settings.label }}
-        </a>
+        </button>
       {% endfor %}
     </div>
-  {% endif %}
 
-  {% if tiles.size > 0 %}
+    <div class="category-tiles__panels">
+      {% for tab in tabs %}
+        {% assign tab_index = forloop.index %}
+        <div
+          class="category-tiles__grid{% if forloop.first %} is-active{% endif %}"
+          data-panel-index="{{ tab_index }}"
+        >
+          {% for block in tiles %}
+            {% if block.settings.tab_group == tab_index %}
+              {% render 'category-tile', block: block, is_solid: is_solid %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% elsif tiles.size > 0 %}
     <div class="category-tiles__grid">
       {% for block in tiles %}
-        {% liquid
-          assign tile_collection = block.settings.collection
-          assign tile_url = '#'
-          if tile_collection != blank
-            assign tile_url = tile_collection.url
-          endif
-          if block.settings.link != blank
-            assign tile_url = block.settings.link
-          endif
-
-          assign tile_label = block.settings.label
-          if tile_label == blank and tile_collection != blank
-            assign tile_label = tile_collection.title
-          endif
-
-          assign tile_image = block.settings.image
-          if tile_image == blank and tile_collection != blank
-            assign tile_image = tile_collection.featured_image
-          endif
-
-          assign tile_scheme = block.settings.color_scheme
-        %}
-        <a
-          href="{{ tile_url }}"
-          class="category-tiles__tile"
-          {{ block.shopify_attributes }}
-          {% if is_solid %}
-            style="--tile-bg: {{ tile_scheme.settings.background }}; --tile-text: {{ tile_scheme.settings.text }};"
-          {% endif %}
-        >
-          {% if is_solid %}
-            <span class="category-tiles__label">{{ tile_label }}</span>
-          {% else %}
-            <span class="category-tiles__media">
-              {% if tile_image %}
-                <img
-                  src="{{ tile_image | image_url: width: 700 }}"
-                  srcset="{{ tile_image | image_url: width: 350 }} 350w, {{ tile_image | image_url: width: 500 }} 500w, {{ tile_image | image_url: width: 700 }} 700w"
-                  sizes="(min-width: 990px) 20vw, 50vw"
-                  alt="{{ tile_image.alt | escape }}"
-                  width="{{ tile_image.width }}"
-                  height="{{ tile_image.height }}"
-                  loading="lazy"
-                  class="category-tiles__image"
-                >
-              {% else %}
-                <span class="category-tiles__placeholder"></span>
-              {% endif %}
-              <span class="category-tiles__scrim"></span>
-              <span class="category-tiles__overlay-text">
-                <span class="category-tiles__label">{{ tile_label }}</span>
-                {% if block.settings.meta != blank %}
-                  <span class="category-tiles__meta">{{ block.settings.meta }}</span>
-                {% endif %}
-              </span>
-            </span>
-          {% endif %}
-        </a>
+        {% render 'category-tile', block: block, is_solid: is_solid %}
       {% endfor %}
     </div>
   {% endif %}
   </div>
-</div>
+</category-tiles-component>
 
 <script
   src="{{ 'lazy-image-fade.js' | asset_url }}"
+  type="module"
+></script>
+<script
+  src="{{ 'category-tiles.js' | asset_url }}"
   type="module"
 ></script>
 
@@ -167,19 +135,48 @@
   }
 
   .category-tiles__tab {
+    border: none;
+    background: none;
+    padding: 0 0 10px;
     font-family: "Cera Pro", var(--font-heading--family), sans-serif;
     font-weight: 700;
     font-size: 17px;
     color: rgb(from currentColor r g b / 0.6);
     text-decoration: none;
     white-space: nowrap;
-    padding-bottom: 10px;
     border-bottom: 2px solid transparent;
+    cursor: pointer;
   }
 
   .category-tiles__tab.is-active {
     color: currentColor;
     border-bottom-color: currentColor;
+  }
+
+  .category-tiles__panels {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'stack';
+  }
+
+  .category-tiles__panels .category-tiles__grid {
+    grid-area: stack;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 200ms ease, visibility 200ms ease;
+  }
+
+  .category-tiles__panels .category-tiles__grid.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category-tiles__panels .category-tiles__grid {
+      transition: none;
+    }
   }
 
   .category-tiles__grid {
@@ -385,11 +382,6 @@
           "id": "label",
           "label": "Label",
           "default": "What's new"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
         }
       ]
     },
@@ -397,6 +389,16 @@
       "type": "tile",
       "name": "Tile",
       "settings": [
+        {
+          "type": "range",
+          "id": "tab_group",
+          "label": "Show under tab #",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 1,
+          "info": "Matches a tab's position: 1 = first tab, 2 = second tab, etc. Only relevant when this section has tab blocks."
+        },
         {
           "type": "collection",
           "id": "collection",
