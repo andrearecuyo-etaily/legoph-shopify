@@ -120,11 +120,11 @@
     "builder_gallery": {
       "type": "feature-grid",
       "blocks": {
-        "build_1": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
-        "build_2": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
-        "build_3": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
-        "build_4": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } },
-        "build_5": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true } }
+        "build_1": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Munchlax", "product_price": "$69.99", "product_link": "shopify://collections/all" } },
+        "build_2": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Rally Racer Supra Concept", "product_price": "$29.99", "product_link": "shopify://collections/all" } },
+        "build_3": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Bloom Arrangement", "product_price": "$87.99", "product_link": "shopify://collections/all" } },
+        "build_4": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Voyager Deep-Field Probe", "product_price": "$99.99", "product_link": "shopify://collections/all" } },
+        "build_5": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Arcade Pinball Machine", "product_price": "$229.99", "product_link": "shopify://collections/all" } }
       },
       "block_order": ["build_1", "build_2", "build_3", "build_4", "build_5"],
       "name": "Builder gallery",

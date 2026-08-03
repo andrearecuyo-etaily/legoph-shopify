@@ -63,8 +63,34 @@
                 <span class="feature-grid__placeholder"></span>
               {% endif %}
               {% if block.settings.show_overlay_icon %}
-                <span class="feature-grid__overlay-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                {% liquid
+                  assign has_hotspot = false
+                  if block.settings.product_name != blank
+                    assign has_hotspot = true
+                  endif
+                %}
+                <span class="feature-grid__hotspot{% if has_hotspot %} feature-grid__hotspot--interactive{% endif %}">
+                  <span
+                    class="feature-grid__overlay-icon"
+                    {% if has_hotspot %}
+                      tabindex="0"
+                      role="button"
+                      aria-label="View product: {{ block.settings.product_name }}"
+                    {% endif %}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                  </span>
+                  {% if has_hotspot %}
+                    <a href="{{ block.settings.product_link | default: '#' }}" class="feature-grid__hotspot-card">
+                      <span class="feature-grid__hotspot-name">{{ block.settings.product_name }}</span>
+                      <span class="feature-grid__hotspot-meta">
+                        {% if block.settings.product_price != blank %}
+                          <span class="feature-grid__hotspot-price">{{ block.settings.product_price }}</span>
+                        {% endif %}
+                        <svg class="feature-grid__hotspot-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
+                      </span>
+                    </a>
+                  {% endif %}
                 </span>
               {% endif %}
             </span>
@@ -192,10 +218,18 @@
     opacity: 1;
   }
 
-  .feature-grid__overlay-icon {
+  .feature-grid__hotspot {
     position: absolute;
     bottom: 14px;
     left: 14px;
+  }
+
+  .feature-grid__grid--featured .feature-grid__item:not(.feature-grid__item--large) .feature-grid__hotspot {
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .feature-grid__overlay-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,11 +240,73 @@
     color: #141414;
   }
 
+  .feature-grid__hotspot--interactive .feature-grid__overlay-icon {
+    cursor: pointer;
+  }
+
   .feature-grid__grid--featured .feature-grid__item:not(.feature-grid__item--large) .feature-grid__overlay-icon {
     width: 26px;
     height: 26px;
-    bottom: 10px;
-    left: 10px;
+  }
+
+  .feature-grid__hotspot-card {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 170px;
+    background: var(--surface-page, #ffffff);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md, 0px 1px 2px rgba(0,0,0,0.1), 0px 4px 12px rgba(0,0,0,0.08));
+    padding: 10px 14px;
+    text-decoration: none;
+    color: var(--text-default, #141414);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease;
+    z-index: 2;
+  }
+
+  .feature-grid__hotspot--interactive:hover .feature-grid__hotspot-card,
+  .feature-grid__hotspot--interactive:focus-within .feature-grid__hotspot-card {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-grid__hotspot-card {
+      transition: none;
+    }
+  }
+
+  .feature-grid__hotspot-name {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .feature-grid__hotspot-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline-start: auto;
+  }
+
+  .feature-grid__hotspot-price {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .feature-grid__hotspot-chevron {
+    flex-shrink: 0;
+    color: var(--text-meta, #939393);
   }
 
   .feature-grid__content {
@@ -392,6 +488,25 @@
           "id": "show_overlay_icon",
           "label": "Show \"+\" overlay icon",
           "default": false
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Hover card: product name",
+          "info": "If set, hovering (or tapping) the \"+\" icon shows a small product card. Leave blank to keep the icon purely decorative.",
+          "visible_if": "{{ block.settings.show_overlay_icon == true }}"
+        },
+        {
+          "type": "text",
+          "id": "product_price",
+          "label": "Hover card: price",
+          "visible_if": "{{ block.settings.show_overlay_icon == true }}"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Hover card: product link",
+          "visible_if": "{{ block.settings.show_overlay_icon == true }}"
         },
         {
           "type": "text",
