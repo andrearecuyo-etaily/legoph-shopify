@@ -47,9 +47,36 @@
     {% if menu %}
       <nav class="brickline-header__nav" aria-label="Main menu">
         {% for link in menu.links limit: 6 %}
-          <a href="{{ link.url }}" class="brickline-header__nav-link">
-            {{ link.title }}
-          </a>
+          {% unless link.title == 'Home' %}
+            {% if link.links.size > 0 %}
+              <div class="brickline-header__nav-item">
+                <button
+                  type="button"
+                  class="brickline-header__nav-link brickline-header__nav-link--has-submenu"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-controls="brickline-header-submenu-{{ section.id }}-{{ forloop.index }}"
+                >
+                  {{ link.title }}
+                </button>
+                <div class="brickline-header__submenu" id="brickline-header-submenu-{{ section.id }}-{{ forloop.index }}">
+                  <ul class="brickline-header__submenu-list">
+                    {% for child_link in link.links %}
+                      <li>
+                        <a href="{{ child_link.url }}" class="brickline-header__submenu-link">
+                          {{ child_link.title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              <a href="{{ link.url }}" class="brickline-header__nav-link">
+                {{ link.title }}
+              </a>
+            {% endif %}
+          {% endunless %}
         {% endfor %}
       </nav>
     {% endif %}
@@ -114,9 +141,34 @@
     <div class="brickline-header__mobile-menu" id="brickline-header-menu-{{ section.id }}" hidden>
       <nav class="brickline-header__mobile-nav" aria-label="Main menu">
         {% for link in menu.links limit: 6 %}
-          <a href="{{ link.url }}" class="brickline-header__mobile-link">
-            {{ link.title }}
-          </a>
+          {% unless link.title == 'Home' %}
+            {% if link.links.size > 0 %}
+              <div class="brickline-header__mobile-item">
+                <button
+                  type="button"
+                  class="brickline-header__mobile-link brickline-header__mobile-link--has-submenu"
+                  aria-expanded="false"
+                  aria-controls="brickline-header-mobile-submenu-{{ section.id }}-{{ forloop.index }}"
+                >
+                  {{ link.title }}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
+                </button>
+                <ul class="brickline-header__mobile-submenu" id="brickline-header-mobile-submenu-{{ section.id }}-{{ forloop.index }}" hidden>
+                  {% for child_link in link.links %}
+                    <li>
+                      <a href="{{ child_link.url }}" class="brickline-header__mobile-submenu-link">
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% else %}
+              <a href="{{ link.url }}" class="brickline-header__mobile-link">
+                {{ link.title }}
+              </a>
+            {% endif %}
+          {% endunless %}
         {% endfor %}
       </nav>
     </div>
@@ -170,7 +222,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 120px;
+    width: auto;
     height: 32px;
     flex-shrink: 0;
     text-decoration: none;
@@ -205,16 +257,26 @@
   .brickline-header__nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 32px;
     flex: 1;
     min-width: 0;
+    padding-left:32px;
 
     @media screen and (max-width: 749px) {
       display: none;
     }
   }
 
+  .brickline-header__nav-item {
+    position: relative;
+  }
+
   .brickline-header__nav-link {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
     color: currentColor;
     font-family: "Cera Pro", var(--font-heading--family), sans-serif;
     font-weight: 700;
@@ -222,6 +284,61 @@
     text-transform: uppercase;
     text-decoration: none;
     white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .brickline-header__submenu {
+    position: absolute;
+    top: calc(100% + 20px);
+    left: 0;
+    z-index: 20;
+    min-width: 220px;
+    background: var(--surface-page, #ffffff);
+    color: var(--text-default, #141414);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md, 0px 1px 2px rgba(0,0,0,0.1), 0px 4px 12px rgba(0,0,0,0.08));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-16px);
+    transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+    pointer-events: none;
+  }
+
+  .brickline-header__nav-item.is-open .brickline-header__submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brickline-header__submenu {
+      transition: none;
+    }
+  }
+
+  .brickline-header__submenu-list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .brickline-header__submenu-link {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: currentColor;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .brickline-header__submenu-link:hover {
+      background: var(--surface-muted, #f2f2f2);
+    }
   }
 
   .brickline-header__search {
@@ -328,6 +445,10 @@
   }
 
   .brickline-header__mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     padding: 14px 0;
     border-bottom: 1px solid rgb(from currentColor r g b / 0.15);
     color: currentColor;
@@ -340,6 +461,47 @@
 
   .brickline-header__mobile-link:last-child {
     border-bottom: none;
+  }
+
+  .brickline-header__mobile-item {
+    border-bottom: 1px solid rgb(from currentColor r g b / 0.15);
+  }
+
+  .brickline-header__mobile-item:last-child {
+    border-bottom: none;
+  }
+
+  .brickline-header__mobile-link--has-submenu {
+    width: 100%;
+    justify-content: space-between;
+    background: none;
+    border: none;
+    border-bottom: none;
+    cursor: pointer;
+  }
+
+  .brickline-header__mobile-link--has-submenu svg {
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+
+  .brickline-header__mobile-item.is-open .brickline-header__mobile-link--has-submenu svg {
+    transform: rotate(90deg);
+  }
+
+  .brickline-header__mobile-submenu {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 12px 12px;
+  }
+
+  .brickline-header__mobile-submenu-link {
+    padding: 10px 0;
+    color: currentColor;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: none;
   }
 {% endstylesheet %}
 
