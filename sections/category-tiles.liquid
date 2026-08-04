@@ -67,11 +67,17 @@
         </div>
       {% endfor %}
     </div>
+    <div class="category-tiles__progress">
+      <div class="category-tiles__progress-bar"></div>
+    </div>
   {% elsif tiles.size > 0 %}
     <div class="category-tiles__grid">
       {% for block in tiles %}
         {% render 'category-tile', block: block, is_solid: is_solid %}
       {% endfor %}
+    </div>
+    <div class="category-tiles__progress">
+      <div class="category-tiles__progress-bar"></div>
     </div>
   {% endif %}
   </div>
@@ -187,17 +193,30 @@
   }
 
   .category-tiles__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    padding-block-end: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 
     @media screen and (min-width: 750px) and (max-width: 989px) {
+      display: grid;
       grid-template-columns: repeat(4, 1fr);
+      overflow-x: visible;
     }
 
     @media screen and (min-width: 990px) {
+      display: grid;
       grid-template-columns: repeat(var(--category-tiles-columns, 5), 1fr);
+      overflow-x: visible;
     }
+  }
+
+  .category-tiles__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .category-tiles__tile {
@@ -210,6 +229,34 @@
     aspect-ratio: 3 / 4;
     padding: 14px 8px;
     transition: opacity 200ms ease, box-shadow 200ms ease;
+    scroll-snap-align: start;
+    flex: 0 0 30%;
+
+    @media screen and (min-width: 750px) {
+      flex: unset;
+    }
+  }
+
+  .category-tiles__progress {
+    display: none;
+    width: 100%;
+    height: 3px;
+    background: rgb(from currentColor r g b / 0.15);
+    border-radius: 999px;
+    margin-top: 20px;
+    overflow: hidden;
+
+    @media screen and (max-width: 749px) {
+      display: block;
+    }
+  }
+
+  .category-tiles__progress-bar {
+    width: 30%;
+    height: 100%;
+    background: currentColor;
+    border-radius: 999px;
+    transition: width 200ms ease;
   }
 
   .category-tiles--solid .category-tiles__tile {
