@@ -87,6 +87,18 @@
     </div>
   {% endif %}
   </div>
+  {% if is_solid %}
+    <svg
+      class="category-tiles__divider"
+      viewBox="0 0 375 50"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M380.521 77.728L-5.00003 52L0.499997 13L189 35.5L210 32L211 24L383.5 45.5L380.521 77.728Z"></path>
+      <path d="M185.965 27.3303L211.092 29.9712L207.923 60.1218L182.796 57.4809L185.965 27.3303Z"></path>
+      <path d="M190.676 27.8255L206.376 29.4756L206.828 25.1743C206.907 24.4278 206.366 23.76 205.619 23.6815L192.615 22.3147C191.868 22.2362 191.2 22.777 191.122 23.5235L190.67 27.8248L190.676 27.8255Z"></path>
+    </svg>
+  {% endif %}
 </category-tiles-component>
 
 <style>
@@ -125,8 +137,16 @@
     color: var(--category-tiles-text);
   }
 
-  .category-tiles--solid {
-    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  .category-tiles__divider {
+    display: block;
+    width: 100%;
+    height: clamp(28px, 6vw, 56px);
+    margin-top: -1px;
+    color: var(--category-tiles-bg);
+  }
+
+  .category-tiles__divider path {
+    fill: currentColor;
   }
 
   .category-tiles__header {
