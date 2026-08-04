@@ -21,6 +21,7 @@
         "support_menu": "footer",
         "account_menu": "footer-my-account",
         "more_menu": "footer-more-from-us",
+        "legal_menu": "footer-legal",
         "newsletter_heading": "Subscribe to Digital Marketing Emails",
         "newsletter_placeholder": "Your email address",
         "newsletter_button_label": "Subscribe",
