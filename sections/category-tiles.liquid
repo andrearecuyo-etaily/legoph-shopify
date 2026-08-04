@@ -87,7 +87,9 @@
     </div>
   {% endif %}
   </div>
-  {% if is_solid %}
+</category-tiles-component>
+{% if is_solid %}
+  <div class="category-tiles__divider-wrap" style="color: {{ section.settings.color_scheme.settings.background }};">
     <svg
       class="category-tiles__divider category-tiles__divider--mobile"
       viewBox="0 0 375 50"
@@ -118,8 +120,8 @@
       <path d="M832.322 12.4081L864.244 14.6403L861.542 53.2839L829.62 51.0517L832.322 12.4081Z"></path>
       <path d="M838.306 12.8266L858.253 14.2214L858.638 8.70844C858.705 7.75165 857.992 6.92342 857.043 6.85711L840.522 5.70179C839.573 5.63547 838.751 6.35633 838.684 7.31312L838.299 12.826L838.306 12.8266Z"></path>
     </svg>
-  {% endif %}
-</category-tiles-component>
+  </div>
+{% endif %}
 
 <style>
   @container category-tiles-{{ section.id }} (min-width: {{ grid_breakpoint }}px) {
@@ -157,13 +159,17 @@
     color: var(--category-tiles-text);
   }
 
+  .category-tiles__divider-wrap {
+    display: block;
+    width: 100%;
+    margin-top: -1px;
+  }
+
   .category-tiles__divider {
     display: none;
     width: 100%;
     height: clamp(28px, 6vw, 56px);
-    margin-top: -1px;
-    color: var(--category-tiles-bg);
-    transform: scaleX(-1);
+    transform: rotate(180deg);
   }
 
   .category-tiles__divider path {
