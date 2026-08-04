@@ -196,7 +196,11 @@
             "style": "image",
             "heading": "Let your imagination bloom with customizable elements.",
             "subtext": "Position the petals and leaves, then change the lengths of the stems to create wonderful arrangements for the home.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "show_overlay_icon": true,
+            "product_name": "Bloom Arrangement",
+            "product_price": "$87.99",
+            "product_link": "shopify://collections/all"
           }
         },
         "release_2": {
@@ -205,7 +209,11 @@
             "style": "image",
             "heading": "Help kids develop key life skills",
             "subtext": "What's in the box? Everything kids need to create a toy watermill, tall bird, squid, pear tree, and let their imagination run free.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "show_overlay_icon": true,
+            "product_name": "Creative Skills Builder Set",
+            "product_price": "$54.99",
+            "product_link": "shopify://collections/all"
           }
         },
         "release_3": {
@@ -214,7 +222,11 @@
             "style": "image",
             "heading": "Recognize your child's hard work",
             "subtext": "This kit is ideal for kids with a passion for arts and crafts who want to express themselves through design.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "show_overlay_icon": true,
+            "product_name": "Arts & Crafts Design Kit",
+            "product_price": "$42.99",
+            "product_link": "shopify://collections/all"
           }
         }
       },
