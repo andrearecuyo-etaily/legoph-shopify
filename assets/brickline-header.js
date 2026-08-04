@@ -18,12 +18,21 @@ class BricklineHeaderComponent extends HTMLElement {
       });
     }
 
+    this.backdrop = this.querySelector('.brickline-header__backdrop');
     this.navItems = Array.from(this.querySelectorAll('.brickline-header__nav-item'));
     this.navItems.forEach((item) => {
       const button = item.querySelector('.brickline-header__nav-link--has-submenu');
-      if (!button) return;
-      button.addEventListener('click', () => this.toggleSubmenu(item));
+      const closeButton = item.querySelector('.brickline-header__submenu-close');
+      if (button) button.addEventListener('click', () => this.toggleSubmenu(item));
+      if (closeButton) closeButton.addEventListener('click', () => this.closeAllSubmenus());
+      item.querySelectorAll('.brickline-header__submenu-link').forEach((link) => {
+        link.addEventListener('click', () => this.closeAllSubmenus());
+      });
     });
+
+    if (this.backdrop) {
+      this.backdrop.addEventListener('click', () => this.closeAllSubmenus());
+    }
 
     if (this.navItems.length) {
       document.addEventListener('keydown', (event) => {
@@ -71,6 +80,7 @@ class BricklineHeaderComponent extends HTMLElement {
     item.classList.add('is-open');
     const button = item.querySelector('.brickline-header__nav-link--has-submenu');
     if (button) button.setAttribute('aria-expanded', 'true');
+    if (this.backdrop) this.backdrop.classList.add('is-open');
   }
 
   closeAllSubmenus() {
@@ -79,6 +89,7 @@ class BricklineHeaderComponent extends HTMLElement {
       const button = item.querySelector('.brickline-header__nav-link--has-submenu');
       if (button) button.setAttribute('aria-expanded', 'false');
     });
+    if (this.backdrop) this.backdrop.classList.remove('is-open');
   }
 
   toggleMobileSubmenu(item, button, submenu) {

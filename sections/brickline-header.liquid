@@ -60,11 +60,15 @@
                   {{ link.title }}
                 </button>
                 <div class="brickline-header__submenu" id="brickline-header-submenu-{{ section.id }}-{{ forloop.index }}">
+                  <button type="button" class="brickline-header__submenu-close" aria-label="Close menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+                  </button>
                   <ul class="brickline-header__submenu-list">
                     {% for child_link in link.links %}
                       <li>
                         <a href="{{ child_link.url }}" class="brickline-header__submenu-link">
-                          {{ child_link.title }}
+                          <span>{{ child_link.title }}</span>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg>
                         </a>
                       </li>
                     {% endfor %}
@@ -79,6 +83,7 @@
           {% endunless %}
         {% endfor %}
       </nav>
+      <div class="brickline-header__backdrop"></div>
     {% endif %}
 
     <search-button class="brickline-header__search">
@@ -288,21 +293,20 @@
   }
 
   .brickline-header__submenu {
-    position: absolute;
-    top: calc(100% + 20px);
+    position: fixed;
+    top: 0;
     left: 0;
-    z-index: 20;
-    min-width: 220px;
-    max-width: calc(100vw - 48px);
-    overflow-x: auto;
+    bottom: 0;
+    z-index: 100;
+    width: min(420px, 86vw);
+    overflow-y: auto;
     background: var(--surface-page, #ffffff);
     color: var(--text-default, #141414);
-    border-radius: 8px;
     box-shadow: var(--shadow-md, 0px 1px 2px rgba(0,0,0,0.1), 0px 4px 12px rgba(0,0,0,0.08));
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-16px);
-    transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+    transform: translateX(-100%);
+    transition: opacity 300ms ease, transform 300ms ease, visibility 300ms ease;
     pointer-events: none;
   }
 
@@ -313,34 +317,76 @@
     pointer-events: auto;
   }
 
+  .brickline-header__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms ease, visibility 300ms ease;
+    pointer-events: none;
+  }
+
+  .brickline-header__backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .brickline-header__submenu {
       transition: none;
     }
   }
 
+  .brickline-header__submenu-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    color: var(--text-default, #141414);
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .brickline-header__submenu-close:hover {
+      background: var(--surface-muted, #f2f2f2);
+    }
+  }
+
   .brickline-header__submenu-list {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    max-height: min(70vh, 480px);
-    padding: 10px;
-  }
-
-  .brickline-header__submenu-list li {
-    width: 220px;
+    padding: 88px 8px 24px;
   }
 
   .brickline-header__submenu-link {
-    display: block;
-    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 24px;
     border-radius: 6px;
     color: currentColor;
     font-family: "Cera Pro", var(--font-body--family), sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     text-decoration: none;
-    white-space: nowrap;
+  }
+
+  .brickline-header__submenu-link svg {
+    flex-shrink: 0;
+    opacity: 0.5;
   }
 
   @media (hover: hover) and (pointer: fine) {
