@@ -9,6 +9,12 @@
   if tabs.size > 0
     assign has_tabs = true
   endif
+
+  assign min_tile_width = 130
+  assign tile_gap = 14
+  assign columns = section.settings.columns_desktop
+  assign gap_total = columns | minus: 1 | times: tile_gap
+  assign grid_breakpoint = columns | times: min_tile_width | plus: gap_total | plus: 48
 %}
 
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
@@ -24,7 +30,7 @@
     --category-tiles-text: {{ section.settings.color_scheme.settings.text }};
   "
 >
-  <div class="category-tiles__container brickline-container">
+  <div class="category-tiles__container brickline-container" style="container-type: inline-size; container-name: category-tiles-{{ section.id }};">
   {% if section.settings.heading != blank or section.settings.subheading != blank %}
     <div class="category-tiles__header">
       {% if section.settings.heading != blank %}
@@ -82,6 +88,24 @@
   {% endif %}
   </div>
 </category-tiles-component>
+
+<style>
+  @container category-tiles-{{ section.id }} (min-width: {{ grid_breakpoint }}px) {
+    #shopify-section-{{ section.id }} .category-tiles__grid {
+      display: grid;
+      grid-template-columns: repeat(var(--category-tiles-columns, 5), 1fr);
+      overflow-x: visible;
+    }
+
+    #shopify-section-{{ section.id }} .category-tiles__tile {
+      flex: unset;
+    }
+
+    #shopify-section-{{ section.id }} .category-tiles__progress {
+      display: none;
+    }
+  }
+</style>
 
 <script
   src="{{ 'lazy-image-fade.js' | asset_url }}"
@@ -201,18 +225,6 @@
     padding-block-end: 4px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-
-    @media screen and (min-width: 750px) and (max-width: 989px) {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      overflow-x: visible;
-    }
-
-    @media screen and (min-width: 990px) {
-      display: grid;
-      grid-template-columns: repeat(var(--category-tiles-columns, 5), 1fr);
-      overflow-x: visible;
-    }
   }
 
   .category-tiles__grid::-webkit-scrollbar {
@@ -230,25 +242,17 @@
     padding: 14px 8px;
     transition: opacity 200ms ease, box-shadow 200ms ease;
     scroll-snap-align: start;
-    flex: 0 0 30%;
-
-    @media screen and (min-width: 750px) {
-      flex: unset;
-    }
+    flex: 0 0 130px;
   }
 
   .category-tiles__progress {
-    display: none;
+    display: block;
     width: 100%;
     height: 3px;
     background: rgb(from currentColor r g b / 0.15);
     border-radius: 999px;
     margin-top: 20px;
     overflow: hidden;
-
-    @media screen and (max-width: 749px) {
-      display: block;
-    }
   }
 
   .category-tiles__progress-bar {
