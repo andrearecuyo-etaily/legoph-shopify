@@ -89,7 +89,7 @@
   </div>
   {% if is_solid %}
     <svg
-      class="category-tiles__divider"
+      class="category-tiles__divider category-tiles__divider--mobile"
       viewBox="0 0 375 50"
       preserveAspectRatio="none"
       aria-hidden="true"
@@ -97,6 +97,26 @@
       <path d="M380.521 77.728L-5.00003 52L0.499997 13L189 35.5L210 32L211 24L383.5 45.5L380.521 77.728Z"></path>
       <path d="M185.965 27.3303L211.092 29.9712L207.923 60.1218L182.796 57.4809L185.965 27.3303Z"></path>
       <path d="M190.676 27.8255L206.376 29.4756L206.828 25.1743C206.907 24.4278 206.366 23.76 205.619 23.6815L192.615 22.3147C191.868 22.2362 191.2 22.777 191.122 23.5235L190.67 27.8248L190.676 27.8255Z"></path>
+    </svg>
+    <svg
+      class="category-tiles__divider category-tiles__divider--tablet"
+      viewBox="0 0 768 50"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M765.871 85.8633L-11.752 54.3713L-9.99738 11.0452L401.5 33.5L417 15L428 16L428.5 11.5L767.626 42.5372L765.871 85.8633Z"></path>
+      <path d="M403.356 14.6644L428.537 16.7188L426.072 46.9351L400.891 44.8808L403.356 14.6644Z"></path>
+      <path d="M408.078 15.0496L423.813 16.3332L424.164 12.0225C424.225 11.2744 423.669 10.6193 422.921 10.5583L409.888 9.49506C409.14 9.43403 408.485 9.99025 408.424 10.7384L408.072 15.0491L408.078 15.0496Z"></path>
+    </svg>
+    <svg
+      class="category-tiles__divider category-tiles__divider--desktop"
+      viewBox="0 0 1600 60"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M-14.9547 1.35453L830 41L862.5 21.5L864 7L1599.82 50.1824L1597.77 117.828L-17.0001 69L-14.9547 1.35453Z"></path>
+      <path d="M832.322 12.4081L864.244 14.6403L861.542 53.2839L829.62 51.0517L832.322 12.4081Z"></path>
+      <path d="M838.306 12.8266L858.253 14.2214L858.638 8.70844C858.705 7.75165 857.992 6.92342 857.043 6.85711L840.522 5.70179C839.573 5.63547 838.751 6.35633 838.684 7.31312L838.299 12.826L838.306 12.8266Z"></path>
     </svg>
   {% endif %}
 </category-tiles-component>
@@ -138,7 +158,7 @@
   }
 
   .category-tiles__divider {
-    display: block;
+    display: none;
     width: 100%;
     height: clamp(28px, 6vw, 56px);
     margin-top: -1px;
@@ -147,6 +167,25 @@
 
   .category-tiles__divider path {
     fill: currentColor;
+  }
+
+  @media screen and (max-width: 749px) {
+    .category-tiles__divider--mobile {
+      display: block;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .category-tiles__divider--tablet {
+      display: block;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .category-tiles__divider--desktop {
+      display: block;
+      height: clamp(36px, 4vw, 64px);
+    }
   }
 
   .category-tiles__header {
