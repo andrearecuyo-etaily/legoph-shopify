@@ -60,9 +60,26 @@
                   {{ link.title }}
                 </button>
                 <div class="brickline-header__submenu" id="brickline-header-submenu-{{ section.id }}-{{ forloop.index }}">
-                  <button type="button" class="brickline-header__submenu-close" aria-label="Close menu">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-                  </button>
+                  <div class="brickline-header__submenu-top">
+                    {% if settings.logo %}
+                      <a href="{{ routes.root_url }}" class="brickline-header__submenu-logo">
+                        <img
+                          src="{{ settings.logo | image_url: width: 240 }}"
+                          alt="{{ shop.name }}"
+                          width="120"
+                          height="32"
+                          loading="lazy"
+                        >
+                      </a>
+                    {% else %}
+                      <a href="{{ routes.root_url }}" class="brickline-header__submenu-logo brickline-header__submenu-logo--placeholder">
+                        <span>{{ shop.name }}</span>
+                      </a>
+                    {% endif %}
+                    <button type="button" class="brickline-header__submenu-close" aria-label="Close menu">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+                    </button>
+                  </div>
                   <ul class="brickline-header__submenu-list">
                     {% for child_link in link.links %}
                       <li>
@@ -340,13 +357,45 @@
     }
   }
 
+  .brickline-header__submenu-top {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--surface-page, #ffffff);
+    border-bottom: 1px solid rgb(from var(--text-default, #141414) r g b / 0.1);
+  }
+
+  .brickline-header__submenu-logo {
+    display: flex;
+    align-items: center;
+    width: 120px;
+    height: 32px;
+    text-decoration: none;
+  }
+
+  .brickline-header__submenu-logo img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .brickline-header__submenu-logo--placeholder span {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--text-default, #141414);
+  }
+
   .brickline-header__submenu-close {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 24px;
-    right: 24px;
+    flex-shrink: 0;
     width: 36px;
     height: 36px;
     background: none;
@@ -367,7 +416,7 @@
   .brickline-header__submenu-list {
     display: flex;
     flex-direction: column;
-    padding: 88px 8px 24px;
+    padding: 8px 8px 24px;
   }
 
   .brickline-header__submenu-link {
