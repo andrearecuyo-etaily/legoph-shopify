@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
-<div
+<feature-grid-component
   class="feature-grid brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
@@ -70,16 +70,20 @@
                   endif
                 %}
                 <span class="feature-grid__hotspot{% if has_hotspot %} feature-grid__hotspot--interactive{% endif %}">
-                  <span
-                    class="feature-grid__overlay-icon"
-                    {% if has_hotspot %}
-                      tabindex="0"
-                      role="button"
+                  {% if has_hotspot %}
+                    <button
+                      type="button"
+                      class="feature-grid__overlay-icon"
                       aria-label="View product: {{ block.settings.product_name }}"
-                    {% endif %}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
-                  </span>
+                      aria-expanded="false"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                    </button>
+                  {% else %}
+                    <span class="feature-grid__overlay-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                    </span>
+                  {% endif %}
                   {% if has_hotspot %}
                     <a href="{{ block.settings.product_link | default: '#' }}" class="feature-grid__hotspot-card">
                       <span class="feature-grid__hotspot-name">{{ block.settings.product_name }}</span>
@@ -120,7 +124,12 @@
       {% endfor %}
     </div>
   {% endif %}
-</div>
+</feature-grid-component>
+
+<script
+  src="{{ 'feature-grid.js' | asset_url }}"
+  type="module"
+></script>
 
 {% stylesheet %}
   .feature-grid__header {
@@ -235,9 +244,12 @@
     justify-content: center;
     width: 30px;
     height: 30px;
+    border: none;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     color: #141414;
+    padding: 0;
+    font: inherit;
   }
 
   .feature-grid__hotspot--interactive .feature-grid__overlay-icon {
@@ -271,7 +283,8 @@
   }
 
   .feature-grid__hotspot--interactive:hover .feature-grid__hotspot-card,
-  .feature-grid__hotspot--interactive:focus-within .feature-grid__hotspot-card {
+  .feature-grid__hotspot--interactive:focus-within .feature-grid__hotspot-card,
+  .feature-grid__hotspot--interactive.is-open .feature-grid__hotspot-card {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
