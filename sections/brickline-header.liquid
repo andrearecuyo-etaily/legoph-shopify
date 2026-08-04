@@ -46,7 +46,7 @@
 
     {% if menu %}
       <nav class="brickline-header__nav" aria-label="Main menu">
-        {% for link in menu.links limit: 6 %}
+        {% for link in menu.links limit: 8 %}
           {% unless link.title == 'Home' %}
             {% if link.links.size > 0 %}
               <div class="brickline-header__nav-item">
@@ -140,7 +140,7 @@
   {% if menu %}
     <div class="brickline-header__mobile-menu" id="brickline-header-menu-{{ section.id }}" hidden>
       <nav class="brickline-header__mobile-nav" aria-label="Main menu">
-        {% for link in menu.links limit: 6 %}
+        {% for link in menu.links limit: 8 %}
           {% unless link.title == 'Home' %}
             {% if link.links.size > 0 %}
               <div class="brickline-header__mobile-item">
@@ -293,6 +293,8 @@
     left: 0;
     z-index: 20;
     min-width: 220px;
+    max-width: calc(100vw - 48px);
+    overflow-x: auto;
     background: var(--surface-page, #ffffff);
     color: var(--text-default, #141414);
     border-radius: 8px;
@@ -320,7 +322,13 @@
   .brickline-header__submenu-list {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+    max-height: min(70vh, 480px);
     padding: 10px;
+  }
+
+  .brickline-header__submenu-list li {
+    width: 220px;
   }
 
   .brickline-header__submenu-link {
