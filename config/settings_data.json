@@ -110,7 +110,7 @@
       },
       "scheme-black": {
         "settings": {
-          "background": "#000000",
+          "background": "#242424",
           "text": "#ffffff",
           "button_background": "#ffd400",
           "button_label": "#000000",
