@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <feature-grid-component
-  class="feature-grid brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
+  class="feature-grid feature-grid--{{ section.settings.layout }} brickline-section spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
     --brickline-card-radius: {{ settings.brickline_card_radius }}px;
