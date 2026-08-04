@@ -196,10 +196,17 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
     border-radius: var(--brickline-card-radius, 0px);
     overflow: hidden;
     background: #f7f7f7;
+  }
+
+  .feature-grid--uniform .feature-grid__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .feature-grid--featured .feature-grid__media {
+    height: 100%;
 
     @media screen and (max-width: 749px) {
       aspect-ratio: 4 / 3;
