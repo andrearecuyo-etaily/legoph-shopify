@@ -413,7 +413,8 @@
         "release_1": {
           "type": "item",
           "settings": {
-            "style": "image",
+            "style": "color",
+            "image": "shopify://shop_images/Giftgiving-202504-Home-Content-Block-Standard.jpg",
             "color_scheme": "",
             "show_overlay_icon": false,
             "product_name": "",
@@ -428,7 +429,7 @@
         "release_2": {
           "type": "item",
           "settings": {
-            "style": "image",
+            "style": "color",
             "color_scheme": "",
             "show_overlay_icon": false,
             "product_name": "",
@@ -443,7 +444,7 @@
         "release_3": {
           "type": "item",
           "settings": {
-            "style": "image",
+            "style": "color",
             "color_scheme": "",
             "show_overlay_icon": false,
             "product_name": "",
