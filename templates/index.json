@@ -557,7 +557,7 @@
         "discover_1": {
           "type": "item",
           "settings": {
-            "style": "image",
+            "style": "color",
             "image": "shopify://shop_images/Giftgiving-202504-Home-Content-Block-Standard.jpg",
             "color_scheme": "scheme-blue",
             "show_overlay_icon": false,
