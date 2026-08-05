@@ -12,6 +12,8 @@
     "logo": "shopify://shop_images/brand-lego.svg",
     "logo_height": 36,
     "logo_height_mobile": 28,
+    "favicon": "shopify://shop_images/brand-lego.svg",
+    "footer_logo": "shopify://shop_images/brand-lego.svg",
     "brickline_card_radius": 0,
     "brickline_shadow_intensity": "subtle",
     "type_body_font": "nunito_sans_n4",
