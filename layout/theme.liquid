@@ -42,6 +42,9 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ 'apple-touch-icon-76x76.png' | asset_url }}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{ 'apple-touch-icon-60x60.png' | asset_url }}">
 
+    <link rel="preload" href="{{ 'CeraPro-Regular.otf' | asset_url }}" as="font" type="font/otf" crossorigin>
+    <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+
     {% comment %}
       Opt into cross-document (MPA) view transitions and hold first paint until #MainContent
       parses, so the transition runs consistently.
