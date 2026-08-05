@@ -15,42 +15,50 @@
         "slide_1": {
           "type": "slide",
           "settings": {
+            "color_scheme": "scheme-earth-blue",
             "heading": "Shop a piece of it",
             "subheading": "<p>From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector.</p>",
             "button_label": "Shop now",
             "button_link": "shopify://collections/all",
             "button_label_2": "Learn more",
-            "color_scheme": "scheme-earth-blue"
+            "button_link_2": ""
           }
         },
         "slide_2": {
           "type": "slide",
           "settings": {
+            "color_scheme": "scheme-green",
             "heading": "New sets have landed",
             "subheading": "<p>Explore the latest arrivals across every theme, from Everfrost to Critter Quest.</p>",
             "button_label": "Shop now",
             "button_link": "shopify://collections/all",
             "button_label_2": "Learn more",
-            "color_scheme": "scheme-green"
+            "button_link_2": ""
           }
         },
         "slide_3": {
           "type": "slide",
           "settings": {
+            "color_scheme": "scheme-blue",
             "heading": "Build something amazing",
             "subheading": "<p>Discover Exclusives and Signature Editions made for serious collectors.</p>",
             "button_label": "Shop now",
             "button_link": "shopify://collections/all",
             "button_label_2": "Learn more",
-            "color_scheme": "scheme-blue"
+            "button_link_2": ""
           }
         }
       },
-      "block_order": ["slide_1", "slide_2", "slide_3"],
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
       "name": "Hero slider",
       "settings": {
         "color_scheme": "scheme-earth-blue",
         "section_width": "full-width",
+        "content_position": "center",
         "autoplay": true,
         "autoplay_speed": 5,
         "padding-block-start": 0,
@@ -60,24 +68,133 @@
     "category_strip": {
       "type": "category-tiles",
       "blocks": {
-        "tab_1": { "type": "tab", "settings": { "label": "What's new" } },
-        "tab_2": { "type": "tab", "settings": { "label": "Gifting" } },
-        "tab_3": { "type": "tab", "settings": { "label": "Themes" } },
-        "tile_1": { "type": "tile", "settings": { "label": "All new sets", "color_scheme": "scheme-blue", "link": "shopify://collections/all" } },
-        "tile_2": { "type": "tile", "settings": { "label": "Exclusives", "color_scheme": "scheme-earth-blue" } },
-        "tile_3": { "type": "tile", "settings": { "label": "Offers", "color_scheme": "scheme-purple" } },
-        "tile_4": { "type": "tile", "settings": { "label": "Technic Line", "color_scheme": "scheme-charcoal" } },
-        "tile_5": { "type": "tile", "settings": { "label": "Signature Editions", "color_scheme": "scheme-muted" } },
-        "tile_6": { "type": "tile", "settings": { "label": "Retiring Soon", "color_scheme": "scheme-orange" } },
-        "tile_7": { "type": "tile", "settings": { "label": "Speed Circuit", "color_scheme": "scheme-charcoal" } },
-        "tile_8": { "type": "tile", "settings": { "label": "Smart Play Sets", "color_scheme": "scheme-yellow" } }
+        "tab_1": {
+          "type": "tab",
+          "settings": {
+            "label": "What's new"
+          }
+        },
+        "tab_2": {
+          "type": "tab",
+          "settings": {
+            "label": "Gifting"
+          }
+        },
+        "tab_3": {
+          "type": "tab",
+          "settings": {
+            "label": "Themes"
+          }
+        },
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "All new sets",
+            "link": "shopify://collections/all",
+            "color_scheme": "scheme-blue",
+            "meta": ""
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Exclusives",
+            "link": "",
+            "color_scheme": "scheme-earth-blue",
+            "meta": ""
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Offers",
+            "link": "",
+            "color_scheme": "scheme-purple",
+            "meta": ""
+          }
+        },
+        "tile_4": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Technic Line",
+            "link": "",
+            "color_scheme": "scheme-charcoal",
+            "meta": ""
+          }
+        },
+        "tile_5": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Signature Editions",
+            "link": "",
+            "color_scheme": "scheme-muted",
+            "meta": ""
+          }
+        },
+        "tile_6": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Retiring Soon",
+            "link": "",
+            "color_scheme": "scheme-orange",
+            "meta": ""
+          }
+        },
+        "tile_7": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Speed Circuit",
+            "link": "",
+            "color_scheme": "scheme-charcoal",
+            "meta": ""
+          }
+        },
+        "tile_8": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Smart Play Sets",
+            "link": "",
+            "color_scheme": "scheme-yellow",
+            "meta": ""
+          }
+        }
       },
-      "block_order": ["tab_1", "tab_2", "tab_3", "tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6", "tile_7", "tile_8"],
+      "block_order": [
+        "tab_1",
+        "tab_2",
+        "tab_3",
+        "tile_1",
+        "tile_2",
+        "tile_3",
+        "tile_4",
+        "tile_5",
+        "tile_6",
+        "tile_7",
+        "tile_8"
+      ],
       "name": "Category strip",
       "settings": {
         "style": "solid",
-        "color_scheme": "scheme-black",
+        "heading": "",
+        "subheading": "",
         "columns_desktop": 8,
+        "color_scheme": "scheme-black",
         "section_width": "full-width",
         "padding-block-start": 32,
         "padding-block-end": 80
@@ -86,11 +203,33 @@
     "recommended_rail": {
       "type": "product-rail",
       "blocks": {
-        "tab_featured": { "type": "tab", "settings": { "label": "Featured", "collection": "all" } },
-        "tab_popular": { "type": "tab", "settings": { "label": "Popular", "collection": "all" } },
-        "tab_kids": { "type": "tab", "settings": { "label": "Kids' sets", "collection": "all" } }
+        "tab_featured": {
+          "type": "tab",
+          "settings": {
+            "label": "Featured",
+            "collection": "all"
+          }
+        },
+        "tab_popular": {
+          "type": "tab",
+          "settings": {
+            "label": "Popular",
+            "collection": "all"
+          }
+        },
+        "tab_kids": {
+          "type": "tab",
+          "settings": {
+            "label": "Kids' sets",
+            "collection": "all"
+          }
+        }
       },
-      "block_order": ["tab_featured", "tab_popular", "tab_kids"],
+      "block_order": [
+        "tab_featured",
+        "tab_popular",
+        "tab_kids"
+      ],
       "name": "Recommended for you",
       "settings": {
         "heading": "Recommended For You",
@@ -120,18 +259,95 @@
     "builder_gallery": {
       "type": "feature-grid",
       "blocks": {
-        "build_1": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Munchlax", "product_price": "$69.99", "product_link": "shopify://collections/all" } },
-        "build_2": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Rally Racer Supra Concept", "product_price": "$29.99", "product_link": "shopify://collections/all" } },
-        "build_3": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Bloom Arrangement", "product_price": "$87.99", "product_link": "shopify://collections/all" } },
-        "build_4": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Voyager Deep-Field Probe", "product_price": "$99.99", "product_link": "shopify://collections/all" } },
-        "build_5": { "type": "item", "settings": { "style": "image", "show_overlay_icon": true, "product_name": "Arcade Pinball Machine", "product_price": "$229.99", "product_link": "shopify://collections/all" } }
+        "build_1": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": true,
+            "product_name": "Munchlax",
+            "product_price": "$69.99",
+            "product_link": "shopify://collections/all",
+            "heading": "",
+            "subtext": "",
+            "button_label": "",
+            "link": ""
+          }
+        },
+        "build_2": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": true,
+            "product_name": "Rally Racer Supra Concept",
+            "product_price": "$29.99",
+            "product_link": "shopify://collections/all",
+            "heading": "",
+            "subtext": "",
+            "button_label": "",
+            "link": ""
+          }
+        },
+        "build_3": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": true,
+            "product_name": "Bloom Arrangement",
+            "product_price": "$87.99",
+            "product_link": "shopify://collections/all",
+            "heading": "",
+            "subtext": "",
+            "button_label": "",
+            "link": ""
+          }
+        },
+        "build_4": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": true,
+            "product_name": "Voyager Deep-Field Probe",
+            "product_price": "$99.99",
+            "product_link": "shopify://collections/all",
+            "heading": "",
+            "subtext": "",
+            "button_label": "",
+            "link": ""
+          }
+        },
+        "build_5": {
+          "type": "item",
+          "settings": {
+            "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": true,
+            "product_name": "Arcade Pinball Machine",
+            "product_price": "$229.99",
+            "product_link": "shopify://collections/all",
+            "heading": "",
+            "subtext": "",
+            "button_label": "",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["build_1", "build_2", "build_3", "build_4", "build_5"],
+      "block_order": [
+        "build_1",
+        "build_2",
+        "build_3",
+        "build_4",
+        "build_5"
+      ],
       "name": "Builder gallery",
       "settings": {
         "heading": "<h2>See What Everyone's Building</h2>",
         "subheading": "<p>Real builds from real builders, shared with the community.</p>",
         "layout": "featured",
+        "columns": 3,
         "color_scheme": "scheme-white",
         "section_width": "page-width",
         "padding-block-start": 64,
@@ -172,7 +388,11 @@
           }
         }
       },
-      "block_order": ["pill_1", "pill_2", "pill_3"],
+      "block_order": [
+        "pill_1",
+        "pill_2",
+        "pill_3"
+      ],
       "name": "Themed banner",
       "settings": {
         "layout": "banner",
@@ -194,34 +414,57 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Let your imagination bloom with customizable elements.",
             "subtext": "Position the petals and leaves, then change the lengths of the stems to create wonderful arrangements for the home.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "link": ""
           }
         },
         "release_2": {
           "type": "item",
           "settings": {
             "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Help kids develop key life skills",
             "subtext": "What's in the box? Everything kids need to create a toy watermill, tall bird, squid, pear tree, and let their imagination run free.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "link": ""
           }
         },
         "release_3": {
           "type": "item",
           "settings": {
             "style": "image",
+            "color_scheme": "",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Recognize your child's hard work",
             "subtext": "This kit is ideal for kids with a passion for arts and crafts who want to express themselves through design.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "link": ""
           }
         }
       },
-      "block_order": ["release_1", "release_2", "release_3"],
+      "block_order": [
+        "release_1",
+        "release_2",
+        "release_3"
+      ],
       "name": "New releases",
       "settings": {
         "heading": "<h2>New Releases</h2>",
+        "subheading": "",
         "layout": "uniform",
         "columns": 3,
         "color_scheme": "scheme-white",
@@ -233,17 +476,74 @@
     "shop_by_theme": {
       "type": "category-tiles",
       "blocks": {
-        "theme_1": { "type": "tile", "settings": { "label": "Super Heroes", "meta": "5+" } },
-        "theme_2": { "type": "tile", "settings": { "label": "City", "meta": "6+" } },
-        "theme_3": { "type": "tile", "settings": { "label": "Everfrost", "meta": "5+" } },
-        "theme_4": { "type": "tile", "settings": { "label": "Shadowkin", "meta": "6+" } },
-        "theme_5": { "type": "tile", "settings": { "label": "Little Builders", "meta": "1.5-5" } }
+        "theme_1": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Super Heroes",
+            "link": "",
+            "color_scheme": "",
+            "meta": "5+"
+          }
+        },
+        "theme_2": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "City",
+            "link": "",
+            "color_scheme": "",
+            "meta": "6+"
+          }
+        },
+        "theme_3": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Everfrost",
+            "link": "",
+            "color_scheme": "",
+            "meta": "5+"
+          }
+        },
+        "theme_4": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Shadowkin",
+            "link": "",
+            "color_scheme": "",
+            "meta": "6+"
+          }
+        },
+        "theme_5": {
+          "type": "tile",
+          "settings": {
+            "tab_group": 1,
+            "collection": "",
+            "label": "Little Builders",
+            "link": "",
+            "color_scheme": "",
+            "meta": "1.5-5"
+          }
+        }
       },
-      "block_order": ["theme_1", "theme_2", "theme_3", "theme_4", "theme_5"],
+      "block_order": [
+        "theme_1",
+        "theme_2",
+        "theme_3",
+        "theme_4",
+        "theme_5"
+      ],
       "name": "Shop by theme",
       "settings": {
         "style": "image",
         "heading": "<h2>Shop by Theme</h2>",
+        "subheading": "",
         "columns_desktop": 5,
         "color_scheme": "scheme-white",
         "section_width": "page-width",
@@ -257,11 +557,17 @@
         "discover_1": {
           "type": "item",
           "settings": {
-            "style": "color",
+            "style": "image",
+            "image": "shopify://shop_images/Giftgiving-202504-Home-Content-Block-Standard.jpg",
             "color_scheme": "scheme-blue",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Get gifting",
             "subtext": "Shop ideas by occasion, age and price. Plus gift cards, too.",
-            "button_label": "Shop now"
+            "button_label": "Shop now",
+            "link": ""
           }
         },
         "discover_2": {
@@ -269,9 +575,14 @@
           "settings": {
             "style": "color",
             "color_scheme": "scheme-green",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Read all about it",
             "subtext": "See our library of articles for ideas and inspiration.",
-            "button_label": "Discover"
+            "button_label": "Discover",
+            "link": ""
           }
         },
         "discover_3": {
@@ -279,16 +590,26 @@
           "settings": {
             "style": "color",
             "color_scheme": "scheme-black",
+            "show_overlay_icon": false,
+            "product_name": "",
+            "product_price": "",
+            "product_link": "",
             "heading": "Membership perks at your fingertips",
             "subtext": "Shop new sets, stack up points and unlock rewards.",
-            "button_label": "Learn more"
+            "button_label": "Learn more",
+            "link": ""
           }
         }
       },
-      "block_order": ["discover_1", "discover_2", "discover_3"],
+      "block_order": [
+        "discover_1",
+        "discover_2",
+        "discover_3"
+      ],
       "name": "Discover more",
       "settings": {
         "heading": "<h2>Discover More</h2>",
+        "subheading": "",
         "layout": "uniform",
         "columns": 3,
         "color_scheme": "scheme-white",
