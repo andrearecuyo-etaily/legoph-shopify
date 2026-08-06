@@ -76,6 +76,7 @@
         "announcement_BxgCk9_2",
         "announcement_BxgCk9_3"
       ],
+      "disabled": true,
       "name": "t:names.announcement_bar",
       "settings": {
         "speed": 5,
