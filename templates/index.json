@@ -482,10 +482,11 @@
           "settings": {
             "tab_group": 1,
             "collection": "",
-            "label": "Super Heroes",
+            "label": "",
             "link": "",
             "color_scheme": "",
-            "meta": "5+"
+            "image": "shopify://shop_images/themebuttonsuperheroescopy540x_1.png",
+            "meta": ""
           }
         },
         "theme_2": {
@@ -493,10 +494,11 @@
           "settings": {
             "tab_group": 1,
             "collection": "",
-            "label": "City",
+            "label": "",
             "link": "",
             "color_scheme": "",
-            "meta": "6+"
+            "image": "shopify://shop_images/43189disneyprincess1hy21verticalbtnbg_1.png",
+            "meta": ""
           }
         },
         "theme_3": {
@@ -504,10 +506,11 @@
           "settings": {
             "tab_group": 1,
             "collection": "",
-            "label": "Everfrost",
+            "label": "",
             "link": "",
             "color_scheme": "",
-            "meta": "5+"
+            "image": "shopify://shop_images/themeninjago540x_1.jpg",
+            "meta": ""
           }
         },
         "theme_4": {
@@ -515,10 +518,11 @@
           "settings": {
             "tab_group": 1,
             "collection": "",
-            "label": "Shadowkin",
+            "label": "",
             "link": "",
             "color_scheme": "",
-            "meta": "6+"
+            "image": "shopify://shop_images/themeduplo540x_1.png",
+            "meta": ""
           }
         },
         "theme_5": {
@@ -526,10 +530,11 @@
           "settings": {
             "tab_group": 1,
             "collection": "",
-            "label": "Little Builders",
+            "label": "",
             "link": "",
             "color_scheme": "",
-            "meta": "1.5-5"
+            "image": "shopify://shop_images/60292city1hy21verticalbtnbg_1.png",
+            "meta": ""
           }
         }
       },
