@@ -187,16 +187,6 @@
     content: '';
   }
 
-  .hero-slider__slide:has(.hero-slider__image) {
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgb(from var(--slide-bg) r g b / 0.55);
-      z-index: 1;
-    }
-  }
-
   .hero-slider__image.is-loaded {
     opacity: 1;
   }
