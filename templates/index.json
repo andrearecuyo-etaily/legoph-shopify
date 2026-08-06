@@ -221,6 +221,7 @@
       "settings": {
         "layout": "band",
         "content_position": "left",
+        "image": "shopify://shop_images/Evergreen-VI-LIApp-202607-HP-Content-Block-Standard.jpg",
         "heading": "<h2>New Arrivals</h2>",
         "subheading": "<p>The latest sets this month</p>",
         "button_label": "Shop now",
