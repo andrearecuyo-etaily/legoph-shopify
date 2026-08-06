@@ -12,46 +12,21 @@
     "hero_slider": {
       "type": "hero-slider",
       "blocks": {
-        "slide_1": {
-          "type": "slide",
-          "settings": {
-            "color_scheme": "scheme-earth-blue",
-            "heading": "Shop a piece of it",
-            "subheading": "<p>From celebrating this generation's most iconic builds to the ultimate showpiece — there's a Brickline edition for every collector.</p>",
-            "button_label": "Shop now",
-            "button_link": "shopify://collections/all",
-            "button_label_2": "Learn more",
-            "button_link_2": ""
-          }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
-            "color_scheme": "scheme-green",
-            "heading": "New sets have landed",
-            "subheading": "<p>Explore the latest arrivals across every theme, from Everfrost to Critter Quest.</p>",
-            "button_label": "Shop now",
-            "button_link": "shopify://collections/all",
-            "button_label_2": "Learn more",
-            "button_link_2": ""
-          }
-        },
         "slide_3": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/20260804_EARLYBIRD_2_LCS_PC.jpg",
             "color_scheme": "scheme-blue",
-            "heading": "Build something amazing",
-            "subheading": "<p>Discover Exclusives and Signature Editions made for serious collectors.</p>",
-            "button_label": "Shop now",
+            "heading": "",
+            "subheading": "",
+            "button_label": "",
             "button_link": "shopify://collections/all",
-            "button_label_2": "Learn more",
+            "button_label_2": "",
             "button_link_2": ""
           }
         }
       },
       "block_order": [
-        "slide_1",
-        "slide_2",
         "slide_3"
       ],
       "name": "Hero slider",
@@ -413,7 +388,7 @@
         "release_1": {
           "type": "item",
           "settings": {
-            "style": "color",
+            "style": "image",
             "image": "shopify://shop_images/Giftgiving-202504-Home-Content-Block-Standard.jpg",
             "color_scheme": "",
             "show_overlay_icon": false,
