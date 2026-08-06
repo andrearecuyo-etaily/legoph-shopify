@@ -372,6 +372,7 @@
       "settings": {
         "layout": "banner",
         "content_position": "right",
+        "image": "shopify://shop_images/Giftgiving-202504-Home-Content-Block-Standard.jpg",
         "heading": "<h2>Frosty adventures await with Everfrost</h2>",
         "subheading": "<p>Explore icy new sets built for imaginative winter play.</p>",
         "button_label": "Shop now",
