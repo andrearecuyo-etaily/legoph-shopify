@@ -239,6 +239,7 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "image": "shopify://shop_images/11513_Square_1.png",
             "color_scheme": "",
             "show_overlay_icon": true,
             "product_name": "Munchlax",
@@ -254,6 +255,7 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "image": "shopify://shop_images/42236_Square.jpg",
             "color_scheme": "",
             "show_overlay_icon": true,
             "product_name": "Rally Racer Supra Concept",
@@ -269,6 +271,7 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "image": "shopify://shop_images/75647_Square.png",
             "color_scheme": "",
             "show_overlay_icon": true,
             "product_name": "Bloom Arrangement",
@@ -284,6 +287,7 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "image": "shopify://shop_images/60511_Square.png",
             "color_scheme": "",
             "show_overlay_icon": true,
             "product_name": "Voyager Deep-Field Probe",
@@ -299,6 +303,7 @@
           "type": "item",
           "settings": {
             "style": "image",
+            "image": "shopify://shop_images/72150_Square.png",
             "color_scheme": "",
             "show_overlay_icon": true,
             "product_name": "Arcade Pinball Machine",
