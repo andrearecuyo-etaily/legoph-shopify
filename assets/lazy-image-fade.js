@@ -10,14 +10,17 @@ function observe(img) {
   img.addEventListener('load', () => markLoaded(img), { once: true });
 }
 
-document.querySelectorAll('.category-tiles__image, .product-rail-card__image').forEach(observe);
+const LAZY_IMAGE_SELECTOR =
+  '.category-tiles__image, .product-rail-card__image, .feature-grid__image, .hero-slider__image';
+
+document.querySelectorAll(LAZY_IMAGE_SELECTOR).forEach(observe);
 
 if ('MutationObserver' in window) {
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (!(node instanceof Element)) continue;
-        node.querySelectorAll?.('.category-tiles__image, .product-rail-card__image').forEach(observe);
+        node.querySelectorAll?.(LAZY_IMAGE_SELECTOR).forEach(observe);
       }
     }
   });
