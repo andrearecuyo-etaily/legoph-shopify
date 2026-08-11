@@ -4,7 +4,7 @@
 
   Accepts:
   - icon: {String} one of document, question, star, gift, calendar, mountains, heart,
-    truck, shield, refresh, chevron-down, close, minus, plus, check, trash, search, filter
+    truck, shield, refresh, chevron-down, close, minus, plus, check, trash, search, filter, sort
 
   Usage:
   {% render 'brickline-icon', icon: 'star' %}
@@ -45,6 +45,8 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/></svg>
   {%- when 'search' -%}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+  {%- when 'sort' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4v14M4 15l3 3 3-3M17 20V6M20 9l-3-3-3 3"/></svg>
   {%- when 'filter' -%}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
   {%- else -%}

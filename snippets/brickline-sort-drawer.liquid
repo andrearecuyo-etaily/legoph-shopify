@@ -1,0 +1,86 @@
+{% comment %}
+  Sort drawer for the collection grid. Options come from `collection.sort_options`,
+  so they always match what the storefront actually supports.
+
+  Accepts:
+  - drawer_id: {String} required, matches the trigger's data-drawer-open
+
+  Usage:
+  {% render 'brickline-sort-drawer', drawer_id: 'sort-123' %}
+{% endcomment %}
+
+{% liquid
+  assign current_sort = collection.sort_by | default: collection.default_sort_by
+%}
+
+<brickline-drawer
+  id="{{ drawer_id }}"
+  class="bl-drawer"
+  hidden
+>
+  <div
+    class="bl-drawer__overlay"
+    data-drawer-overlay
+  ></div>
+
+  <div
+    class="bl-drawer__panel"
+    data-drawer-panel
+    role="dialog"
+    aria-modal="true"
+    aria-label="Sort by"
+  >
+    <div class="bl-drawer__header">
+      <span class="bl-drawer__title">Sort by</span>
+      <button
+        type="button"
+        class="bl-drawer__close"
+        data-drawer-close
+        aria-label="Close sort options"
+      >
+        {%- render 'brickline-icon', icon: 'close' -%}
+      </button>
+    </div>
+
+    <form
+      method="get"
+      class="bl-drawer__body"
+    >
+      {% comment %} Carry active filters so sorting doesn't drop them. {% endcomment %}
+      {% for filter in collection.filters %}
+        {% for value in filter.active_values %}
+          <input
+            type="hidden"
+            name="{{ value.param_name }}"
+            value="{{ value.value }}"
+          >
+        {% endfor %}
+      {% endfor %}
+
+      <div class="bl-drawer__options">
+        {% for option in collection.sort_options %}
+          <label class="bl-drawer__option">
+            <input
+              type="radio"
+              name="sort_by"
+              value="{{ option.value }}"
+              {% if option.value == current_sort %}
+                checked
+              {% endif %}
+            >
+            <span>{{ option.name }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="bl-drawer__actions">
+        <button
+          type="submit"
+          class="bl-drawer__apply"
+        >
+          Apply
+        </button>
+      </div>
+    </form>
+  </div>
+</brickline-drawer>

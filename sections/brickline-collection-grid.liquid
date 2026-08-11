@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 <link rel="stylesheet" href="{{ 'brickline-product-card.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-drawer.css' | asset_url }}">
 
 <div
   id="brickline-collection-grid"
@@ -96,144 +97,35 @@
         {% endif %}
 
         {% if section.settings.show_filters and collection.filters.size > 0 %}
-          <details class="collection-grid__disclosure">
-            <summary class="collection-grid__disclosure-button">
-              {%- render 'brickline-icon', icon: 'filter' -%}
-              Filters
-              {%- if has_active_filters %} &bull;{% endif -%}
-            </summary>
-            <form
-              method="get"
-              class="collection-grid__panel"
-            >
-              {% comment %}
-                Carry the current sort so opening the filter panel doesn't reset it.
-              {% endcomment %}
-              {% if collection.sort_by != blank %}
-                <input
-                  type="hidden"
-                  name="sort_by"
-                  value="{{ collection.sort_by }}"
-                >
-              {% endif %}
-
-              {% for filter in collection.filters %}
-                {% case filter.type %}
-                  {% when 'list', 'boolean' %}
-                    <fieldset class="collection-grid__filter">
-                      <legend class="collection-grid__filter-legend">{{ filter.label }}</legend>
-                      {% for value in filter.values %}
-                        <label class="collection-grid__filter-option">
-                          <input
-                            type="checkbox"
-                            name="{{ value.param_name }}"
-                            value="{{ value.value }}"
-                            {% if value.active %}
-                              checked
-                            {% endif %}
-                            {% if value.count == 0 and value.active == false %}
-                              disabled
-                            {% endif %}
-                          >
-                          <span>{{ value.label }} ({{ value.count }})</span>
-                        </label>
-                      {% endfor %}
-                    </fieldset>
-                  {% when 'price_range' %}
-                    <fieldset class="collection-grid__filter">
-                      <legend class="collection-grid__filter-legend">{{ filter.label }}</legend>
-                      <div class="collection-grid__filter-range">
-                        <label>
-                          <span class="visually-hidden">{{ filter.min_value.label }}</span>
-                          <input
-                            type="number"
-                            name="{{ filter.min_value.param_name }}"
-                            value="{{ filter.min_value.value | divided_by: 100 }}"
-                            min="0"
-                            max="{{ filter.range_max | divided_by: 100 }}"
-                            placeholder="{{ 0 | money_without_currency }}"
-                          >
-                        </label>
-                        <span aria-hidden="true">–</span>
-                        <label>
-                          <span class="visually-hidden">{{ filter.max_value.label }}</span>
-                          <input
-                            type="number"
-                            name="{{ filter.max_value.param_name }}"
-                            value="{{ filter.max_value.value | divided_by: 100 }}"
-                            min="0"
-                            max="{{ filter.range_max | divided_by: 100 }}"
-                            placeholder="{{ filter.range_max | money_without_currency }}"
-                          >
-                        </label>
-                      </div>
-                    </fieldset>
-                {% endcase %}
-              {% endfor %}
-
-              <div class="collection-grid__panel-actions">
-                <button
-                  type="submit"
-                  class="collection-grid__panel-apply"
-                >
-                  Apply
-                </button>
-                <a
-                  href="{{ collection.url }}"
-                  class="collection-grid__panel-clear"
-                >
-                  Clear all
-                </a>
-              </div>
-            </form>
-          </details>
+          <button
+            type="button"
+            class="collection-grid__tool"
+            data-drawer-open="filters-{{ section.id }}"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+          >
+            {%- render 'brickline-icon', icon: 'filter' -%}
+            Filters
+            {%- if has_active_filters %}
+              <span
+                class="collection-grid__tool-dot"
+                aria-label="Filters applied"
+              ></span>
+            {% endif -%}
+          </button>
         {% endif %}
 
         {% if section.settings.show_sort %}
-          <form
-            method="get"
-            class="collection-grid__sort"
+          <button
+            type="button"
+            class="collection-grid__tool"
+            data-drawer-open="sort-{{ section.id }}"
+            aria-haspopup="dialog"
+            aria-expanded="false"
           >
-            {% comment %}
-              Preserve active filter params so changing the sort doesn't drop them.
-            {% endcomment %}
-            {% for filter in collection.filters %}
-              {% for value in filter.active_values %}
-                <input
-                  type="hidden"
-                  name="{{ value.param_name }}"
-                  value="{{ value.value }}"
-                >
-              {% endfor %}
-            {% endfor %}
-
-            <label
-              for="sort-by-{{ section.id }}"
-              class="visually-hidden"
-            >
-              Sort by
-            </label>
-            <select
-              id="sort-by-{{ section.id }}"
-              name="sort_by"
-              class="collection-grid__sort-select"
-              onchange="this.form.submit()"
-            >
-              {% liquid
-                assign current_sort = collection.sort_by | default: collection.default_sort_by
-              %}
-              {% for option in collection.sort_options %}
-                <option
-                  value="{{ option.value }}"
-                  {% if option.value == current_sort %}
-                    selected
-                  {% endif %}
-                >
-                  Sort by: {{ option.name }}
-                </option>
-              {% endfor %}
-            </select>
-          </form>
+            {%- render 'brickline-icon', icon: 'sort' -%}
+            Sort by
+          </button>
         {% endif %}
       </div>
     </div>
@@ -312,13 +204,24 @@
         <span class="collection-grid__empty-body">Try clearing a filter to see more sets.</span>
         <a
           href="{{ collection.url }}"
-          class="collection-grid__panel-apply"
+          class="collection-grid__empty-action"
         >
           Clear filters
         </a>
       </div>
     {% endif %}
   {% endpaginate %}
+
+  {% if section.settings.show_filters and collection.filters.size > 0 %}
+    {% render 'brickline-filters-drawer',
+      drawer_id: 'filters-' | append: section.id,
+      visible_count: section.settings.filter_options_visible
+    %}
+  {% endif %}
+
+  {% if section.settings.show_sort %}
+    {% render 'brickline-sort-drawer', drawer_id: 'sort-' | append: section.id %}
+  {% endif %}
 </div>
 
 {% stylesheet %}
@@ -412,12 +315,7 @@
     }
   }
 
-  .collection-grid__disclosure {
-    position: relative;
-  }
-
-  .collection-grid__disclosure-button,
-  .collection-grid__sort-select {
+  .collection-grid__tool {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -428,104 +326,27 @@
     background: var(--surface-page, #ffffff);
     border: 1px solid var(--color-border-default, #d9d9d9);
     border-radius: 0;
-    padding: 8px 12px;
+    padding: 9px 14px;
     cursor: pointer;
-    list-style: none;
+    min-height: 40px;
   }
 
-  .collection-grid__disclosure-button::-webkit-details-marker {
-    display: none;
+  @media (hover: hover) and (pointer: fine) {
+    .collection-grid__tool:hover {
+      border-color: var(--brand-black, #000000);
+    }
   }
 
-  .collection-grid__disclosure-button svg {
+  .collection-grid__tool svg {
     width: 15px;
     height: 15px;
   }
 
-  .collection-grid__panel {
-    position: absolute;
-    z-index: 3;
-    inset-inline-end: 0;
-    margin-block-start: 8px;
-    width: min(320px, 80vw);
-    max-height: 60vh;
-    overflow-y: auto;
-    background: var(--surface-page, #ffffff);
-    border: 1px solid var(--color-border-default, #d9d9d9);
-    box-shadow: var(--shadow-md, 0 4px 12px rgb(0 0 0 / 8%));
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .collection-grid__filter {
-    border: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .collection-grid__filter-legend {
-    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 0;
-    margin-block-end: 4px;
-  }
-
-  .collection-grid__filter-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: "Cera Pro", var(--font-body--family), sans-serif;
-    font-size: 13px;
-    color: var(--text-subtle, #636363);
-    cursor: pointer;
-  }
-
-  .collection-grid__filter-range {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .collection-grid__filter-range input {
-    width: 100%;
-    min-width: 0;
-    padding: 8px 10px;
-    border: 1px solid var(--color-border-default, #d9d9d9);
-    font-family: "Cera Pro", var(--font-body--family), sans-serif;
-    font-size: 13px;
-  }
-
-  .collection-grid__panel-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .collection-grid__panel-apply {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: var(--brand-black, #000000);
-    color: var(--text-inverse, #ffffff);
-    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 10px 18px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .collection-grid__panel-clear {
-    font-family: "Cera Pro", var(--font-body--family), sans-serif;
-    font-size: 12px;
-    color: var(--text-subtle, #636363);
+  .collection-grid__tool-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-discount-red, #dd0000);
   }
 
   .collection-grid__items {
@@ -609,10 +430,27 @@
     font-size: 14px;
     color: var(--text-subtle, #636363);
   }
+
+  .collection-grid__empty-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brand-black, #000000);
+    color: var(--text-inverse, #ffffff);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 12px 20px;
+    text-decoration: none;
+  }
 {% endstylesheet %}
 
 <script
   src="{{ 'brickline-cart-actions.js' | asset_url }}"
+  type="module"
+></script>
+<script
+  src="{{ 'brickline-drawer.js' | asset_url }}"
   type="module"
 ></script>
 
@@ -673,6 +511,15 @@
       "label": "Show filters",
       "info": "Uses the storefront filters configured in Search & Discovery.",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "filter_options_visible",
+      "label": "Filter options before \u201cSee more\u201d",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 5
     },
     {
       "type": "checkbox",
