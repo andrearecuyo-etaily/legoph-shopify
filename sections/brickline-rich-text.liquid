@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="rich-text brickline-section spacing-style rich-text--{{ section.settings.alignment }}"
+  class="rich-text brickline-section spacing-style rich-text--{{ section.settings.alignment }} rich-text--body-{{ section.settings.body_size }}"
   style="{% render 'spacing-padding', settings: section.settings %}; --rich-text-width: {{ section.settings.content_width }}px;"
 >
   <div class="rich-text__inner">
@@ -115,6 +115,13 @@
     font-size: 14px;
     color: var(--text-subtle, #636363);
     line-height: 1.7;
+  }
+
+  /* Legal small print — the Free Shipping disclaimer, for one. */
+  .rich-text--body-small .rich-text__intro,
+  .rich-text--body-small .rich-text__body {
+    font-size: 12px;
+    color: var(--text-meta, #939393);
   }
 
   .rich-text__intro p,
@@ -238,6 +245,16 @@
         { "value": "start", "label": "Left" }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "body_size",
+      "label": "Body size",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "small", "label": "Small print" }
+      ],
+      "default": "normal"
     },
     {
       "type": "range",

@@ -1,0 +1,69 @@
+{
+  "sections": {
+    "banner": {
+      "type": "brickline-cta-banner",
+      "settings": {
+        "heading": "FREE shipping with orders over ₱2,000!*",
+        "subheading": "",
+        "alignment": "end",
+        "button_label": "Shop now",
+        "button_link": "/collections/all",
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "popular": {
+      "type": "brickline-product-grid",
+      "settings": {
+        "heading": "Most Popular",
+        "products_to_show": 5,
+        "show_meta": true,
+        "columns": 5,
+        "columns_tablet": 3,
+        "columns_mobile": 2,
+        "section_width": "page-width",
+        "padding-block-start": 56,
+        "padding-block-end": 0
+      }
+    },
+    "disclaimer": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "body": "<p><strong>Free Shipping Every Day offer</strong> applies to online orders at brickline.ph and for telephone orders. Qualifying purchase must be greater than ₱2,000 in merchandise; any applicable taxes, service fees or value of gift cards purchased do not apply to the merchandise total. Once your order reaches above ₱2,000, free standard shipping is applied automatically. Brickline reserves the right to cancel or modify this promotion at any time without advance notice.</p>",
+        "alignment": "center",
+        "body_size": "small",
+        "content_width": 900,
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "deal": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-start",
+        "image_ratio": "4 / 3",
+        "text_alignment": "start",
+        "mobile_order": "media",
+        "heading": "Reveal a deal",
+        "body": "<p>From gifts with purchase to special discounts, see current promotions now.</p>",
+        "button_label": "Learn more",
+        "button_link": "/collections/all",
+        "background_color": "#00395d",
+        "text_color": "#ffffff",
+        "padding-block-start": 40,
+        "padding-block-end": 56
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "popular",
+    "disclaimer",
+    "deal"
+  ]
+}

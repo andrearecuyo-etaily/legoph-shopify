@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="cta-banner brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  class="cta-banner cta-banner--{{ section.settings.alignment }} brickline-section spacing-style section section--{{ section.settings.section_width }}"
   style="{% render 'spacing-padding', settings: section.settings %}"
 >
   <div
@@ -39,6 +39,38 @@
     justify-content: space-between;
     gap: 24px;
     flex-wrap: wrap;
+  }
+
+  /* Stacked variants put the copy and button in one column, which is how the
+     Free Shipping banner reads. */
+  .cta-banner--start .cta-banner__panel,
+  .cta-banner--center .cta-banner__panel,
+  .cta-banner--end .cta-banner__panel {
+    flex-direction: column;
+    padding: 32px 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cta-banner--start .cta-banner__panel,
+    .cta-banner--center .cta-banner__panel,
+    .cta-banner--end .cta-banner__panel {
+      padding: 40px;
+    }
+  }
+
+  .cta-banner--start .cta-banner__panel {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .cta-banner--center .cta-banner__panel {
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta-banner--end .cta-banner__panel {
+    align-items: flex-end;
+    text-align: end;
   }
 
   .cta-banner__text {
@@ -106,6 +138,18 @@
       "id": "subheading",
       "label": "Subheading",
       "default": "7/7–7/12, while supplies last.*"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Text left, button right" },
+        { "value": "start", "label": "Stacked left" },
+        { "value": "center", "label": "Stacked centered" },
+        { "value": "end", "label": "Stacked right" }
+      ],
+      "default": "split"
     },
     {
       "type": "text",

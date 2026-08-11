@@ -27,8 +27,10 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - [x] Search — `templates/search.json` (`brickline-search`)
 - [x] Filters Drawer / Sort Drawer — `snippets/brickline-filters-drawer.liquid`, `brickline-sort-drawer.liquid`, driven by `assets/brickline-drawer.js`; replaces the inline disclosures in `brickline-collection-grid`
 - [x] Accessibility Statement / Privacy Policy / Terms and Conditions / Shipping Information — assign `templates/page.content.json`; copy lives in the Shopify page editor (`brickline-rich-text` falls back to `page.title` / `page.content`)
-- [ ] About Us, Coming Soon, Free Shipping — not started
-- [ ] Account, Account Details, Addresses, Order History, Order Confirmation — blocked, see note below
+- [x] About Us — `templates/page.about.json` (inset banner + `brickline-rich-text` sections)
+- [x] Coming Soon — `templates/password.json` (`brickline-coming-soon`, live countdown + storefront password form)
+- [x] Free Shipping — `templates/page.free-shipping.json` (`brickline-cta-banner`, `brickline-product-grid`, small-print `brickline-rich-text`, `brickline-feature-band`)
+- [x] Account / Account Details / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
 - [ ] Wishlist, Checkout — see note below
 
 ## Pages available in the source project (not yet converted)
@@ -69,16 +71,19 @@ Every one of these pages already shares the exact same utility bar / header / fo
 
 ## Blocked / needs a decision
 
-**Customer account pages.** This theme ships no `templates/customers/` directory at
-all, which is how Horizon ships when a store uses Shopify's *new customer accounts*
-— those pages (`Account`, `Account Details`, `Addresses`, `Order History`,
-`Order Confirmation`) are hosted by Shopify at `shopify.com/<store-id>/account` and
-cannot be templated by the theme; branding is limited to what Settings → Customer
-accounts exposes. If the store is instead on *classic* customer accounts, the
-designs can be built as `templates/customers/account.liquid`, `order.liquid`,
-`addresses.liquid`, `login.liquid` and `register.liquid`. Which system is active is
-a store setting, not something the theme files record — confirm in Shopify admin
-before building these.
+**Customer account pages — built for classic accounts.** `templates/customers/`
+did not exist in this theme; it was added on the basis that the store runs
+*classic* customer accounts. These templates only render under classic accounts —
+under Shopify's *new customer accounts* the pages are hosted at
+`shopify.com/<store-id>/account` and the theme is bypassed entirely. If the store
+is ever migrated to new accounts, everything under `templates/customers/` becomes
+dead code.
+
+Only the `Account` design (the login/register card) was converted from its design
+file. `Account Details`, `Addresses`, `Order History` and `Order Confirmation` were
+built against the Shopify `customer` / `order` object model in the established
+Brickline visual language — worth a pass against those four design files before
+sign-off.
 
 **Wishlist.** Shopify has no native wishlist. Delivering this needs either an app
 (Wishlist Plus, Swym) whose markup we'd theme, or a custom implementation backed by

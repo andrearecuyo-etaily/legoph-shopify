@@ -1,0 +1,444 @@
+{% comment %}
+  Coming Soon / password page. Lives on templates/password.json, which Shopify
+  serves while the storefront is password-protected — so it renders without the
+  theme's header and footer by design.
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="coming-soon"
+  style="--coming-bg: {{ section.settings.background_color }}; --coming-fg: {{ section.settings.text_color }}; --coming-accent: {{ section.settings.button_color }};"
+>
+  <div class="coming-soon__inner">
+    {% if section.settings.logo != blank %}
+      <img
+        src="{{ section.settings.logo | image_url: width: 400 }}"
+        alt="{{ shop.name | escape }}"
+        class="coming-soon__logo"
+        width="{{ section.settings.logo.width }}"
+        height="{{ section.settings.logo.height }}"
+      >
+    {% else %}
+      <span class="coming-soon__wordmark">{{ section.settings.wordmark | default: shop.name }}</span>
+    {% endif %}
+
+    <div class="coming-soon__copy">
+      {% if section.settings.heading != blank %}
+        <h1 class="coming-soon__heading">{{ section.settings.heading }}</h1>
+      {% endif %}
+      {% if section.settings.body != blank %}
+        <p class="coming-soon__body">{{ section.settings.body }}</p>
+      {% endif %}
+    </div>
+
+    {% if section.settings.launch_date != blank %}
+      {% comment %}
+        Counts down in the visitor's own timezone from the ISO date in settings.
+        Rendered with dashes so there's no flash of wrong numbers before JS runs.
+      {% endcomment %}
+      <countdown-timer
+        class="coming-soon__countdown"
+        data-launch="{{ section.settings.launch_date }}"
+      >
+        <div class="coming-soon__unit">
+          <span
+            class="coming-soon__value"
+            data-countdown="days"
+          >
+            --
+          </span>
+          <span class="coming-soon__label">Days</span>
+        </div>
+        <div class="coming-soon__unit">
+          <span
+            class="coming-soon__value"
+            data-countdown="hours"
+          >
+            --
+          </span>
+          <span class="coming-soon__label">Hours</span>
+        </div>
+        <div class="coming-soon__unit">
+          <span
+            class="coming-soon__value"
+            data-countdown="minutes"
+          >
+            --
+          </span>
+          <span class="coming-soon__label">Minutes</span>
+        </div>
+        <div class="coming-soon__unit">
+          <span
+            class="coming-soon__value"
+            data-countdown="seconds"
+          >
+            --
+          </span>
+          <span class="coming-soon__label">Seconds</span>
+        </div>
+      </countdown-timer>
+    {% endif %}
+
+    {% form 'customer', class: 'coming-soon__form' %}
+      <input
+        type="hidden"
+        name="contact[tags]"
+        value="newsletter, coming-soon"
+      >
+      {% if form.posted_successfully? %}
+        <p
+          class="coming-soon__success"
+          role="status"
+        >
+          {{ section.settings.success_message | default: "Thanks — we'll let you know the moment we launch." }}
+        </p>
+      {% else %}
+        <label
+          for="coming-soon-email-{{ section.id }}"
+          class="visually-hidden"
+        >
+          Email address
+        </label>
+        <input
+          id="coming-soon-email-{{ section.id }}"
+          type="email"
+          name="contact[email]"
+          placeholder="{{ section.settings.placeholder | default: 'Your email address' | escape }}"
+          required
+        >
+        <button
+          type="submit"
+          class="coming-soon__submit"
+        >
+          {{ section.settings.button_label | default: 'Notify Me' }}
+        </button>
+      {% endif %}
+    {% endform %}
+
+    {% comment %} Shopify requires the storefront password form on this template. {% endcomment %}
+    <details class="coming-soon__password">
+      <summary>Enter using password</summary>
+      {% form 'storefront_password', class: 'coming-soon__password-form' %}
+        {% if form.errors %}
+          <span
+            class="coming-soon__error"
+            role="alert"
+          >
+            {{ form.errors.messages.form }}
+          </span>
+        {% endif %}
+        <label
+          for="storefront-password-{{ section.id }}"
+          class="visually-hidden"
+        >
+          Password
+        </label>
+        <input
+          id="storefront-password-{{ section.id }}"
+          type="password"
+          name="password"
+          placeholder="Password"
+          autocomplete="current-password"
+        >
+        <button
+          type="submit"
+          class="coming-soon__submit"
+        >
+          Enter
+        </button>
+      {% endform %}
+    </details>
+
+    <span class="coming-soon__legal">
+      {{ section.settings.legal | default: '© 2026 Brickline. All rights reserved.' }}
+    </span>
+  </div>
+</div>
+
+<script
+  src="{{ 'brickline-countdown.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  .coming-soon {
+    background: var(--coming-bg, #000000);
+    color: var(--coming-fg, #ffffff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .coming-soon__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coming-soon__inner {
+      gap: 28px;
+    }
+  }
+
+  .coming-soon__logo {
+    display: block;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .coming-soon__wordmark {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 0.01em;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coming-soon__wordmark {
+      font-size: 32px;
+    }
+  }
+
+  .coming-soon__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .coming-soon__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 1.25;
+    color: inherit;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coming-soon__heading {
+      font-size: 28px;
+    }
+  }
+
+  .coming-soon__body {
+    margin: 0 auto;
+    max-width: 420px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 1.6;
+  }
+
+  .coming-soon__countdown {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coming-soon__countdown {
+      gap: 20px;
+    }
+  }
+
+  .coming-soon__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .coming-soon__value {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    background: var(--surface-tertiary, #f7f7f7);
+    color: var(--brand-black, #000000);
+    padding: 10px 12px;
+    min-width: 52px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media screen and (min-width: 750px) {
+    .coming-soon__value {
+      font-size: 32px;
+      padding: 12px 16px;
+      min-width: 60px;
+    }
+  }
+
+  .coming-soon__label {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+  }
+
+  .coming-soon__form,
+  .coming-soon__password-form {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    width: 100%;
+    max-width: 380px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .coming-soon__form input,
+  .coming-soon__password-form input {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 0;
+    background: var(--text-inverse, #ffffff);
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-default, #141414);
+  }
+
+  .coming-soon__submit {
+    border: none;
+    border-radius: 0;
+    background: var(--coming-accent, #ffd400);
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: filter 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .coming-soon__submit:hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  .coming-soon__success {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+  }
+
+  .coming-soon__password {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  .coming-soon__password summary {
+    cursor: pointer;
+    margin-block-end: 12px;
+  }
+
+  .coming-soon__error {
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    color: var(--brand-yellow, #ffd400);
+  }
+
+  .coming-soon__legal {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    opacity: 0.5;
+    margin-block-start: 16px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Coming soon",
+  "class": "section--coming-soon",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Wordmark",
+      "info": "Shown when no logo is set.",
+      "default": "Brickline"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Something new is being built"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "We're putting the finishing pieces together. Be the first to know when we launch."
+    },
+    {
+      "type": "text",
+      "id": "launch_date",
+      "label": "Launch date",
+      "info": "ISO format, e.g. 2026-09-01T09:00:00. Leave blank to hide the countdown.",
+      "default": "2026-09-01T09:00:00"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Notify Me"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks — we'll let you know the moment we launch."
+    },
+    {
+      "type": "text",
+      "id": "legal",
+      "label": "Legal line",
+      "default": "© 2026 Brickline. All rights reserved."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button",
+      "default": "#ffd400"
+    }
+  ]
+}
+{% endschema %}

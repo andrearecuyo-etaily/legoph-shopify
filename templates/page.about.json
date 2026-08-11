@@ -1,0 +1,109 @@
+{
+  "sections": {
+    "banner": {
+      "type": "brickline-page-banner",
+      "settings": {
+        "title_source": "page",
+        "heading": "About Brickline",
+        "title_size": "large",
+        "layout": "inset",
+        "title_alignment": "start",
+        "uppercase": false,
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "show_breadcrumb": true,
+        "breadcrumb_current": "About Us",
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
+    "intro": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "intro": "<p>Brickline Trading Co. brings brick-built play to collectors and families across the Philippines — from certified retail stores to a growing online catalog of exclusives, themed sets, and everyday favorites.</p>",
+        "button_label": "Find a Store",
+        "button_link": "/pages/our-stores",
+        "alignment": "center",
+        "body_size": "normal",
+        "content_width": 900,
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "story": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "Our Story",
+        "body": "<p>Founded to bring certified brick-built play closer to Filipino families, Brickline operates flagship stores across Metro Manila alongside a full online shop — pairing hands-on in-store experiences with fast island-wide delivery.</p>",
+        "alignment": "start",
+        "body_size": "normal",
+        "content_width": 900,
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "beliefs": {
+      "type": "brickline-rich-text",
+      "blocks": {
+        "b1": {
+          "type": "bullet",
+          "settings": {
+            "text": "Play should be hands-on, imaginative, and shared across generations."
+          }
+        },
+        "b2": {
+          "type": "bullet",
+          "settings": {
+            "text": "Every set we sell is certified authentic and quality-checked."
+          }
+        },
+        "b3": {
+          "type": "bullet",
+          "settings": {
+            "text": "Our stores and staff are part of the local building community, not just a checkout counter."
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "What We Believe",
+        "alignment": "start",
+        "body_size": "normal",
+        "content_width": 900,
+        "padding-block-start": 28,
+        "padding-block-end": 0
+      }
+    },
+    "rewards": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "Brickline Rewards",
+        "body": "<p>Members earn points on every purchase and unlock early access, exclusive gifts, and members-only pricing. <a href=\"/pages/loyalty\">Learn more about Brickline Rewards</a>.</p>",
+        "alignment": "start",
+        "body_size": "normal",
+        "content_width": 900,
+        "padding-block-start": 28,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "intro",
+    "story",
+    "beliefs",
+    "rewards"
+  ]
+}
