@@ -1,0 +1,526 @@
+/* Brickline customer-account pages: login/register card, account dashboard,
+   order history, addresses and order confirmation. */
+
+/* ---------- Auth card ---------- */
+
+.customer-auth__inner {
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+  padding-inline: 20px;
+  text-align: center;
+}
+
+.customer-auth__heading {
+  margin: 0 0 12px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+@media screen and (min-width: 750px) {
+  .customer-auth__heading {
+    font-size: 28px;
+  }
+}
+
+.customer-auth__subheading {
+  margin: 0 0 28px;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 15px;
+  color: var(--text-subtle, #636363);
+}
+
+.customer-auth__card {
+  display: block;
+  background: var(--surface-page, #ffffff);
+  border: 1px solid var(--color-border-default, #d9d9d9);
+  padding: 24px;
+  text-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .customer-auth__card {
+    padding: 32px;
+  }
+}
+
+.customer-auth__tabs {
+  display: flex;
+  margin-block-end: 24px;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+.customer-auth__tab {
+  flex: 1;
+  text-align: center;
+  padding: 0 0 14px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-meta, #939393);
+}
+
+.customer-auth__tab.is-active {
+  color: var(--text-default, #141414);
+  border-bottom-color: var(--brand-black, #000000);
+}
+
+/* Panels are hidden until the component activates one; without JS the login
+   panel is revealed by the no-JS fallback at the bottom of this block. */
+.customer-auth__panel {
+  display: none;
+}
+
+.customer-auth__panel.is-active {
+  display: block;
+}
+
+.customer-auth__panel form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.customer-auth__panel label {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 13px;
+  color: var(--text-subtle, #636363);
+}
+
+.customer-auth__panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  margin-block-end: 6px;
+  border: 1px solid var(--color-border-default, #d9d9d9);
+  border-radius: 0;
+  background: var(--surface-page, #ffffff);
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-default, #141414);
+}
+
+.customer-auth__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media screen and (min-width: 480px) {
+  .customer-auth__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.customer-auth__submit {
+  width: 100%;
+  margin-block-start: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: var(--brand-orange, #c3622c);
+  color: var(--brand-black, #000000);
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 15px 24px;
+  cursor: pointer;
+  transition: filter 150ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .customer-auth__submit:hover {
+    filter: brightness(0.92);
+  }
+}
+
+.customer-auth__link {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 13px;
+  color: var(--text-link, #005ad2);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.customer-auth__link--center {
+  align-self: center;
+  margin-block-start: 12px;
+}
+
+.customer-auth__note {
+  margin: 0 0 4px;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-subtle, #636363);
+}
+
+.customer-auth__notice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  padding: 12px 0;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-subtle, #636363);
+}
+
+.customer-auth__notice-title {
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-default, #141414);
+}
+
+.customer-auth__errors {
+  margin-block-end: 12px;
+  padding: 12px 16px;
+  background: var(--surface-tertiary, #f7f7f7);
+  border-inline-start: 4px solid var(--status-discount-red, #dd0000);
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 13px;
+}
+
+.customer-auth__errors ul {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+
+/* Without JS no panel gets `.is-active`, which would leave an empty card.
+   Reveal the login panel in that case. */
+.no-js .customer-auth__panel[data-auth-panel="login"] {
+  display: block;
+}
+
+/* ---------- Account dashboard / order history / addresses ---------- */
+
+.account__inner {
+  width: 100%;
+  max-width: var(--account-width, 1100px);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.account__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-block-end: 28px;
+}
+
+.account__heading {
+  margin: 0;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+@media screen and (min-width: 750px) {
+  .account__heading {
+    font-size: 30px;
+  }
+}
+
+.account__meta {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-subtle, #636363);
+}
+
+.account__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media screen and (min-width: 990px) {
+  .account__layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+.account__nav {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+/* On phones the sidebar becomes a horizontal scroller so it doesn't push the
+   actual content below the fold. */
+@media screen and (max-width: 989px) {
+  .account__nav {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .account__nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.account__nav-link {
+  padding: 14px 18px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-default, #141414);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+@media screen and (max-width: 989px) {
+  .account__nav-link {
+    border-bottom: none;
+    border-inline-end: 1px solid var(--color-border-default, #d9d9d9);
+  }
+}
+
+.account__nav-link:last-child {
+  border: none;
+}
+
+.account__nav-link.is-active {
+  background: var(--brand-black, #000000);
+  color: var(--text-inverse, #ffffff);
+}
+
+.account__panel {
+  border: 1px solid var(--color-border-default, #d9d9d9);
+  padding: 20px;
+}
+
+@media screen and (min-width: 750px) {
+  .account__panel {
+    padding: 24px;
+  }
+}
+
+.account__panel + .account__panel {
+  margin-block-start: 24px;
+}
+
+.account__panel-heading {
+  margin: 0 0 16px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.account__empty {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-subtle, #636363);
+}
+
+/* Order tables become stacked cards on small screens — a 5-column table at
+   360px is unreadable. */
+.account__orders {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+}
+
+.account__orders th {
+  text-align: start;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-subtle, #636363);
+  padding: 0 12px 12px 0;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+.account__orders td {
+  padding: 16px 12px 16px 0;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+  vertical-align: top;
+}
+
+@media screen and (max-width: 749px) {
+  .account__orders,
+  .account__orders tbody,
+  .account__orders tr,
+  .account__orders td {
+    display: block;
+    width: 100%;
+  }
+
+  .account__orders thead {
+    display: none;
+  }
+
+  .account__orders tr {
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    padding: 12px;
+    margin-block-end: 12px;
+  }
+
+  .account__orders td {
+    border: none;
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .account__orders td::before {
+    content: attr(data-label);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-subtle, #636363);
+  }
+}
+
+.account__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  background: var(--surface-muted, #f2f2f2);
+  color: var(--text-default, #141414);
+}
+
+.account__status--paid,
+.account__status--fulfilled {
+  background: var(--status-success-green, #008439);
+  color: var(--text-inverse, #ffffff);
+}
+
+.account__status--pending,
+.account__status--unfulfilled {
+  background: var(--brand-yellow, #ffd400);
+  color: var(--brand-black, #000000);
+}
+
+.account__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: var(--brand-orange, #c3622c);
+  color: var(--brand-black, #000000);
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 22px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.account__button--secondary {
+  background: var(--surface-page, #ffffff);
+  color: var(--text-default, #141414);
+  border: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+.account__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-block-start: 16px;
+}
+
+.account__address-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media screen and (min-width: 750px) {
+  .account__address-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.account__address {
+  border: 1px solid var(--color-border-default, #d9d9d9);
+  padding: 20px;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  color: var(--text-subtle, #636363);
+  line-height: 1.7;
+}
+
+.account__address-title {
+  display: block;
+  margin-block-end: 8px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-default, #141414);
+}
+
+.account__form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 0;
+}
+
+@media screen and (min-width: 600px) {
+  .account__form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .account__form-field--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.account__form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  grid-column: 1 / -1;
+}
+
+.account__form-field label {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 13px;
+  color: var(--text-subtle, #636363);
+}
+
+.account__form-field input,
+.account__form-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-default, #d9d9d9);
+  border-radius: 0;
+  background: var(--surface-page, #ffffff);
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+}
+
+@media screen and (min-width: 600px) {
+  .account__form-field--half {
+    grid-column: span 1;
+  }
+}

@@ -1,0 +1,127 @@
+{% comment %}
+  Address form fields shared by the edit and create forms on the addresses page.
+
+  Accepts:
+  - address: {Address} optional, pre-fills the inputs
+  - id_prefix: {String} required, keeps input ids unique across the several forms
+    rendered on the page
+
+  Usage:
+  {% render 'brickline-address-fields', address: address, id_prefix: address.id %}
+{% endcomment %}
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-first-{{ id_prefix }}">First name</label>
+  <input
+    id="addr-first-{{ id_prefix }}"
+    type="text"
+    name="address[first_name]"
+    value="{{ address.first_name }}"
+    autocomplete="given-name"
+  >
+</div>
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-last-{{ id_prefix }}">Last name</label>
+  <input
+    id="addr-last-{{ id_prefix }}"
+    type="text"
+    name="address[last_name]"
+    value="{{ address.last_name }}"
+    autocomplete="family-name"
+  >
+</div>
+
+<div class="account__form-field account__form-field--full">
+  <label for="addr-company-{{ id_prefix }}">Company (optional)</label>
+  <input
+    id="addr-company-{{ id_prefix }}"
+    type="text"
+    name="address[company]"
+    value="{{ address.company }}"
+    autocomplete="organization"
+  >
+</div>
+
+<div class="account__form-field account__form-field--full">
+  <label for="addr-1-{{ id_prefix }}">Address</label>
+  <input
+    id="addr-1-{{ id_prefix }}"
+    type="text"
+    name="address[address1]"
+    value="{{ address.address1 }}"
+    autocomplete="address-line1"
+  >
+</div>
+
+<div class="account__form-field account__form-field--full">
+  <label for="addr-2-{{ id_prefix }}">Additional address info (optional)</label>
+  <input
+    id="addr-2-{{ id_prefix }}"
+    type="text"
+    name="address[address2]"
+    value="{{ address.address2 }}"
+    autocomplete="address-line2"
+  >
+</div>
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-city-{{ id_prefix }}">City</label>
+  <input
+    id="addr-city-{{ id_prefix }}"
+    type="text"
+    name="address[city]"
+    value="{{ address.city }}"
+    autocomplete="address-level2"
+  >
+</div>
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-zip-{{ id_prefix }}">ZIP / Postal code</label>
+  <input
+    id="addr-zip-{{ id_prefix }}"
+    type="text"
+    name="address[zip]"
+    value="{{ address.zip }}"
+    autocomplete="postal-code"
+  >
+</div>
+
+{% comment %}
+  country_option_tags emits every country plus its provinces as data attributes;
+  brickline-account.js reads those to repopulate the province select on change.
+{% endcomment %}
+<div class="account__form-field account__form-field--half">
+  <label for="addr-country-{{ id_prefix }}">Country or region</label>
+  <select
+    id="addr-country-{{ id_prefix }}"
+    name="address[country]"
+    data-address-country
+    data-province-target="addr-province-{{ id_prefix }}"
+    data-default="{{ address.country }}"
+    autocomplete="country"
+  >
+    {{ country_option_tags }}
+  </select>
+</div>
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-province-{{ id_prefix }}">Province / State</label>
+  <select
+    id="addr-province-{{ id_prefix }}"
+    name="address[province]"
+    data-default="{{ address.province }}"
+    autocomplete="address-level1"
+  ></select>
+</div>
+
+<div class="account__form-field account__form-field--half">
+  <label for="addr-phone-{{ id_prefix }}">Phone</label>
+  <input
+    id="addr-phone-{{ id_prefix }}"
+    type="tel"
+    name="address[phone]"
+    value="{{ address.phone }}"
+    autocomplete="tel"
+  >
+</div>

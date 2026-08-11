@@ -1,0 +1,217 @@
+{% comment %}
+  Single order view — doubles as the Order Confirmation design, since Shopify
+  routes both the post-checkout "view order" link and Order History to this
+  template. Classic customer accounts only.
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-account.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-cart.css' | asset_url }}">
+
+<div
+  class="account brickline-section spacing-style"
+  style="{% render 'spacing-padding', settings: section.settings %}; --account-width: {{ section.settings.content_width }}px;"
+>
+  <div class="account__inner">
+    <div class="account__header">
+      <div>
+        <h1 class="account__heading">Order {{ order.name }}</h1>
+        <span class="account__meta">Placed {{ order.created_at | date: '%d %B %Y' }}</span>
+      </div>
+      <a
+        href="{{ routes.account_url }}"
+        class="account__button account__button--secondary"
+      >
+        Back to my orders
+      </a>
+    </div>
+
+    {% if order.cancelled %}
+      <div class="account__panel">
+        <h2 class="account__panel-heading">Order cancelled</h2>
+        <p class="account__empty">
+          Cancelled {{ order.cancelled_at | date: '%d %B %Y' }} — {{ order.cancel_reason_label }}
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="account__panel">
+      <div class="account__status-row">
+        <span class="account__status account__status--{{ order.financial_status }}">
+          {{- order.financial_status_label -}}
+        </span>
+        <span class="account__status account__status--{{ order.fulfillment_status }}">
+          {{- order.fulfillment_status_label -}}
+        </span>
+      </div>
+
+      <div class="account__order-lines">
+        {% for line_item in order.line_items %}
+          <div class="main-cart__line">
+            <a
+              href="{{ line_item.product.url }}"
+              class="main-cart__line-media"
+            >
+              {% if line_item.image %}
+                <img
+                  src="{{ line_item.image | image_url: width: 300 }}"
+                  alt="{{ line_item.image.alt | escape }}"
+                  width="{{ line_item.image.width }}"
+                  height="{{ line_item.image.height }}"
+                  loading="lazy"
+                >
+              {% endif %}
+            </a>
+
+            <div class="main-cart__line-body">
+              <a
+                href="{{ line_item.product.url }}"
+                class="main-cart__line-title"
+              >
+                {{ line_item.title }}
+              </a>
+              <span class="main-cart__line-meta">Qty {{ line_item.quantity }}</span>
+              {% if line_item.fulfillment %}
+                <span class="main-cart__line-meta">
+                  Fulfilled {{ line_item.fulfillment.created_at | date: '%d %b %Y' }}
+                  {%- if line_item.fulfillment.tracking_url %}
+                    · <a href="{{ line_item.fulfillment.tracking_url }}">Track</a>
+                  {%- endif -%}
+                </span>
+              {% endif %}
+            </div>
+
+            <div class="main-cart__line-price">
+              <span class="main-cart__line-price-value">{{ line_item.final_line_price | money }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="account__totals">
+        <div class="main-cart__summary-row">
+          <span>Subtotal</span>
+          <span>{{ order.line_items_subtotal_price | money }}</span>
+        </div>
+        {% for discount in order.cart_level_discount_applications %}
+          <div class="main-cart__summary-row main-cart__summary-row--discount">
+            <span>{{ discount.title }}</span>
+            <span>-{{ discount.total_allocated_amount | money }}</span>
+          </div>
+        {% endfor %}
+        {% for shipping_method in order.shipping_methods %}
+          <div class="main-cart__summary-row">
+            <span>Shipping — {{ shipping_method.title }}</span>
+            <span>{{ shipping_method.price | money }}</span>
+          </div>
+        {% endfor %}
+        {% for tax_line in order.tax_lines %}
+          <div class="main-cart__summary-row">
+            <span>{{ tax_line.title }} ({{ tax_line.rate_percentage }}%)</span>
+            <span>{{ tax_line.price | money }}</span>
+          </div>
+        {% endfor %}
+        <div class="main-cart__total">
+          <span class="main-cart__total-label">Total</span>
+          <span class="main-cart__total-value">{{ order.total_price | money }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="account__address-grid">
+      <div class="account__panel">
+        <h2 class="account__panel-heading">Shipping address</h2>
+        {% if order.shipping_address %}
+          <div class="account__address">{{ order.shipping_address | format_address }}</div>
+        {% else %}
+          <p class="account__empty">No shipping address on this order.</p>
+        {% endif %}
+      </div>
+
+      <div class="account__panel">
+        <h2 class="account__panel-heading">Billing address</h2>
+        {% if order.billing_address %}
+          <div class="account__address">{{ order.billing_address | format_address }}</div>
+        {% else %}
+          <p class="account__empty">No billing address on this order.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .account__status-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-block-end: 20px;
+  }
+
+  .account__order-lines {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .account__totals {
+    margin-block-start: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* The order page reuses the cart's address grid for shipping/billing, so the
+     panels need their own top margin rather than the stacked one. */
+  .account__address-grid > .account__panel + .account__panel {
+    margin-block-start: 0;
+  }
+
+  .account__address-grid {
+    margin-block-start: 24px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Customer order",
+  "class": "section--customer-order",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1100
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{% comment %}
+  Shared sidebar for the customer-account pages.
+
+  Accepts:
+  - current: {String} one of 'account', 'addresses' — marks the active link
+
+  Usage:
+  {% render 'brickline-account-nav', current: 'account' %}
+{% endcomment %}
+
+<nav
+  class="account__nav"
+  aria-label="Account"
+>
+  <a
+    href="{{ routes.account_url }}"
+    class="account__nav-link{% if current == 'account' %} is-active{% endif %}"
+    {% if current == 'account' %}
+      aria-current="page"
+    {% endif %}
+  >
+    My Orders
+  </a>
+  <a
+    href="{{ routes.account_addresses_url }}"
+    class="account__nav-link{% if current == 'addresses' %} is-active{% endif %}"
+    {% if current == 'addresses' %}
+      aria-current="page"
+    {% endif %}
+  >
+    My Addresses
+  </a>
+  <a
+    href="{{ routes.account_logout_url }}"
+    class="account__nav-link"
+  >
+    Log out
+  </a>
+</nav>

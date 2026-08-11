@@ -1,0 +1,320 @@
+{% comment %}
+  Sign in / register / forgot password in one card, matching the Account design.
+
+  Shopify splits these across three form types. `customer_login` and
+  `recover_customer_password` both live on /account/login; `create_customer` is
+  normally /account/register but Shopify accepts it here too, which is what lets
+  the design's Log In / Register tabs work without a page change.
+{% endcomment %}
+
+{% liquid
+  assign start_tab = section.settings.default_tab | default: 'login'
+  # /account/register renders this same section, so open the Register tab there.
+  if template contains 'register'
+    assign start_tab = 'register'
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-account.css' | asset_url }}">
+
+<div
+  class="customer-auth brickline-section spacing-style"
+  style="{% render 'spacing-padding', settings: section.settings %}"
+>
+  <div class="customer-auth__inner">
+    {% if section.settings.heading != blank %}
+      <h1 class="customer-auth__heading">{{ section.settings.heading }}</h1>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p class="customer-auth__subheading">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+    <customer-auth
+      class="customer-auth__card"
+      data-start-tab="{{ start_tab }}"
+    >
+      <div
+        class="customer-auth__tabs"
+        role="tablist"
+      >
+        <button
+          type="button"
+          class="customer-auth__tab"
+          data-auth-tab="login"
+          role="tab"
+        >
+          {{ section.settings.login_label | default: 'Log In' }}
+        </button>
+        <button
+          type="button"
+          class="customer-auth__tab"
+          data-auth-tab="register"
+          role="tab"
+        >
+          {{ section.settings.register_label | default: 'Register' }}
+        </button>
+      </div>
+
+      {% comment %} ---------- Log in ---------- {% endcomment %}
+      <div
+        class="customer-auth__panel"
+        data-auth-panel="login"
+      >
+        {% form 'customer_login', novalidate: 'novalidate' %}
+          {% if form.errors %}
+            <div
+              class="customer-auth__errors"
+              role="alert"
+            >
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <label for="customer-email-{{ section.id }}">Email</label>
+          <input
+            id="customer-email-{{ section.id }}"
+            type="email"
+            name="customer[email]"
+            autocomplete="email"
+            placeholder="{{ section.settings.email_placeholder | default: 'Write your email' | escape }}"
+            required
+          >
+
+          <label for="customer-password-{{ section.id }}">Password</label>
+          <input
+            id="customer-password-{{ section.id }}"
+            type="password"
+            name="customer[password]"
+            autocomplete="current-password"
+            placeholder="Password"
+            required
+          >
+
+          <button
+            type="button"
+            class="customer-auth__link"
+            data-auth-tab="recover"
+          >
+            Forgot your password?
+          </button>
+
+          <button
+            type="submit"
+            class="customer-auth__submit"
+          >
+            {{ section.settings.login_submit | default: 'Continue' }}
+          </button>
+        {% endform %}
+      </div>
+
+      {% comment %} ---------- Recover password ---------- {% endcomment %}
+      <div
+        class="customer-auth__panel"
+        data-auth-panel="recover"
+      >
+        {% form 'recover_customer_password', novalidate: 'novalidate' %}
+          {% if form.posted_successfully? %}
+            <div class="customer-auth__notice">
+              <span class="customer-auth__notice-title">Check your inbox</span>
+              <span>If an account exists for that address, a reset link is on its way.</span>
+            </div>
+          {% else %}
+            {% if form.errors %}
+              <div
+                class="customer-auth__errors"
+                role="alert"
+              >
+                {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+
+            <p class="customer-auth__note">
+              Enter your email and we'll send a link to reset your password.
+            </p>
+
+            <label for="recover-email-{{ section.id }}">Email</label>
+            <input
+              id="recover-email-{{ section.id }}"
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder="Email address"
+              required
+            >
+
+            <button
+              type="submit"
+              class="customer-auth__submit"
+            >
+              Send Reset Link
+            </button>
+          {% endif %}
+
+          <button
+            type="button"
+            class="customer-auth__link customer-auth__link--center"
+            data-auth-tab="login"
+          >
+            Back to Log In
+          </button>
+        {% endform %}
+      </div>
+
+      {% comment %} ---------- Register ---------- {% endcomment %}
+      <div
+        class="customer-auth__panel"
+        data-auth-panel="register"
+      >
+        {% form 'create_customer', novalidate: 'novalidate' %}
+          {% if form.errors %}
+            <div
+              class="customer-auth__errors"
+              role="alert"
+            >
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="customer-auth__row">
+            <div>
+              <label for="register-first-{{ section.id }}">First name</label>
+              <input
+                id="register-first-{{ section.id }}"
+                type="text"
+                name="customer[first_name]"
+                autocomplete="given-name"
+              >
+            </div>
+            <div>
+              <label for="register-last-{{ section.id }}">Last name</label>
+              <input
+                id="register-last-{{ section.id }}"
+                type="text"
+                name="customer[last_name]"
+                autocomplete="family-name"
+              >
+            </div>
+          </div>
+
+          <label for="register-email-{{ section.id }}">Email</label>
+          <input
+            id="register-email-{{ section.id }}"
+            type="email"
+            name="customer[email]"
+            autocomplete="email"
+            required
+          >
+
+          <label for="register-password-{{ section.id }}">Password</label>
+          <input
+            id="register-password-{{ section.id }}"
+            type="password"
+            name="customer[password]"
+            autocomplete="new-password"
+            required
+          >
+
+          <button
+            type="submit"
+            class="customer-auth__submit"
+          >
+            {{ section.settings.register_submit | default: 'Create Account' }}
+          </button>
+        {% endform %}
+      </div>
+    </customer-auth>
+  </div>
+</div>
+
+<script
+  src="{{ 'brickline-account.js' | asset_url }}"
+  type="module"
+></script>
+
+{% schema %}
+{
+  "name": "Customer login",
+  "class": "section--customer-auth",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sign in or create your Brickline account"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "If you're a new Brickline builder, start by putting in your email."
+    },
+    {
+      "type": "select",
+      "id": "default_tab",
+      "label": "Default tab",
+      "options": [
+        { "value": "login", "label": "Log in" },
+        { "value": "register", "label": "Register" }
+      ],
+      "default": "login"
+    },
+    {
+      "type": "text",
+      "id": "login_label",
+      "label": "Log in tab label",
+      "default": "Log In"
+    },
+    {
+      "type": "text",
+      "id": "register_label",
+      "label": "Register tab label",
+      "default": "Register"
+    },
+    {
+      "type": "text",
+      "id": "login_submit",
+      "label": "Log in button",
+      "default": "Continue"
+    },
+    {
+      "type": "text",
+      "id": "register_submit",
+      "label": "Register button",
+      "default": "Create Account"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Write your email"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}
