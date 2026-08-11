@@ -18,7 +18,18 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - [x] Product 3 — `templates/product.cinematic.json` (adds `brickline-cta-banner` and two `brickline-feature-band` splits)
 - [x] Cart — `templates/cart.json` (`brickline-main-cart`)
 - [x] Cart Drawer — Horizon's `snippets/cart-drawer.liquid` reskinned via `assets/brickline-cart.css`, plus `brickline-shipping-meter` and `brickline-cart-upsells`
-- [ ] All other pages below — not started
+- [x] 404 — `templates/404.json` (`brickline-404`)
+- [x] Returns — `templates/page.returns.json` (`brickline-rich-text` + `brickline-faq`)
+- [x] FAQs — `templates/page.faqs.json` (inset `brickline-page-banner` + grouped `brickline-faq` sections)
+- [x] Our Stores — `templates/page.stores.json` (`brickline-store-locator`)
+- [x] Contact Us — `templates/page.contact.json` (`brickline-feature-band` ×2 + `brickline-columns`)
+- [x] Send Message — `templates/page.send-message.json` (`brickline-contact-form`)
+- [x] Search — `templates/search.json` (`brickline-search`)
+- [x] Filters Drawer / Sort Drawer — `snippets/brickline-filters-drawer.liquid`, `brickline-sort-drawer.liquid`, driven by `assets/brickline-drawer.js`; replaces the inline disclosures in `brickline-collection-grid`
+- [x] Accessibility Statement / Privacy Policy / Terms and Conditions / Shipping Information — assign `templates/page.content.json`; copy lives in the Shopify page editor (`brickline-rich-text` falls back to `page.title` / `page.content`)
+- [ ] About Us, Coming Soon, Free Shipping — not started
+- [ ] Account, Account Details, Addresses, Order History, Order Confirmation — blocked, see note below
+- [ ] Wishlist, Checkout — see note below
 
 ## Pages available in the source project (not yet converted)
 
@@ -55,3 +66,24 @@ Every one of these pages already shares the exact same utility bar / header / fo
 - `Brickline 404`, `Free Shipping`, `Accessibility Statement`, `Brickline Privacy Policy`, `Brickline Terms and Conditions`, `Brickline Returns`, `Brickline FAQs`, `Brickline Shipping Information` are mostly static content — good candidates to convert early/quickly.
 - `Brickline Collections`, `Brickline Collection 1/2`, `Brickline Search` are full PLP/search patterns — will need real Shopify collection/search objects and filters, not the mock arrays in the source.
 - Footer legal-links menu (spec row 3: Privacy policy, Cookies, Cookie settings, Legal notice, Terms of use, Digital wellbeing, Accessibility, Do not sell/share my personal information) currently has no menu wired in `brickline-footer.liquid`'s `legal_menu` setting (removed as a default because no matching Shopify navigation menu exists yet) — create that menu in Shopify admin and set it in the footer section settings when ready.
+
+## Blocked / needs a decision
+
+**Customer account pages.** This theme ships no `templates/customers/` directory at
+all, which is how Horizon ships when a store uses Shopify's *new customer accounts*
+— those pages (`Account`, `Account Details`, `Addresses`, `Order History`,
+`Order Confirmation`) are hosted by Shopify at `shopify.com/<store-id>/account` and
+cannot be templated by the theme; branding is limited to what Settings → Customer
+accounts exposes. If the store is instead on *classic* customer accounts, the
+designs can be built as `templates/customers/account.liquid`, `order.liquid`,
+`addresses.liquid`, `login.liquid` and `register.liquid`. Which system is active is
+a store setting, not something the theme files record — confirm in Shopify admin
+before building these.
+
+**Wishlist.** Shopify has no native wishlist. Delivering this needs either an app
+(Wishlist Plus, Swym) whose markup we'd theme, or a custom implementation backed by
+customer metafields plus an App Proxy. The wishlist heart on the product cards is
+presentational only today — it toggles for the life of the page and persists nothing.
+
+**Checkout.** Not themeable outside Shopify Plus. On non-Plus plans the design can
+only be approximated through the checkout branding settings in admin.
