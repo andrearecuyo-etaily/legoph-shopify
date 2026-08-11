@@ -1,0 +1,107 @@
+{
+  "sections": {
+    "intro": {
+      "type": "brickline-rich-text",
+      "blocks": {
+        "b1": {
+          "type": "bullet",
+          "settings": {
+            "text": "Free returns on all items*"
+          }
+        },
+        "b2": {
+          "type": "bullet",
+          "settings": {
+            "text": "90 days from the receipt of your order to make a return"
+          }
+        },
+        "b3": {
+          "type": "bullet",
+          "settings": {
+            "text": "We'll refund your order within 14 business days of receiving your return"
+          }
+        },
+        "b4": {
+          "type": "bullet",
+          "settings": {
+            "text": "All refunds are made in the original payment method"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "heading": "Brickline Returns",
+        "subheading": "All you need to know about Brickline Returns",
+        "intro": "<p>Whatever the reason for making a return, it's quick and easy to send your Brickline order back to us. A quick overview:</p>",
+        "alignment": "center",
+        "content_width": 900,
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "faq": {
+      "type": "brickline-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How can I make an online return?",
+            "answer": "<p>Log in to your account, find your order under Order History, and select the items you'd like to return. Print the prepaid return label and drop your package at any carrier location.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Do you have any return restrictions?",
+            "answer": "<p>Most items can be returned within 90 days of receipt. Opened creative packs, gift cards, and final-sale items are not eligible for return.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I get help over the phone?",
+            "answer": "<p>Yes — our support team is available to help with returns Monday through Friday. Visit the Help Center for current phone hours.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return an item to a Brickline Certified Store?",
+            "answer": "<p>Items purchased online can be returned at any Brickline Certified Store location with your order confirmation.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Can you offer a refund for a set bought at a Brickline Certified Store?",
+            "answer": "<p>Sets purchased in-store follow the same 90-day return window and can be refunded at any Brickline Certified Store with a receipt.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "heading": "",
+        "anchor_id": "returns-faq",
+        "open_first": false,
+        "padding-block-start": 48,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "faq"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "sections": {
+    "locator": {
+      "type": "brickline-store-locator",
+      "blocks": {
+        "store_1": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store BGC",
+            "address": "G/F 106 Park Triangle, 11th Ave., Bonifacio Global City, Taguig City 1635",
+            "hours": "Mon–Thu: 10:00AM – 8:00PM\nFri–Sun: 10:00AM – 9:00PM",
+            "phone": "0998 551 5792",
+            "email": "bgc@brickline.ph"
+          }
+        },
+        "store_2": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store ATC",
+            "address": "G/F Unit 1202, Alabang Town Center, Ayala Alabang, Muntinlupa City 1780",
+            "hours": "Mon–Sun: 11:00AM – 9:00PM",
+            "phone": "0998 985 4988",
+            "email": "atc@brickline.ph"
+          }
+        },
+        "store_3": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store Trinoma",
+            "address": "1st Level, Unit 1034, Trinoma Mindanao Wing, Quezon City 1105",
+            "hours": "Mon–Fri: 11:00AM – 9:00PM\nSat–Sun: 10:00AM – 10:00PM",
+            "phone": "0998 551 5799",
+            "email": "trinoma@brickline.ph"
+          }
+        },
+        "store_4": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store Shangri-La",
+            "address": "Unit 5022 & 5023, Level 5 East Wing, Shangri-La Plaza Mall, EDSA cor. Shaw Blvd., Mandaluyong City 1550",
+            "hours": "Mon–Fri: 11:00AM – 9:00PM\nSat–Sun: 10:00AM – 9:00PM",
+            "phone": "0998 551 5798",
+            "email": "shangrila@brickline.ph"
+          }
+        },
+        "store_5": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store Manila Bay",
+            "address": "G/F Unit G218-A Building B, Ayala Mall Manila Bay, D. Macapagal Blvd., Parañaque City 1101",
+            "hours": "Mon–Fri: 11:00AM – 9:00PM\nSat–Sun: 10:00AM – 10:00PM",
+            "phone": "0939 929 5053",
+            "email": "manilabay@brickline.ph"
+          }
+        },
+        "store_6": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store U.P. Town Center",
+            "address": "G/F Unit C160 Phase 2, U.P. Town Center, Katipunan Ave., Diliman, Quezon City 1101",
+            "hours": "Mon–Fri: 11:00AM – 9:00PM\nSat–Sun: 10:00AM – 10:00PM",
+            "phone": "0998 551 5794",
+            "email": "uptowncenter@brickline.ph"
+          }
+        },
+        "store_7": {
+          "type": "store",
+          "settings": {
+            "name": "Brickline Store Vermosa",
+            "address": "Bldg. D GF NF 26-28, Ayala Malls Vermosa, Daang Hari Rd. cor. Vermosa Blvd., Pasong Buaya I, City of Imus 4103",
+            "hours": "Mon–Sun: 11:00AM – 9:00PM",
+            "phone": "0919 093 8990",
+            "email": "vermosa@brickline.ph"
+          }
+        }
+      },
+      "block_order": [
+        "store_1",
+        "store_2",
+        "store_3",
+        "store_4",
+        "store_5",
+        "store_6",
+        "store_7"
+      ],
+      "settings": {
+        "heading": "Store Locator",
+        "show_search": true,
+        "search_label": "Find stores near this location",
+        "search_placeholder": "City or barangay",
+        "show_breadcrumb": true,
+        "breadcrumb_parent": "Stores",
+        "breadcrumb_current": "All Stores",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 56
+      }
+    }
+  },
+  "order": [
+    "locator"
+  ]
+}

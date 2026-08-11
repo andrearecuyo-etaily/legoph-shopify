@@ -29,7 +29,7 @@
 {% endif %}
 
 <div
-  class="page-banner brickline-section spacing-style"
+  class="page-banner brickline-section spacing-style page-banner--{{ section.settings.layout }} page-banner--align-{{ section.settings.title_alignment }}{% if section.settings.uppercase %} page-banner--uppercase{% endif %}"
   style="{% render 'spacing-padding', settings: section.settings %}; --banner-bg: {{ section.settings.background_color }}; --banner-fg: {{ section.settings.text_color }};"
 >
   <div class="brickline-container page-banner__inner">
@@ -57,8 +57,25 @@
   }
 
   .page-banner {
-    background: var(--banner-bg, #006cb7);
     color: var(--banner-fg, #ffffff);
+  }
+
+  /* Full bleed paints the section itself, so the colour runs edge to edge.
+     Inset paints only the inner container, giving the contained colour block
+     used on the FAQs page. */
+  .page-banner--full {
+    background: var(--banner-bg, #006cb7);
+  }
+
+  .page-banner--inset .page-banner__inner {
+    background: var(--banner-bg, #006cb7);
+    padding: 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .page-banner--inset .page-banner__inner {
+      padding: 32px;
+    }
   }
 
   .page-banner__inner {
@@ -70,13 +87,24 @@
     position: relative;
   }
 
+  .page-banner--align-start .page-banner__inner {
+    justify-content: flex-start;
+  }
+
   .page-banner__title {
     margin: 0;
     font-family: "Cera Pro", var(--font-heading--family), sans-serif;
     color: inherit;
     text-align: center;
-    text-transform: uppercase;
     letter-spacing: 0.02em;
+  }
+
+  .page-banner--uppercase .page-banner__title {
+    text-transform: uppercase;
+  }
+
+  .page-banner--align-start .page-banner__title {
+    text-align: start;
   }
 
   .page-banner__title--small {
@@ -187,6 +215,32 @@
         { "value": "large", "label": "Large" }
       ],
       "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "full", "label": "Full-bleed colour" },
+        { "value": "inset", "label": "Colour block inside page width" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Title alignment",
+      "options": [
+        { "value": "center", "label": "Centered" },
+        { "value": "start", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase title",
+      "default": true
     },
     {
       "type": "color",

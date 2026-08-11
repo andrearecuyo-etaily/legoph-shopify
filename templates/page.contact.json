@@ -1,146 +1,102 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "main-page",
-      "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "content": {
-          "type": "text",
-          "name": "t:names.content",
-          "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "title",
-        "content"
-      ],
+    "title": {
+      "type": "brickline-rich-text",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "padding-block-start": 40,
+        "show_breadcrumb": true,
+        "heading": "Get in touch with a Brickline expert",
+        "alignment": "center",
+        "content_width": 1400,
+        "padding-block-start": 8,
+        "padding-block-end": 32
+      }
+    },
+    "chat": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-end",
+        "image_ratio": "4 / 3",
+        "text_alignment": "start",
+        "mobile_order": "text",
+        "heading": "Chat with a Brickline expert",
+        "body": "<p>Our chatbot can help with lots of topics or connect you to a Brickline expert.</p>",
+        "button_label": "Chat with us",
+        "button_link": "#",
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
-    "form": {
-      "type": "section",
+    "write": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-start",
+        "image_ratio": "4 / 3",
+        "text_alignment": "end",
+        "mobile_order": "text",
+        "heading": "Write to us",
+        "body": "<p>Pick a topic and get support. We're here to help.</p>",
+        "button_label": "Send a message",
+        "button_link": "/pages/send-message",
+        "background_color": "#006cb7",
+        "text_color": "#ffffff",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "details": {
+      "type": "brickline-columns",
       "blocks": {
-        "contact_form_UwiCkQ": {
-          "type": "contact-form",
+        "call": {
+          "type": "column",
           "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "custom_width_mobile": 100,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
+            "heading": "Call us",
+            "body": "<p><strong>Brickline Customer Service in English</strong><br><a href=\"tel:+18001234567\">1-800-123-4567</a><br>Monday to Friday 8am – 8pm PHT<br>Saturday to Sunday 9am – 6pm PHT</p><p><strong>Brickline Customer Service in Filipino</strong><br><a href=\"tel:+18007654321\">1-800-765-4321</a><br>Monday to Friday 9am – 6pm PHT</p><p>Our toll-free number may be blocked by some providers. You may be charged when calling from a mobile phone — please check with your provider for details.</p>"
+          }
+        },
+        "letter": {
+          "type": "column",
+          "settings": {
+            "heading": "Send us a letter",
+            "body": "<p><strong>Brickline Customer Service</strong><br>PO Box 4521<br>Makati Central Post Office<br>Makati City 1200<br>Philippines</p>"
+          }
         }
       },
       "block_order": [
-        "contact_form_UwiCkQ"
+        "call",
+        "letter"
       ],
-      "name": "t:names.contact_form",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "padding-block-start": 32,
-        "padding-block-end": 84
+        "columns": 2,
+        "columns_tablet": 2,
+        "dividers": true,
+        "content_width": 900,
+        "padding-block-start": 48,
+        "padding-block-end": 0
+      }
+    },
+    "data_safety": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "How we keep your data safe",
+        "body": "<p>We're committed to treating your personal information with care, trust, and respect. Our privacy policy explains exactly how we protect it.</p>",
+        "button_label": "Learn more",
+        "button_link": "/policies/privacy-policy",
+        "alignment": "center",
+        "content_width": 700,
+        "padding-block-start": 0,
+        "padding-block-end": 64
       }
     }
   },
   "order": [
-    "main",
-    "form"
+    "title",
+    "chat",
+    "write",
+    "details",
+    "data_safety"
   ]
 }

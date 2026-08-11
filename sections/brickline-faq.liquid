@@ -5,15 +5,15 @@
   {% if section.settings.anchor_id != blank %}
     id="{{ section.settings.anchor_id | handleize }}"
   {% endif %}
-  class="brickline-faq brickline-section spacing-style"
-  style="{% render 'spacing-padding', settings: section.settings %}"
+  class="brickline-faq brickline-section spacing-style brickline-faq--align-{{ section.settings.heading_alignment }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --faq-width: {{ section.settings.content_width }}px;"
 >
   <div class="brickline-faq__inner">
     {% if section.settings.heading != blank %}
-      <h2 class="brickline-faq__heading">{{ section.settings.heading }}</h2>
+      <h2 class="brickline-faq__heading brickline-faq__heading--{{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="brickline-faq__list">
+    <div class="brickline-faq__list{% if section.settings.top_border %} brickline-faq__list--bordered{% endif %}">
       {% for block in section.blocks %}
         <details
           class="brickline-faq__item"
@@ -40,28 +40,53 @@
 {% stylesheet %}
   .brickline-faq__inner {
     width: 100%;
-    max-width: 900px;
+    max-width: var(--faq-width, 900px);
     margin-inline: auto;
     padding-inline: 20px;
   }
 
   .brickline-faq__heading {
-    margin: 0 0 24px;
+    margin: 0 0 12px;
     font-family: "Cera Pro", var(--font-heading--family), sans-serif;
-    font-weight: 700;
-    font-size: 24px;
     text-align: center;
   }
 
+  .brickline-faq--align-start .brickline-faq__heading {
+    text-align: start;
+  }
+
+  .brickline-faq__heading--small {
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .brickline-faq__heading--medium {
+    font-weight: 700;
+    font-size: 22px;
+  }
+
+  .brickline-faq__heading--large {
+    font-weight: 600;
+    font-size: 24px;
+  }
+
   @media screen and (min-width: 750px) {
-    .brickline-faq__heading {
+    .brickline-faq__heading--medium {
       font-size: 26px;
+    }
+
+    .brickline-faq__heading--large {
+      font-size: 28px;
     }
   }
 
   .brickline-faq__list {
     display: flex;
     flex-direction: column;
+  }
+
+  .brickline-faq__list--bordered {
+    border-top: 1px solid var(--color-border-default, #d9d9d9);
   }
 
   .brickline-faq__item {
@@ -165,6 +190,43 @@
       "id": "open_first",
       "label": "Open first question by default",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "center", "label": "Centered" },
+        { "value": "start", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "top_border",
+      "label": "Rule above first question",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 900
     },
     {
       "type": "header",

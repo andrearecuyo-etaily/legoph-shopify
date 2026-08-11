@@ -1,0 +1,497 @@
+{% liquid
+  assign stores = section.blocks | where: 'type', 'store'
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="store-locator brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %}"
+>
+  {% if section.settings.show_breadcrumb %}
+    <div class="store-locator__breadcrumb">
+      {% render 'brickline-breadcrumb',
+        current: section.settings.breadcrumb_current | default: 'All Stores',
+        parent_label: section.settings.breadcrumb_parent,
+        parent_url: section.settings.breadcrumb_parent_url
+      %}
+    </div>
+  {% endif %}
+
+  {% if section.settings.heading != blank %}
+    <h1 class="store-locator__heading">{{ section.settings.heading }}</h1>
+  {% endif %}
+
+  <store-locator class="store-locator__component">
+    {% if section.settings.show_search %}
+      <div class="store-locator__panel">
+        <span class="store-locator__panel-label">
+          {{ section.settings.search_label | default: 'Find stores near this location' }}
+        </span>
+        <div class="store-locator__controls">
+          <div class="store-locator__field">
+            {%- render 'brickline-icon', icon: 'search' -%}
+            <label
+              for="store-search-{{ section.id }}"
+              class="visually-hidden"
+            >
+              {{ section.settings.search_placeholder | default: 'City or barangay' }}
+            </label>
+            <input
+              id="store-search-{{ section.id }}"
+              type="search"
+              data-store-search
+              placeholder="{{ section.settings.search_placeholder | default: 'City or barangay' | escape }}"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="store-locator__layout">
+      <div class="store-locator__list">
+        <p
+          class="store-locator__empty"
+          data-store-empty
+          hidden
+        >
+          No stores found. Try another city.
+        </p>
+
+        {% for store in stores %}
+          <div
+            class="store-card"
+            data-store
+            data-store-haystack="{{ store.settings.name | append: ' ' | append: store.settings.address | downcase | escape }}"
+            {{ store.shopify_attributes }}
+          >
+            <span
+              class="store-card__pin"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <div class="store-card__body">
+              <span class="store-card__name">{{ store.settings.name }}</span>
+              {% if store.settings.address != blank %}
+                <span class="store-card__address">{{ store.settings.address }}</span>
+              {% endif %}
+
+              {% if store.settings.hours != blank %}
+                <span class="store-card__hours">{{ store.settings.hours | newline_to_br }}</span>
+              {% endif %}
+
+              <div class="store-card__contact">
+                {% if store.settings.phone != blank %}
+                  <a href="tel:{{ store.settings.phone | remove: ' ' }}">{{ store.settings.phone }}</a>
+                {% endif %}
+                {% if store.settings.email != blank %}
+                  <a href="mailto:{{ store.settings.email }}">{{ store.settings.email }}</a>
+                {% endif %}
+                {% if store.settings.directions_url != blank %}
+                  <a
+                    href="{{ store.settings.directions_url }}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Directions
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="store-locator__map">
+        {% if section.settings.map_embed_url != blank %}
+          <iframe
+            src="{{ section.settings.map_embed_url }}"
+            title="{{ section.settings.heading | default: 'Store locator' | escape }} map"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        {% elsif section.settings.map_image != blank %}
+          <img
+            src="{{ section.settings.map_image | image_url: width: 1200 }}"
+            alt=""
+            width="{{ section.settings.map_image.width }}"
+            height="{{ section.settings.map_image.height }}"
+            loading="lazy"
+          >
+        {% else %}
+          <span class="store-locator__map-placeholder">
+            Add a map embed URL in the section settings to show a live map here.
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </store-locator>
+</div>
+
+<script
+  src="{{ 'brickline-store-locator.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  .store-locator__breadcrumb {
+    margin-block-end: 20px;
+  }
+
+  .store-locator__heading {
+    margin: 0 0 24px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-locator__heading {
+      font-size: 34px;
+    }
+  }
+
+  .store-locator__panel {
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-block-end: 32px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-locator__panel {
+      padding: 24px;
+    }
+  }
+
+  .store-locator__panel-label {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .store-locator__controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .store-locator__field {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    border-radius: 4px;
+    padding: 10px 14px;
+  }
+
+  .store-locator__field svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--text-meta, #939393);
+  }
+
+  .store-locator__field input {
+    border: none;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-default, #141414);
+  }
+
+  .store-locator__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media screen and (min-width: 990px) {
+    .store-locator__layout {
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+    }
+  }
+
+  .store-locator__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* On phones and tablets the map leads, then the list — a tall list above a
+     map pushes the map off-screen entirely. */
+  @media screen and (max-width: 989px) {
+    .store-locator__map {
+      order: -1;
+    }
+  }
+
+  .store-locator__empty {
+    margin: 0;
+    padding: 24px 4px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .store-card {
+    display: flex;
+    gap: 12px;
+    padding: 20px 4px;
+    border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+  }
+
+  .store-card[hidden] {
+    display: none;
+  }
+
+  .store-card__pin {
+    flex-shrink: 0;
+    margin-block-start: 2px;
+    color: var(--brand-black, #000000);
+  }
+
+  .store-card__pin svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .store-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .store-card__name {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .store-card__address,
+  .store-card__hours {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+    line-height: 1.6;
+  }
+
+  .store-card__contact {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+  }
+
+  .store-locator__map {
+    background: #d8ecf0;
+    border-radius: 4px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 20px;
+  }
+
+  .store-locator__map iframe,
+  .store-locator__map img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+  }
+
+  .store-locator__map-placeholder {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+    text-align: center;
+    padding: 24px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Store locator",
+  "class": "section--store-locator",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Store Locator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search filter",
+      "info": "Filters the list below by store name and address, in the browser.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search label",
+      "default": "Find stores near this location"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "City or barangay"
+    },
+    {
+      "type": "header",
+      "content": "Map"
+    },
+    {
+      "type": "text",
+      "id": "map_embed_url",
+      "label": "Map embed URL",
+      "info": "The src from a Google Maps 'Embed a map' iframe. Leave blank to show an image or placeholder instead."
+    },
+    {
+      "type": "image_picker",
+      "id": "map_image",
+      "label": "Map image",
+      "info": "Static fallback used when no embed URL is set."
+    },
+    {
+      "type": "header",
+      "content": "Breadcrumb"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_parent",
+      "label": "Parent label",
+      "default": "Stores"
+    },
+    {
+      "type": "url",
+      "id": "breadcrumb_parent_url",
+      "label": "Parent link"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_current",
+      "label": "Current label",
+      "default": "All Stores"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Store",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Brickline Store BGC"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address",
+          "default": "G/F 106 Park Triangle, 11th Ave., Bonifacio Global City, Taguig City 1635"
+        },
+        {
+          "type": "textarea",
+          "id": "hours",
+          "label": "Opening hours",
+          "info": "One line per row."
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email"
+        },
+        {
+          "type": "url",
+          "id": "directions_url",
+          "label": "Directions link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store locator",
+      "blocks": [{ "type": "store" }]
+    }
+  ]
+}
+{% endschema %}

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
-  class="feature-band feature-band--{{ section.settings.layout }} feature-band--mobile-{{ section.settings.mobile_order }} brickline-section spacing-style"
+  class="feature-band feature-band--{{ section.settings.layout }} feature-band--mobile-{{ section.settings.mobile_order }} feature-band--text-{{ section.settings.text_alignment }} brickline-section spacing-style"
   style="{% render 'spacing-padding', settings: section.settings %}; --band-bg: {{ section.settings.background_color }}; --band-fg: {{ section.settings.text_color }}; --band-ratio: {{ section.settings.image_ratio }};"
 >
   <div class="brickline-container feature-band__inner">
@@ -64,6 +64,26 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  .feature-band--text-start .feature-band__content {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .feature-band--text-end .feature-band__content {
+    align-items: flex-end;
+    text-align: end;
+  }
+
+  .feature-band--text-center .feature-band__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .feature-band--text-end .feature-band__button,
+  .feature-band--text-center .feature-band__button {
+    align-self: auto;
   }
 
   .feature-band__eyebrow {
@@ -202,6 +222,17 @@
         { "value": "media-end", "label": "Text left, image right" }
       ],
       "default": "stacked"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Centered" },
+        { "value": "end", "label": "Right" }
+      ],
+      "default": "start"
     },
     {
       "type": "select",

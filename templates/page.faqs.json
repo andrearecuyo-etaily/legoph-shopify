@@ -1,0 +1,168 @@
+{
+  "sections": {
+    "banner": {
+      "type": "brickline-page-banner",
+      "settings": {
+        "title_source": "page",
+        "heading": "FAQs",
+        "title_size": "large",
+        "layout": "inset",
+        "title_alignment": "start",
+        "uppercase": false,
+        "background_color": "#006cb7",
+        "text_color": "#ffffff",
+        "show_breadcrumb": true,
+        "breadcrumb_current": "FAQs",
+        "padding-block-start": 0,
+        "padding-block-end": 32
+      }
+    },
+    "intro": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "intro": "<p>Find answers to our most commonly asked questions about orders, shipping, returns, and your Brickline account.</p>",
+        "button_label": "Contact Us",
+        "button_link": "/pages/contact-us",
+        "alignment": "center",
+        "content_width": 900,
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      }
+    },
+    "faq_1": {
+      "type": "brickline-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order ships, you'll receive a confirmation email with tracking details. You can also view order status anytime under My Orders.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "What are the shipping options?",
+            "answer": "<p>We offer Standard (5–7 business days) shipping nationwide, with free shipping on qualifying orders.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change my order after placing it?",
+            "answer": "<p>Orders begin processing shortly after checkout, so changes can't be guaranteed. Contact us right away and we'll do our best to help.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "settings": {
+        "heading": "Orders & Shipping",
+        "anchor_id": "",
+        "open_first": true,
+        "heading_alignment": "start",
+        "heading_size": "large",
+        "top_border": true,
+        "content_width": 900,
+        "padding-block-start": 24,
+        "padding-block-end": 28
+      }
+    },
+    "faq_2": {
+      "type": "brickline-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Unopened items in original packaging can be returned within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How long do refunds take?",
+            "answer": "<p>Refunds are processed within 5–7 business days of us receiving your return.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ],
+      "settings": {
+        "heading": "Returns & Refunds",
+        "anchor_id": "",
+        "open_first": false,
+        "heading_alignment": "start",
+        "heading_size": "large",
+        "top_border": true,
+        "content_width": 900,
+        "padding-block-start": 0,
+        "padding-block-end": 28
+      }
+    },
+    "faq_3": {
+      "type": "brickline-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need an account to check out?",
+            "answer": "<p>Yes, an account is required to complete checkout so we can keep your orders, rewards, and addresses in one place.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How do I earn Brickline Rewards points?",
+            "answer": "<p>You automatically earn points on every purchase once you're signed in and enrolled in Brickline Rewards.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ],
+      "settings": {
+        "heading": "Account & Rewards",
+        "anchor_id": "",
+        "open_first": false,
+        "heading_alignment": "start",
+        "heading_size": "large",
+        "top_border": true,
+        "content_width": 900,
+        "padding-block-start": 0,
+        "padding-block-end": 28
+      }
+    },
+    "help": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "Still Need Help?",
+        "body": "<p>Can't find what you're looking for? Our support team is here to help.</p>",
+        "button_label": "Contact Us",
+        "button_link": "/pages/contact-us",
+        "alignment": "start",
+        "content_width": 900,
+        "padding-block-start": 0,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "intro",
+    "faq_1",
+    "faq_2",
+    "faq_3",
+    "help"
+  ]
+}

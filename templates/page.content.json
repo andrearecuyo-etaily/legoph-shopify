@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": true,
+        "alignment": "start",
+        "content_width": 900,
+        "padding-block-start": 40,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

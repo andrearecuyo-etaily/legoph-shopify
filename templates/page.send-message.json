@@ -1,0 +1,171 @@
+{
+  "sections": {
+    "form": {
+      "type": "brickline-contact-form",
+      "blocks": {
+        "topic": {
+          "type": "select",
+          "settings": {
+            "label": "What do you need help with?",
+            "options": "Product questions or issues\nOrder & shipping\nReturns & refunds\nAccount & rewards",
+            "width": "full",
+            "required": true
+          }
+        },
+        "subtopic": {
+          "type": "select",
+          "settings": {
+            "label": "Tell us a bit more",
+            "options": "Missing and lost pieces, stickers or instructions\nDamaged or defective item\nSomething else",
+            "width": "full",
+            "required": false
+          }
+        },
+        "contact_heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Your contact info",
+            "note": "If you're not an adult, ask your parent or guardian to fill out this form."
+          }
+        },
+        "first_name": {
+          "type": "text",
+          "settings": {
+            "label": "First name",
+            "width": "half",
+            "required": true
+          }
+        },
+        "last_name": {
+          "type": "text",
+          "settings": {
+            "label": "Last name",
+            "width": "half"
+          }
+        },
+        "email": {
+          "type": "text",
+          "settings": {
+            "label": "Email",
+            "input_type": "email",
+            "field_key": "email",
+            "width": "full",
+            "required": true
+          }
+        },
+        "address_heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Your home address",
+            "note": "We may need your address to confirm your identity."
+          }
+        },
+        "address": {
+          "type": "text",
+          "settings": {
+            "label": "House number/Address",
+            "width": "full"
+          }
+        },
+        "address2": {
+          "type": "text",
+          "settings": {
+            "label": "Additional address info (optional)",
+            "width": "full"
+          }
+        },
+        "city": {
+          "type": "text",
+          "settings": {
+            "label": "City",
+            "width": "half"
+          }
+        },
+        "province": {
+          "type": "text",
+          "settings": {
+            "label": "Province",
+            "width": "half"
+          }
+        },
+        "zip": {
+          "type": "text",
+          "settings": {
+            "label": "ZIP / Postal code",
+            "width": "half"
+          }
+        },
+        "phone": {
+          "type": "text",
+          "settings": {
+            "label": "Phone number",
+            "input_type": "tel",
+            "field_key": "phone",
+            "width": "half"
+          }
+        },
+        "message_heading": {
+          "type": "heading",
+          "settings": {
+            "text": "How can we help you?"
+          }
+        },
+        "message": {
+          "type": "textarea",
+          "settings": {
+            "label": "Your message",
+            "help": "Type out your issue or ask a question…",
+            "field_key": "body",
+            "required": true
+          }
+        }
+      },
+      "block_order": [
+        "topic",
+        "subtopic",
+        "contact_heading",
+        "first_name",
+        "last_name",
+        "email",
+        "address_heading",
+        "address",
+        "address2",
+        "city",
+        "province",
+        "zip",
+        "phone",
+        "message_heading",
+        "message"
+      ],
+      "settings": {
+        "heading": "Get in touch with us",
+        "back_label": "Back",
+        "back_link": "/pages/contact-us",
+        "submit_label": "Send",
+        "success_message": "Thanks — we've got your message and will be in touch.",
+        "content_width": 700,
+        "padding-block-start": 32,
+        "padding-block-end": 64
+      }
+    },
+    "data_safety": {
+      "type": "brickline-rich-text",
+      "settings": {
+        "show_breadcrumb": false,
+        "heading": "",
+        "subheading": "How we keep your data safe",
+        "body": "<p>We're committed to treating your personal information with care, trust, and respect. Our privacy policy explains exactly how we protect it.</p>",
+        "button_label": "Learn more",
+        "button_link": "/policies/privacy-policy",
+        "alignment": "center",
+        "content_width": 700,
+        "padding-block-start": 0,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "form",
+    "data_safety"
+  ]
+}
