@@ -1,0 +1,773 @@
+{% liquid
+  assign per_page = section.settings.products_per_page | default: 8
+  assign swatches = section.blocks | where: 'type', 'swatch'
+  assign chips = section.blocks | where: 'type', 'chip'
+  assign has_active_filters = false
+  for filter in collection.filters
+    if filter.active_values.size > 0
+      assign has_active_filters = true
+      break
+    endif
+  endfor
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-product-card.css' | asset_url }}">
+
+<div
+  id="brickline-collection-grid"
+  class="collection-grid brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --cols-mobile: {{ section.settings.columns_mobile }}; --cols-tablet: {{ section.settings.columns_tablet }}; --cols-desktop: {{ section.settings.columns }}; --brickline-card-radius: {{ settings.brickline_card_radius }}px;"
+>
+  {% paginate collection.products by per_page %}
+    {% if swatches.size > 0 %}
+      <div class="collection-grid__swatches">
+        {% for swatch in swatches %}
+          <a
+            href="{{ swatch.settings.link | default: '#' }}"
+            class="collection-grid__swatch"
+            {{ swatch.shopify_attributes }}
+          >
+            <span
+              class="collection-grid__swatch-chip"
+              style="background: {{ swatch.settings.color }};"
+            ></span>
+            <span class="collection-grid__swatch-label">{{ swatch.settings.label }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="collection-grid__toolbar">
+      <span class="collection-grid__count">
+        {%- if paginate.pages > 1 -%}
+          Showing {{ paginate.current_offset | plus: 1 }}–{{ paginate.current_offset | plus: paginate.page_size | at_most: paginate.items }} of {{ paginate.items }} Products
+        {%- else -%}
+          Showing {{ paginate.items }} Products
+        {%- endif -%}
+      </span>
+
+      <div class="collection-grid__controls">
+        {% if chips.size > 0 %}
+          <div class="collection-grid__chips">
+            {% for chip in chips %}
+              {% liquid
+                # Toggle this chip's tag in/out of the current tag list so chips stack
+                # rather than replacing each other.
+                assign chip_tag = chip.settings.tag
+                assign is_active = false
+                if current_tags contains chip_tag
+                  assign is_active = true
+                endif
+
+                assign next_tags = ''
+                for active_tag in current_tags
+                  unless active_tag == chip_tag
+                    assign handled_tag = active_tag | handle
+                    assign next_tags = next_tags | append: handled_tag | append: '+'
+                  endunless
+                endfor
+                unless is_active
+                  assign handled_tag = chip_tag | handle
+                  assign next_tags = next_tags | append: handled_tag | append: '+'
+                endunless
+                # split/join drops the trailing separator
+                assign next_tags = next_tags | split: '+' | join: '+'
+
+                if next_tags == blank
+                  assign chip_url = collection.url
+                else
+                  assign chip_url = collection.url | append: '/' | append: next_tags
+                endif
+              %}
+              <a
+                href="{{ chip_url }}"
+                class="collection-grid__chip{% if is_active %} is-active{% endif %}"
+                {% if is_active %}
+                  aria-current="true"
+                {% endif %}
+                {{ chip.shopify_attributes }}
+              >
+                {{ chip.settings.label | default: chip.settings.tag }}
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_filters and collection.filters.size > 0 %}
+          <details class="collection-grid__disclosure">
+            <summary class="collection-grid__disclosure-button">
+              {%- render 'brickline-icon', icon: 'filter' -%}
+              Filters
+              {%- if has_active_filters %} &bull;{% endif -%}
+            </summary>
+            <form
+              method="get"
+              class="collection-grid__panel"
+            >
+              {% comment %}
+                Carry the current sort so opening the filter panel doesn't reset it.
+              {% endcomment %}
+              {% if collection.sort_by != blank %}
+                <input
+                  type="hidden"
+                  name="sort_by"
+                  value="{{ collection.sort_by }}"
+                >
+              {% endif %}
+
+              {% for filter in collection.filters %}
+                {% case filter.type %}
+                  {% when 'list', 'boolean' %}
+                    <fieldset class="collection-grid__filter">
+                      <legend class="collection-grid__filter-legend">{{ filter.label }}</legend>
+                      {% for value in filter.values %}
+                        <label class="collection-grid__filter-option">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}
+                              checked
+                            {% endif %}
+                            {% if value.count == 0 and value.active == false %}
+                              disabled
+                            {% endif %}
+                          >
+                          <span>{{ value.label }} ({{ value.count }})</span>
+                        </label>
+                      {% endfor %}
+                    </fieldset>
+                  {% when 'price_range' %}
+                    <fieldset class="collection-grid__filter">
+                      <legend class="collection-grid__filter-legend">{{ filter.label }}</legend>
+                      <div class="collection-grid__filter-range">
+                        <label>
+                          <span class="visually-hidden">{{ filter.min_value.label }}</span>
+                          <input
+                            type="number"
+                            name="{{ filter.min_value.param_name }}"
+                            value="{{ filter.min_value.value | divided_by: 100 }}"
+                            min="0"
+                            max="{{ filter.range_max | divided_by: 100 }}"
+                            placeholder="{{ 0 | money_without_currency }}"
+                          >
+                        </label>
+                        <span aria-hidden="true">–</span>
+                        <label>
+                          <span class="visually-hidden">{{ filter.max_value.label }}</span>
+                          <input
+                            type="number"
+                            name="{{ filter.max_value.param_name }}"
+                            value="{{ filter.max_value.value | divided_by: 100 }}"
+                            min="0"
+                            max="{{ filter.range_max | divided_by: 100 }}"
+                            placeholder="{{ filter.range_max | money_without_currency }}"
+                          >
+                        </label>
+                      </div>
+                    </fieldset>
+                {% endcase %}
+              {% endfor %}
+
+              <div class="collection-grid__panel-actions">
+                <button
+                  type="submit"
+                  class="collection-grid__panel-apply"
+                >
+                  Apply
+                </button>
+                <a
+                  href="{{ collection.url }}"
+                  class="collection-grid__panel-clear"
+                >
+                  Clear all
+                </a>
+              </div>
+            </form>
+          </details>
+        {% endif %}
+
+        {% if section.settings.show_sort %}
+          <form
+            method="get"
+            class="collection-grid__sort"
+          >
+            {% comment %}
+              Preserve active filter params so changing the sort doesn't drop them.
+            {% endcomment %}
+            {% for filter in collection.filters %}
+              {% for value in filter.active_values %}
+                <input
+                  type="hidden"
+                  name="{{ value.param_name }}"
+                  value="{{ value.value }}"
+                >
+              {% endfor %}
+            {% endfor %}
+
+            <label
+              for="sort-by-{{ section.id }}"
+              class="visually-hidden"
+            >
+              Sort by
+            </label>
+            <select
+              id="sort-by-{{ section.id }}"
+              name="sort_by"
+              class="collection-grid__sort-select"
+              onchange="this.form.submit()"
+            >
+              {% liquid
+                assign current_sort = collection.sort_by | default: collection.default_sort_by
+              %}
+              {% for option in collection.sort_options %}
+                <option
+                  value="{{ option.value }}"
+                  {% if option.value == current_sort %}
+                    selected
+                  {% endif %}
+                >
+                  Sort by: {{ option.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if collection.products.size > 0 %}
+      <div class="collection-grid__items brickline-grid">
+        {% for product in collection.products %}
+          {% render 'brickline-product-card', product: product %}
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <nav
+          class="collection-grid__pagination"
+          aria-label="Pagination"
+        >
+          <div class="collection-grid__pages">
+            {% if paginate.previous %}
+              <a
+                href="{{ paginate.previous.url }}#brickline-collection-grid"
+                class="collection-grid__page-arrow"
+                rel="prev"
+              >
+                &lsaquo; Prev
+              </a>
+            {% else %}
+              <span class="collection-grid__page-arrow is-disabled">&lsaquo; Prev</span>
+            {% endif %}
+
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a
+                  href="{{ part.url }}#brickline-collection-grid"
+                  class="collection-grid__page"
+                >
+                  {{ part.title }}
+                </a>
+              {% elsif part.title == paginate.current_page %}
+                <span
+                  class="collection-grid__page is-active"
+                  aria-current="page"
+                >
+                  {{ part.title }}
+                </span>
+              {% else %}
+                <span class="collection-grid__page is-ellipsis">{{ part.title }}</span>
+              {% endif %}
+            {% endfor %}
+
+            {% if paginate.next %}
+              <a
+                href="{{ paginate.next.url }}#brickline-collection-grid"
+                class="collection-grid__page-arrow"
+                rel="next"
+              >
+                Next &rsaquo;
+              </a>
+            {% else %}
+              <span class="collection-grid__page-arrow is-disabled">Next &rsaquo;</span>
+            {% endif %}
+          </div>
+
+          {% if section.settings.show_back_to_top %}
+            <a
+              href="#brickline-collection-grid"
+              class="collection-grid__back-to-top"
+            >
+              Back to top
+            </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="collection-grid__empty">
+        <span class="collection-grid__empty-title">No products match these filters</span>
+        <span class="collection-grid__empty-body">Try clearing a filter to see more sets.</span>
+        <a
+          href="{{ collection.url }}"
+          class="collection-grid__panel-apply"
+        >
+          Clear filters
+        </a>
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</div>
+
+{% stylesheet %}
+  .collection-grid__swatches {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-block-end: 28px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .collection-grid__swatches {
+      gap: 32px;
+    }
+  }
+
+  .collection-grid__swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .collection-grid__swatch-chip {
+    width: 44px;
+    height: 44px;
+    display: block;
+    transition: transform 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collection-grid__swatch:hover .collection-grid__swatch-chip {
+      transform: scale(1.06);
+    }
+  }
+
+  .collection-grid__swatch-label {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .collection-grid__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .collection-grid__count {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .collection-grid__controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .collection-grid__chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .collection-grid__chip {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-default, #141414);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    transition: border-color 150ms ease;
+  }
+
+  .collection-grid__chip.is-active {
+    border: 2px solid var(--brand-black, #000000);
+    padding: 7px 13px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collection-grid__chip:hover {
+      border-color: var(--brand-black, #000000);
+    }
+  }
+
+  .collection-grid__disclosure {
+    position: relative;
+  }
+
+  .collection-grid__disclosure-button,
+  .collection-grid__sort-select {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-default, #141414);
+    background: var(--surface-page, #ffffff);
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    border-radius: 0;
+    padding: 8px 12px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .collection-grid__disclosure-button::-webkit-details-marker {
+    display: none;
+  }
+
+  .collection-grid__disclosure-button svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .collection-grid__panel {
+    position: absolute;
+    z-index: 3;
+    inset-inline-end: 0;
+    margin-block-start: 8px;
+    width: min(320px, 80vw);
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--surface-page, #ffffff);
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    box-shadow: var(--shadow-md, 0 4px 12px rgb(0 0 0 / 8%));
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .collection-grid__filter {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .collection-grid__filter-legend {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 0;
+    margin-block-end: 4px;
+  }
+
+  .collection-grid__filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+    cursor: pointer;
+  }
+
+  .collection-grid__filter-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .collection-grid__filter-range input {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+  }
+
+  .collection-grid__panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .collection-grid__panel-apply {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--brand-black, #000000);
+    color: var(--text-inverse, #ffffff);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 10px 18px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .collection-grid__panel-clear {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .collection-grid__items {
+    gap: 20px;
+    margin-block-start: 40px;
+  }
+
+  .collection-grid__pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-block-start: 32px;
+  }
+
+  .collection-grid__pages {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .collection-grid__page-arrow {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-default, #141414);
+    text-decoration: none;
+    padding: 8px 12px;
+  }
+
+  .collection-grid__page-arrow.is-disabled {
+    color: var(--text-meta, #939393);
+  }
+
+  .collection-grid__page {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-default, #141414);
+    text-decoration: none;
+  }
+
+  .collection-grid__page.is-active {
+    background: var(--brand-black, #000000);
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .collection-grid__back-to-top {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-default, #141414);
+    text-decoration: none;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    padding: 11px 18px;
+  }
+
+  .collection-grid__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 64px 24px;
+  }
+
+  .collection-grid__empty-title {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+  }
+
+  .collection-grid__empty-body {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+  }
+{% endstylesheet %}
+
+<script
+  src="{{ 'brickline-cart-actions.js' | asset_url }}"
+  type="module"
+></script>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "class": "section--collection-grid",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns — desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns — tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns — mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Show sort control",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show filters",
+      "info": "Uses the storefront filters configured in Search & Discovery.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_back_to_top",
+      "label": "Show Back to top button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "swatch",
+      "name": "Swatch shortcut",
+      "settings": [
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Color",
+          "default": "#e3599d"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Retiring soon"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "chip",
+      "name": "Tag chip",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Product tag",
+          "default": "New"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Defaults to the tag."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection grid"
+    }
+  ]
+}
+{% endschema %}

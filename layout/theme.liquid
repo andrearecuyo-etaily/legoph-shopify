@@ -46,6 +46,16 @@
     <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
 
     {% comment %}
+      Brickline sections author their padding at desktop scale; brickline-tokens.css
+      multiplies it by this factor below 750px.
+    {% endcomment %}
+    {% style %}
+      :root {
+        --brickline-mobile-padding-scale: {{ settings.brickline_mobile_padding_scale | default: 70 | divided_by: 100.0 }};
+      }
+    {% endstyle %}
+
+    {% comment %}
       Opt into cross-document (MPA) view transitions and hold first paint until #MainContent
       parses, so the transition runs consistently.
       Both are gated on the same settings as the view-transitions.js opt-out switch (see snippets/scripts.liquid).

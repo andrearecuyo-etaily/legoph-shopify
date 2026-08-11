@@ -166,11 +166,46 @@
     ]
   },
   {
-    "name": "Brickline homepage",
+    "name": "Brickline",
     "settings": [
       {
         "type": "paragraph",
-        "content": "Site-wide tuning knobs used by the Brickline homepage sections (hero slider, category tiles, product rail)."
+        "content": "Site-wide tuning knobs used by the Brickline sections (hero slider, category tiles, product rail, cart)."
+      },
+      {
+        "type": "header",
+        "content": "Responsive"
+      },
+      {
+        "type": "range",
+        "id": "brickline_mobile_padding_scale",
+        "label": "Mobile section padding",
+        "info": "Scales every Brickline section's top/bottom padding below 750px. 100% keeps the desktop values.",
+        "min": 40,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default": 70
+      },
+      {
+        "type": "header",
+        "content": "Cart"
+      },
+      {
+        "type": "number",
+        "id": "brickline_free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "In whole currency units. 0 hides the free-shipping meter in the cart drawer.",
+        "default": 0
+      },
+      {
+        "type": "collection",
+        "id": "brickline_cart_upsell_collection",
+        "label": "Cart drawer upsell collection"
+      },
+      {
+        "type": "header",
+        "content": "Cards"
       },
       {
         "type": "range",

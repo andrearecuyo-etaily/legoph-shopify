@@ -1,0 +1,46 @@
+{% comment %}
+  Free-shipping progress meter. Renders nothing unless a threshold is configured
+  in theme settings (Brickline → Free shipping threshold).
+
+  Usage:
+  {% render 'brickline-shipping-meter' %}
+{% endcomment %}
+
+{% liquid
+  # The setting is entered in whole currency units; cart totals are in cents.
+  assign threshold = settings.brickline_free_shipping_threshold | times: 100
+%}
+
+{%- if threshold > 0 -%}
+  {% liquid
+    assign remaining = threshold | minus: cart.total_price
+    assign progress = cart.total_price | times: 100 | divided_by: threshold
+    if progress > 100
+      assign progress = 100
+    endif
+  %}
+  <div class="shipping-meter">
+    {% if remaining <= 0 %}
+      <span class="shipping-meter__label shipping-meter__label--unlocked">
+        You've unlocked free shipping!
+      </span>
+    {% else %}
+      <span class="shipping-meter__label">
+        Add <strong>{{ remaining | money }}</strong> more for free shipping
+      </span>
+    {% endif %}
+    <div
+      class="shipping-meter__track"
+      role="progressbar"
+      aria-valuenow="{{ progress }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-label="Progress toward free shipping"
+    >
+      <div
+        class="shipping-meter__bar"
+        style="width: {{ progress }}%;"
+      ></div>
+    </div>
+  </div>
+{%- endif -%}

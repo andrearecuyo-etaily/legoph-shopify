@@ -1,0 +1,267 @@
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="brickline-steps brickline-section spacing-style"
+  style="{% render 'spacing-padding', settings: section.settings %}; --steps-bg: {{ section.settings.background_color }}; --steps-fg: {{ section.settings.text_color }};"
+>
+  <div class="brickline-container brickline-steps__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="brickline-steps__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <ol class="brickline-steps__list">
+      {% for block in section.blocks %}
+        <li
+          class="brickline-steps__step"
+          {{ block.shopify_attributes }}
+        >
+          <span class="brickline-steps__step-title">
+            {{- forloop.index }}. {{ block.settings.title -}}
+          </span>
+          {% if block.settings.body != blank %}
+            <span class="brickline-steps__step-body">{{ block.settings.body }}</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+
+    {% if section.settings.button_label != blank %}
+      <a
+        href="{{ section.settings.button_link | default: routes.account_register_url }}"
+        class="brickline-steps__button"
+      >
+        {{ section.settings.button_label }} &rsaquo;
+      </a>
+    {% endif %}
+
+    {% if section.settings.image != blank %}
+      <div class="brickline-steps__media">
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          alt="{{ section.settings.image.alt | escape }}"
+          class="brickline-steps__image"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .brickline-steps {
+    background: var(--steps-bg, #000000);
+    color: var(--steps-fg, #ffffff);
+    text-align: center;
+  }
+
+  /* Overrides .brickline-container's 1440px cap — the steps column is narrow. */
+  .brickline-steps__inner {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .brickline-steps__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: inherit;
+  }
+
+  @media screen and (min-width: 750px) {
+    .brickline-steps__heading {
+      font-size: 22px;
+    }
+  }
+
+  .brickline-steps__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .brickline-steps__step {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .brickline-steps__step-title {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .brickline-steps__step-body {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  .brickline-steps__button {
+    align-self: center;
+    background: var(--surface-page, #ffffff);
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: filter 150ms ease, transform 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .brickline-steps__button:hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  .brickline-steps__button:active {
+    transform: scale(0.98);
+  }
+
+  .brickline-steps__media {
+    margin-block-start: 24px;
+    aspect-ratio: 16 / 9;
+    background: var(--surface-secondary, #fafafa);
+    overflow: hidden;
+  }
+
+  .brickline-steps__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Steps callout",
+  "class": "section--brickline-steps",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "It's easy as 1 2 3!"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Join Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Sign up or sign in"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body",
+          "default": "Sign up online or in-store and start collecting points right away."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Steps callout",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Sign up or sign in",
+            "body": "Sign up online or in-store and start collecting points right away."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Collect points",
+            "body": "Earn membership points for buying sets in stores and online."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Get awesome rewards",
+            "body": "Visit your Rewards Centre to unlock discounts and exclusives. It's everything Brickline, all in one place."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

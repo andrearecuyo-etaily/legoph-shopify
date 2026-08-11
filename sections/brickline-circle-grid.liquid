@@ -1,0 +1,222 @@
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="circle-grid brickline-section spacing-style"
+  style="{% render 'spacing-padding', settings: section.settings %}; --circle-bg: {{ section.settings.background_color }}; --circle-fg: {{ section.settings.text_color }}; --cols-mobile: {{ section.settings.columns_mobile }}; --cols-tablet: {{ section.settings.columns_tablet }}; --cols-desktop: {{ section.settings.columns }};"
+>
+  <div class="brickline-container">
+    {% if section.settings.heading != blank %}
+      <h2 class="circle-grid__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="circle-grid__items brickline-grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign tag = 'div'
+          if block.settings.link != blank
+            assign tag = 'a'
+          endif
+        %}
+        <{{ tag }}
+          {% if tag == 'a' %}
+            href="{{ block.settings.link }}"
+          {% endif %}
+          class="circle-grid__item"
+          {{ block.shopify_attributes }}
+        >
+          <span
+            class="circle-grid__circle"
+            style="background: {{ block.settings.color }};"
+          >
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 300 }}"
+                alt=""
+                class="circle-grid__image"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+              >
+            {% endif %}
+          </span>
+          <span class="circle-grid__label">{{ block.settings.label }}</span>
+        </{{ tag }}>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .circle-grid {
+    background: var(--circle-bg, #000000);
+    color: var(--circle-fg, #ffffff);
+  }
+
+  .circle-grid__heading {
+    margin: 0 0 20px;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: inherit;
+  }
+
+  .circle-grid__items {
+    gap: 20px;
+  }
+
+  .circle-grid__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .circle-grid__circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: block;
+    transition: transform 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    a.circle-grid__item:hover .circle-grid__circle {
+      transform: scale(1.05);
+    }
+  }
+
+  .circle-grid__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .circle-grid__label {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Circle grid",
+  "class": "section--circle-grid",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Look what's blooming"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns — desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns — tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns — mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "circle",
+      "name": "Circle",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Fallback color",
+          "default": "#dd0000"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Night Rider Camellia"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Circle grid",
+      "blocks": [{ "type": "circle" }, { "type": "circle" }, { "type": "circle" }, { "type": "circle" }]
+    }
+  ]
+}
+{% endschema %}

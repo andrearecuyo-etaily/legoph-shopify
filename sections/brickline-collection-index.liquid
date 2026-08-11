@@ -1,0 +1,239 @@
+{% liquid
+  # Merchants can either curate the order with blocks or fall back to every collection.
+  assign curated = section.blocks | where: 'type', 'collection'
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="collection-index brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --cols-mobile: {{ section.settings.columns_mobile }}; --cols-tablet: {{ section.settings.columns_tablet }}; --cols-desktop: {{ section.settings.columns }};"
+>
+  <div class="collection-index__items brickline-grid">
+    {% if curated.size > 0 %}
+      {% for block in curated %}
+        {% render 'brickline-collection-card',
+          collection: block.settings.collection,
+          fallback_color: block.settings.color,
+          learn_more_url: block.settings.learn_more_url,
+          shop_label: section.settings.shop_label,
+          learn_more_label: section.settings.learn_more_label,
+          attributes: block.shopify_attributes
+        %}
+      {% endfor %}
+    {% else %}
+      {% for list_collection in collections %}
+        {% render 'brickline-collection-card',
+          collection: list_collection,
+          shop_label: section.settings.shop_label,
+          learn_more_label: section.settings.learn_more_label
+        %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .collection-index__items {
+    gap: 32px 24px;
+  }
+
+  .collection-index-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .collection-index-card__media {
+    aspect-ratio: 16 / 10;
+    background: var(--card-color, #00395d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .collection-index-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .collection-index-card__media-label {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--text-inverse, #ffffff);
+    text-align: center;
+    padding-inline: 12px;
+  }
+
+  .collection-index-card__title {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-default, #141414);
+  }
+
+  .collection-index-card__blurb {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+    line-height: 1.5;
+  }
+
+  .collection-index-card__links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-block-start: 4px;
+    margin-block-start: auto;
+  }
+
+  .collection-index-card__link {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-link, #005ad2);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collection-index-card__link:hover {
+      color: var(--text-link-hover, #0045b7);
+      text-decoration: underline;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection index",
+  "class": "section--collection-index",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add Collection blocks to curate the list. With no blocks, every collection in the store is shown."
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns — desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns — tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns — mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop link label",
+      "default": "Shop Products"
+    },
+    {
+      "type": "text",
+      "id": "learn_more_label",
+      "label": "Learn more link label",
+      "default": "Learn more"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Tile color",
+          "info": "Used when the collection has no image.",
+          "default": "#00395d"
+        },
+        {
+          "type": "url",
+          "id": "learn_more_url",
+          "label": "Learn more link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection index"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+{% comment %}
+  Collection tile for the Collections index — colored/imaged banner, title,
+  description blurb and the Shop / Learn more link pair.
+
+  Accepts:
+  - collection: {Collection} required
+  - fallback_color: {String} tile background when the collection has no image
+  - learn_more_url: {String} optional second link target
+  - shop_label / learn_more_label: {String} link labels
+  - attributes: {String} shopify_attributes for theme editor block targeting
+
+  Usage:
+  {% render 'brickline-collection-card', collection: block.settings.collection %}
+{% endcomment %}
+
+{%- if collection != blank -%}
+  {% liquid
+    assign tile_color = fallback_color | default: '#00395d'
+    assign shop_text = shop_label | default: 'Shop Products'
+    assign learn_text = learn_more_label | default: 'Learn more'
+  %}
+  <div
+    class="collection-index-card"
+    style="--card-color: {{ tile_color }};"
+    {{ attributes }}
+  >
+    <a
+      href="{{ collection.url }}"
+      class="collection-index-card__media"
+    >
+      {% if collection.featured_image %}
+        <img
+          src="{{ collection.featured_image | image_url: width: 800 }}"
+          alt="{{ collection.featured_image.alt | escape }}"
+          class="collection-index-card__image"
+          width="{{ collection.featured_image.width }}"
+          height="{{ collection.featured_image.height }}"
+          loading="lazy"
+        >
+      {% else %}
+        <span class="collection-index-card__media-label">{{ collection.title }}</span>
+      {% endif %}
+    </a>
+
+    <h3 class="collection-index-card__title">{{ collection.title }}</h3>
+
+    {% if collection.description != blank %}
+      <p class="collection-index-card__blurb">
+        {{ collection.description | strip_html | truncatewords: 30 }}
+      </p>
+    {% endif %}
+
+    <div class="collection-index-card__links">
+      <a
+        href="{{ collection.url }}"
+        class="collection-index-card__link"
+      >
+        {{ shop_text }} &rsaquo;
+      </a>
+      {% if learn_more_url != blank %}
+        <a
+          href="{{ learn_more_url }}"
+          class="collection-index-card__link"
+        >
+          {{ learn_text }} &rsaquo;
+        </a>
+      {% endif %}
+    </div>
+  </div>
+{%- endif -%}

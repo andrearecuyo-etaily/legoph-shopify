@@ -1,0 +1,164 @@
+{
+  "sections": {
+    "main": {
+      "type": "brickline-product-main",
+      "blocks": {
+        "gift": {
+          "type": "gift",
+          "settings": {
+            "text": "Sea Serpent — spend over ₱9,000 to unlock this gift",
+            "footnote": "Ends 07/12/2026 · Terms & Conditions"
+          }
+        },
+        "points_note": {
+          "type": "note",
+          "settings": {
+            "text": "<p>Earn Insiders Points on this set. <a href=\"/pages/loyalty\">Learn more</a></p>"
+          }
+        },
+        "shipping_note": {
+          "type": "note",
+          "settings": {
+            "text": "<p>Free shipping with orders over ₱2,000. <a href=\"/policies/shipping-policy\">Deliveries and Returns</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "gift",
+        "points_note",
+        "shipping_note"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "show_eyebrow": true,
+        "show_quantity": true,
+        "purchase_limit": 3,
+        "add_to_cart_label": "Add to Bag",
+        "gift_heading": "Gifts with Purchase",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "membership": {
+      "type": "brickline-cta-banner",
+      "settings": {
+        "heading": "Become a member and unlock perks right away!",
+        "subheading": "Start earning loyalty points with every purchase — which you can redeem for savings, rewards, experiences and more.",
+        "button_label": "Become a member",
+        "button_link": "/pages/loyalty",
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 20
+      }
+    },
+    "cinematic": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-start",
+        "image_ratio": "4 / 3",
+        "heading": "Embark on an out-of-this-world mission",
+        "body": "<p>Launch into the realm of cinematic science fiction with this Icons spacecraft model kit for adults.</p>",
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "padding-block-start": 56,
+        "padding-block-end": 56
+      }
+    },
+    "highlights": {
+      "type": "brickline-editorial-grid",
+      "blocks": {
+        "h1": {
+          "type": "story",
+          "settings": {
+            "title": "Captivating space decor",
+            "subtitle": "A striking centerpiece for the home or office.",
+            "button_label": ""
+          }
+        },
+        "h2": {
+          "type": "story",
+          "settings": {
+            "title": "Dynamic display stand",
+            "subtitle": "Turn the crank to simulate the centrifugal gravity system.",
+            "button_label": ""
+          }
+        },
+        "h3": {
+          "type": "story",
+          "settings": {
+            "title": "Includes iconic minifigures",
+            "subtitle": "Comes with two crew minifigures and a companion robot figure.",
+            "button_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "columns": 3,
+        "image_ratio": "4 / 3",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 0,
+        "columns_tablet": 3,
+        "columns_mobile": 1
+      }
+    },
+    "gift_band": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-end",
+        "image_ratio": "4 / 3",
+        "eyebrow": "Adults Welcome",
+        "heading": "A stellar Brickline gift for sci-fi fans",
+        "body": "<p>Treat yourself or surprise a movie lover with this set, perfect for fans of science fiction and space adventure stories.</p>",
+        "button_label": "Shop now",
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "padding-block-start": 56,
+        "padding-block-end": 56
+      }
+    },
+    "recommendations": {
+      "type": "brickline-product-recommendations",
+      "settings": {
+        "heading": "Recommended For You",
+        "products_to_show": 5,
+        "columns": 5,
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 24,
+        "columns_tablet": 3,
+        "columns_mobile": 2
+      }
+    },
+    "recently_viewed": {
+      "type": "brickline-recently-viewed",
+      "settings": {
+        "heading": "Recently Viewed Sets",
+        "products_to_show": 5,
+        "columns": 5,
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 72,
+        "columns_tablet": 3,
+        "columns_mobile": 2
+      }
+    }
+  },
+  "order": [
+    "main",
+    "membership",
+    "cinematic",
+    "highlights",
+    "gift_band",
+    "recommendations",
+    "recently_viewed"
+  ]
+}

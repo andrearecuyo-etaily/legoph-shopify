@@ -1,0 +1,860 @@
+{% liquid
+  assign variant = product.selected_or_first_available_variant
+  assign price = variant.price
+  assign compare_at_price = variant.compare_at_price
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign meta_age = product.metafields.custom.age
+  assign meta_pieces = product.metafields.custom.pieces
+  assign meta_rating = product.metafields.custom.rating
+  assign meta_rating_count = product.metafields.custom.rating_count
+
+  assign parent_collection = collection
+  if parent_collection == blank
+    assign parent_collection = product.collections.first
+  endif
+
+  assign cta_label = section.settings.add_to_cart_label | default: 'Add to Bag'
+  if product.tags contains 'Pre-order'
+    assign cta_label = 'Pre-order'
+  elsif product.tags contains 'Backorder'
+    assign cta_label = 'Backorder'
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="product-main brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --stage-ratio: {{ section.settings.image_ratio }};"
+>
+  {% if section.settings.show_breadcrumb %}
+    <div class="product-main__breadcrumb">
+      {% render 'brickline-breadcrumb',
+        current: product.title,
+        parent_label: parent_collection.title,
+        parent_url: parent_collection.url
+      %}
+    </div>
+  {% endif %}
+
+  <div class="product-main__layout">
+    <brickline-gallery class="product-main__gallery">
+      <div class="product-main__thumbs">
+        {% for media in product.media limit: 6 %}
+          <button
+            type="button"
+            class="product-main__thumb{% if forloop.first %} is-active{% endif %}"
+            data-media-index="{{ forloop.index0 }}"
+            aria-label="{{ media.alt | default: product.title | escape }}"
+          >
+            <img
+              src="{{ media.preview_image | image_url: width: 200 }}"
+              alt=""
+              width="{{ media.preview_image.width }}"
+              height="{{ media.preview_image.height }}"
+              loading="lazy"
+            >
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="product-main__stage">
+        {% for media in product.media limit: 6 %}
+          <img
+            src="{{ media | image_url: width: 1200 }}"
+            alt="{{ media.alt | default: product.title | escape }}"
+            class="product-main__stage-image{% if forloop.first %} is-active{% endif %}"
+            data-media-index="{{ forloop.index0 }}"
+            width="{{ media.preview_image.width }}"
+            height="{{ media.preview_image.height }}"
+            loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+          >
+        {% else %}
+          <div class="product-main__stage-empty">
+            {{ 'product-1' | placeholder_svg_tag: 'product-main__placeholder' }}
+          </div>
+        {% endfor %}
+      </div>
+    </brickline-gallery>
+
+    <div class="product-main__summary">
+      {% if section.settings.show_eyebrow %}
+        {% assign eyebrow_parts = '' %}
+        {% if parent_collection.title != blank %}
+          {% assign eyebrow_parts = parent_collection.title %}
+        {% endif %}
+        {% if variant.sku != blank %}
+          {% if eyebrow_parts != blank %}
+            {% assign eyebrow_parts = eyebrow_parts | append: ' · #' | append: variant.sku %}
+          {% else %}
+            {% assign eyebrow_parts = '#' | append: variant.sku %}
+          {% endif %}
+        {% endif %}
+        {% if eyebrow_parts != blank %}
+          <span class="product-main__eyebrow">{{ eyebrow_parts }}</span>
+        {% endif %}
+      {% endif %}
+
+      <h1 class="product-main__title">{{ product.title }}</h1>
+
+      {% if meta_rating != blank %}
+        <div class="product-main__rating">
+          <span
+            class="product-main__stars"
+            aria-hidden="true"
+          >
+            {%- assign filled = meta_rating | round -%}
+            {%- for i in (1..5) -%}
+              {%- if i <= filled %}★{% else %}☆{% endif -%}
+            {%- endfor -%}
+          </span>
+          <span class="product-main__rating-count">
+            {{- meta_rating }}
+            {%- if meta_rating_count != blank %} ({{ meta_rating_count }}){% endif -%}
+          </span>
+        </div>
+      {% endif %}
+
+      <div class="product-main__price">
+        {% if on_sale %}
+          <span class="product-main__price-compare">{{ compare_at_price | money }}</span>
+          <span class="product-main__price-value product-main__price-value--sale">{{ price | money }}</span>
+        {% else %}
+          <span class="product-main__price-value">{{ price | money }}</span>
+        {% endif %}
+        {% if section.settings.price_badge != blank %}
+          <span class="product-main__price-badge">{{ section.settings.price_badge }}</span>
+        {% endif %}
+      </div>
+
+      {% if section.settings.member_note != blank and customer == null %}
+        <span class="product-main__note">{{ section.settings.member_note }}</span>
+      {% endif %}
+
+      {% if meta_age != blank or meta_pieces != blank %}
+        <div class="product-main__specs">
+          {% if meta_age != blank %}
+            <span>{{ meta_age }} Ages</span>
+          {% endif %}
+          {% if meta_pieces != blank %}
+            <span>{{ meta_pieces }} Pieces</span>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if variant.available and variant.incoming and variant.next_incoming_date %}
+        <span class="product-main__shipping-note">
+          Will ship by {{ variant.next_incoming_date | date: '%B %-d, %Y' }}
+        </span>
+      {% endif %}
+
+      {% form 'product', product, class: 'product-main__form', novalidate: 'novalidate' %}
+        {% unless product.has_only_default_variant %}
+          <div class="product-main__variants">
+            <label
+              for="variant-{{ section.id }}"
+              class="product-main__variant-label"
+            >
+              {{ product.options | join: ' / ' }}
+            </label>
+            <select
+              id="variant-{{ section.id }}"
+              name="id"
+              class="product-main__variant-select"
+            >
+              {% for option_variant in product.variants %}
+                <option
+                  value="{{ option_variant.id }}"
+                  {% if option_variant == variant %}
+                    selected
+                  {% endif %}
+                  {% unless option_variant.available %}
+                    disabled
+                  {% endunless %}
+                >
+                  {{ option_variant.title }} — {{ option_variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% else %}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ variant.id }}"
+          >
+        {% endunless %}
+
+        {% if section.settings.show_quantity %}
+          <div class="product-main__quantity-row">
+            <div class="product-main__quantity">
+              <button
+                type="button"
+                class="product-main__quantity-button"
+                data-quantity-step="-1"
+                aria-label="Decrease quantity"
+              >
+                {%- render 'brickline-icon', icon: 'minus' -%}
+              </button>
+              <label
+                for="quantity-{{ section.id }}"
+                class="visually-hidden"
+              >
+                Quantity
+              </label>
+              <input
+                id="quantity-{{ section.id }}"
+                class="product-main__quantity-input"
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                {% if section.settings.purchase_limit > 0 %}
+                  max="{{ section.settings.purchase_limit }}"
+                {% endif %}
+                inputmode="numeric"
+              >
+              <button
+                type="button"
+                class="product-main__quantity-button"
+                data-quantity-step="1"
+                aria-label="Increase quantity"
+              >
+                {%- render 'brickline-icon', icon: 'plus' -%}
+              </button>
+            </div>
+            {% if section.settings.purchase_limit > 0 %}
+              <span class="product-main__limit">Limit {{ section.settings.purchase_limit }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <button
+          type="submit"
+          name="add"
+          class="product-main__add"
+          {% unless variant.available %}
+            disabled
+          {% endunless %}
+        >
+          {%- if variant.available -%}
+            {{ cta_label }}
+          {%- else -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- endif -%}
+        </button>
+      {% endform %}
+
+      {% if section.settings.secondary_label != blank %}
+        <a
+          href="{{ section.settings.secondary_link | default: '#' }}"
+          class="product-main__secondary"
+        >
+          {{ section.settings.secondary_label }}
+        </a>
+      {% endif %}
+
+      {% assign gift_blocks = section.blocks | where: 'type', 'gift' %}
+      {% if gift_blocks.size > 0 %}
+        <div class="product-main__gift">
+          <span class="product-main__gift-title">
+            {{ section.settings.gift_heading | default: 'Gifts with Purchase' }} ({{ gift_blocks.size }})
+          </span>
+          {% for gift in gift_blocks %}
+            <span
+              class="product-main__gift-body"
+              {{ gift.shopify_attributes }}
+            >
+              {{ gift.settings.text }}
+            </span>
+            {% if gift.settings.footnote != blank %}
+              <span class="product-main__gift-footnote">{{ gift.settings.footnote }}</span>
+            {% endif %}
+          {% endfor %}
+          {% if section.settings.gift_button_label != blank %}
+            <a
+              href="{{ section.settings.gift_button_link | default: '#' }}"
+              class="product-main__gift-button"
+            >
+              {{ section.settings.gift_button_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% assign note_blocks = section.blocks | where: 'type', 'note' %}
+      {% for note in note_blocks %}
+        <span
+          class="product-main__note"
+          {{ note.shopify_attributes }}
+        >
+          {{ note.settings.text }}
+        </span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script
+  src="{{ 'brickline-product-gallery.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  .product-main__breadcrumb {
+    margin-block-end: 24px;
+  }
+
+  .product-main__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .product-main__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+      gap: 32px;
+    }
+  }
+
+  brickline-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media screen and (min-width: 750px) {
+    brickline-gallery {
+      grid-template-columns: 100px minmax(0, 1fr);
+      gap: 20px;
+    }
+  }
+
+  .product-main__thumbs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    order: 1;
+    scrollbar-width: none;
+  }
+
+  .product-main__thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-main__thumbs {
+      flex-direction: column;
+      overflow-x: visible;
+      order: 0;
+    }
+  }
+
+  .product-main__thumb {
+    flex: 0 0 72px;
+    aspect-ratio: 1;
+    padding: 0;
+    background: var(--surface-secondary, #fafafa);
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-main__thumb {
+      flex: none;
+      width: 100%;
+    }
+  }
+
+  .product-main__thumb.is-active {
+    border: 2px solid var(--brand-black, #000000);
+  }
+
+  .product-main__thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-main__stage {
+    position: relative;
+    background: var(--surface-secondary, #fafafa);
+    aspect-ratio: var(--stage-ratio, 4 / 3);
+    overflow: hidden;
+  }
+
+  .product-main__stage-image {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .product-main__stage-image.is-active {
+    display: block;
+  }
+
+  .product-main__stage-empty,
+  .product-main__placeholder {
+    width: 100%;
+    height: 100%;
+    fill: var(--surface-strong-neutral, #d9d9d9);
+  }
+
+  .product-main__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Tablet keeps the single-column stack, but a full-width buy column reads
+     badly at 900px — cap it and centre it under the gallery. */
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .product-main__summary {
+      max-width: 560px;
+      margin-inline: auto;
+      width: 100%;
+    }
+  }
+
+  .product-main__eyebrow {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-main__title {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .product-main__rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-main__stars {
+    color: var(--status-discount-red, #dd0000);
+    letter-spacing: 0.05em;
+  }
+
+  .product-main__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .product-main__price-value {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .product-main__price-value--sale {
+    color: var(--status-price-red, #bd0000);
+  }
+
+  .product-main__price-compare {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+    text-decoration: line-through;
+  }
+
+  .product-main__price-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: var(--status-discount-red, #dd0000);
+    color: var(--text-inverse, #ffffff);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .product-main__specs {
+    display: flex;
+    gap: 20px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-main__shipping-note,
+  .product-main__note {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-main__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+  }
+
+  .product-main__variants {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .product-main__variant-label {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .product-main__variant-select {
+    padding: 10px 12px;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    background: var(--surface-page, #ffffff);
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    border-radius: 0;
+  }
+
+  .product-main__quantity-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .product-main__quantity {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+  }
+
+  .product-main__quantity-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-default, #141414);
+    cursor: pointer;
+  }
+
+  .product-main__quantity-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .product-main__quantity-input {
+    width: 48px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    border-inline: 1px solid var(--color-border-default, #d9d9d9);
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .product-main__quantity-input::-webkit-outer-spin-button,
+  .product-main__quantity-input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  .product-main__limit {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-meta, #939393);
+  }
+
+  .product-main__add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    background: var(--brand-orange, #c3622c);
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 15px 24px;
+    cursor: pointer;
+    transition: filter 150ms ease, transform 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-main__add:not(:disabled):hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  .product-main__add:active {
+    transform: scale(0.99);
+  }
+
+  .product-main__add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .product-main__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    background: var(--surface-page, #ffffff);
+    color: var(--text-default, #141414);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 11px 20px;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .product-main__secondary:hover {
+      border-color: var(--brand-black, #000000);
+      background: var(--surface-tertiary, #f7f7f7);
+    }
+  }
+
+  .product-main__gift {
+    background: var(--surface-tertiary, #f7f7f7);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  .product-main__gift-title {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .product-main__gift-body {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-main__gift-footnote {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 11px;
+    color: var(--text-meta, #939393);
+  }
+
+  .product-main__gift-button {
+    margin-block-start: 4px;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    background: var(--surface-page, #ffffff);
+    color: var(--text-default, #141414);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product main",
+  "class": "section--product-main",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Gallery image ratio",
+      "options": [
+        { "value": "4 / 3", "label": "4:3" },
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "3 / 4", "label": "Portrait" },
+        { "value": "16 / 9", "label": "16:9" }
+      ],
+      "default": "4 / 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "label": "Show collection · SKU line",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "purchase_limit",
+      "label": "Purchase limit",
+      "info": "0 hides the limit note.",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart label",
+      "default": "Add to Bag"
+    },
+    {
+      "type": "text",
+      "id": "price_badge",
+      "label": "Price badge",
+      "info": "e.g. Insiders Price. Leave blank to hide."
+    },
+    {
+      "type": "text",
+      "id": "member_note",
+      "label": "Member note (logged out only)",
+      "info": "e.g. Not a member? Join for free"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Gift with purchase"
+    },
+    {
+      "type": "text",
+      "id": "gift_heading",
+      "label": "Heading",
+      "default": "Gifts with Purchase"
+    },
+    {
+      "type": "text",
+      "id": "gift_button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "gift_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gift",
+      "name": "Gift with purchase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Sea Serpent — spend over ₱9,000 to unlock this gift"
+        },
+        {
+          "type": "text",
+          "id": "footnote",
+          "label": "Footnote",
+          "default": "Ends 07/12/2026 · Terms & Conditions"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Info note",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Free shipping with orders over ₱2,000.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product main"
+    }
+  ]
+}
+{% endschema %}

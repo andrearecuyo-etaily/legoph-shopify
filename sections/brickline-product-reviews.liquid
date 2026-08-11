@@ -1,0 +1,248 @@
+{% liquid
+  assign reviews = section.blocks | where: 'type', 'review'
+
+  # Average is derived from the block ratings so the summary never disagrees
+  # with the list below it.
+  assign rating_total = 0
+  for review in reviews
+    assign rating_total = rating_total | plus: review.settings.rating
+  endfor
+  assign average = 0
+  if reviews.size > 0
+    assign average = rating_total | times: 10 | divided_by: reviews.size
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+{% if reviews.size > 0 %}
+  <div
+    class="product-reviews brickline-section spacing-style section section--{{ section.settings.section_width }}"
+    style="{% render 'spacing-padding', settings: section.settings %}"
+  >
+    <div class="product-reviews__header">
+      <h2 class="product-reviews__heading">{{ section.settings.heading | default: 'Reviews' }}</h2>
+      <div class="product-reviews__summary">
+        <span class="product-reviews__average">
+          {{- average | divided_by: 10.0 | round: 1 -}}
+        </span>
+        <span class="product-reviews__count">out of 5 · {{ reviews.size }} reviews</span>
+      </div>
+    </div>
+
+    <div class="product-reviews__list">
+      {% for review in reviews %}
+        <article
+          class="product-reviews__item"
+          {{ review.shopify_attributes }}
+        >
+          <div class="product-reviews__meta">
+            <span class="product-reviews__author">{{ review.settings.author }}</span>
+            <span class="product-reviews__date">{{ review.settings.date }}</span>
+          </div>
+          <span
+            class="product-reviews__stars"
+            aria-label="{{ review.settings.rating }} out of 5"
+          >
+            {%- for i in (1..5) -%}
+              {%- if i <= review.settings.rating %}★{% else %}☆{% endif -%}
+            {%- endfor -%}
+          </span>
+          <p class="product-reviews__body">{{ review.settings.body }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .product-reviews__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-block-end: 14px;
+    margin-block-end: 24px;
+    border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+  }
+
+  .product-reviews__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-reviews__heading {
+      font-size: 28px;
+    }
+  }
+
+  .product-reviews__summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .product-reviews__average {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+  }
+
+  .product-reviews__count {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .product-reviews__list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .product-reviews__item {
+    border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+    padding-block-end: 20px;
+  }
+
+  .product-reviews__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-block-end: 6px;
+  }
+
+  .product-reviews__author {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .product-reviews__date {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 12px;
+    color: var(--text-meta, #939393);
+  }
+
+  .product-reviews__stars {
+    display: block;
+    margin-block-end: 6px;
+    color: var(--status-discount-red, #dd0000);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  .product-reviews__body {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+    line-height: 1.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "class": "section--product-reviews",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Reviews"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Marco T."
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "Jun 2026"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review",
+          "default": "Incredible detail. Took a relaxing weekend to build and looks fantastic on my desk."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product reviews",
+      "blocks": [{ "type": "review" }]
+    }
+  ]
+}
+{% endschema %}

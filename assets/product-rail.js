@@ -1,5 +1,4 @@
-import { fetchConfig } from '@theme/utilities';
-import { CartLinesUpdateEvent, CartErrorEvent } from '@shopify/events';
+import '@theme/brickline-cart-actions';
 
 class ProductRail extends HTMLElement {
   connectedCallback() {
@@ -52,95 +51,6 @@ class ProductRail extends HTMLElement {
   }
 }
 
-class AddToCartPill extends HTMLElement {
-  connectedCallback() {
-    this.button = this.querySelector('button');
-    this.button?.addEventListener('click', this.#onClick);
-  }
-
-  disconnectedCallback() {
-    this.button?.removeEventListener('click', this.#onClick);
-  }
-
-  #onClick = (event) => {
-    event.preventDefault();
-    if (this.button?.disabled) return;
-
-    const variantId = this.dataset.variantId;
-    if (!variantId) return;
-
-    const formData = new FormData();
-    formData.set('id', variantId);
-    formData.set('quantity', '1');
-
-    const deferredEventPromise = CartLinesUpdateEvent.createPromise();
-
-    this.dispatchEvent(
-      new CartLinesUpdateEvent({
-        action: 'add',
-        context: 'product-rail',
-        lines: [{ merchandiseId: variantId, quantity: 1 }],
-        promise: deferredEventPromise.promise,
-      })
-    );
-
-    if (this.button) {
-      this.button.disabled = true;
-      this.button.classList.add('is-loading');
-    }
-
-    fetch(Theme.routes.cart_add_url, fetchConfig('javascript', { body: formData }))
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.status) {
-          this.dispatchEvent(
-            new CartErrorEvent({
-              error: response.message || 'Add to cart failed',
-              code: 'INVALID',
-              detail: { description: response.description, errors: response.errors },
-            })
-          );
-          deferredEventPromise.reject(new Error(response.message || 'Add to cart failed'));
-          return;
-        }
-
-        fetch(`${Theme.routes.cart_url}.js`)
-          .then((res) => res.json())
-          .then((cart) => {
-            deferredEventPromise.resolve({
-              cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
-              detail: { source: 'product-rail-add-to-cart', itemCount: 1 },
-            });
-          })
-          .catch(deferredEventPromise.reject);
-
-        this.classList.add('is-added');
-        window.setTimeout(() => this.classList.remove('is-added'), 1800);
-      })
-      .catch((error) => {
-        deferredEventPromise.reject(error);
-      })
-      .finally(() => {
-        if (this.button) {
-          this.button.disabled = false;
-          this.button.classList.remove('is-loading');
-        }
-      });
-  };
-}
-
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-wishlist-toggle]');
-  if (!button) return;
-  const isActive = button.hasAttribute('data-active');
-  button.toggleAttribute('data-active', !isActive);
-  button.setAttribute('aria-pressed', String(!isActive));
-});
-
 if (!customElements.get('product-rail-component')) {
   customElements.define('product-rail-component', ProductRail);
-}
-
-if (!customElements.get('add-to-cart-pill')) {
-  customElements.define('add-to-cart-pill', AddToCartPill);
 }

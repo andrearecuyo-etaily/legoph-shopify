@@ -1,0 +1,318 @@
+{
+  "sections": {
+    "hero": {
+      "type": "brickline-loyalty-hero",
+      "blocks": {
+        "b1": {
+          "type": "bullet",
+          "settings": {
+            "text": "Earn points for shopping in Brickline Certified Stores and online"
+          }
+        },
+        "b2": {
+          "type": "bullet",
+          "settings": {
+            "text": "Unlock members-only offers and experiences"
+          }
+        },
+        "b3": {
+          "type": "bullet",
+          "settings": {
+            "text": "Get early access to new sets"
+          }
+        },
+        "b4": {
+          "type": "bullet",
+          "settings": {
+            "text": "Receive monthly promotions and specials for members"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "breadcrumb_label": "Brickline Rewards",
+        "heading": "Get Rewarded with Brickline Rewards. It's Free!",
+        "panel_color": "#006cb7",
+        "primary_label": "Get Rewards",
+        "secondary_label": "Join Online",
+        "signin_text": "I have a Brickline Account and I'm already a Rewards Member",
+        "signin_label": "Sign In",
+        "signin_label_customer": "My account",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "quick_links": {
+      "type": "brickline-icon-links",
+      "blocks": {
+        "terms": {
+          "type": "link",
+          "settings": {
+            "icon": "document",
+            "label": "Terms and Conditions",
+            "link": "/policies/terms-of-service"
+          }
+        },
+        "faqs": {
+          "type": "link",
+          "settings": {
+            "icon": "question",
+            "label": "FAQs",
+            "link": "#rewards-faq"
+          }
+        }
+      },
+      "block_order": [
+        "terms",
+        "faqs"
+      ],
+      "settings": {
+        "background_color": "#006cb7",
+        "text_color": "#ffffff",
+        "padding-block-start": 28,
+        "padding-block-end": 28
+      }
+    },
+    "faq": {
+      "type": "brickline-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Is Brickline Rewards really free to join?",
+            "answer": "<p>Yes — membership is completely free, with no tiers or spending limits to unlock the basics. Sign up in-store or online in under a minute.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How many points do I earn per purchase?",
+            "answer": "<p>Silver members earn 1 point, Gold earns 2, and Platinum earns 3 for every ₱100 spent, both in-store and online.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Do my points expire?",
+            "answer": "<p>Points remain valid for 24 months from the date they were earned, as long as your account stays active.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use points and a discount code together?",
+            "answer": "<p>Yes, points redemptions can be combined with most promotional discount codes at checkout.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "How do I redeem my rewards?",
+            "answer": "<p>Visit the Rewards Centre in your account to browse available rewards and redeem points instantly online or in-store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "heading": "Loyalty FAQ",
+        "anchor_id": "rewards-faq",
+        "open_first": true,
+        "padding-block-start": 64,
+        "padding-block-end": 0
+      }
+    },
+    "intro": {
+      "type": "brickline-media-text",
+      "settings": {
+        "heading": "What is Brickline Rewards Loyalty Program?",
+        "body": "<p>Free to join with no tiers or limits, Brickline Rewards is a loyalty program where you earn points on each purchase when shopping with us.</p>",
+        "media_position": "end",
+        "image_ratio": "16 / 9",
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "benefits": {
+      "type": "brickline-benefit-grid",
+      "blocks": {
+        "free": {
+          "type": "benefit",
+          "settings": {
+            "icon": "mountains",
+            "title": "It's free to be a member",
+            "body": "<p>Sign up online or in-store and start collecting points. You'll also get access to exclusive items and pre-release collections.</p>"
+          }
+        },
+        "points": {
+          "type": "benefit",
+          "settings": {
+            "icon": "star",
+            "title": "Collect 3 points for every ₱100 spent",
+            "body": "<p>All members earn points on every purchase, based on their tier. Silver earns 1 point, Gold earns 2, and Platinum earns 3 for every ₱100 spent.</p>"
+          }
+        },
+        "online": {
+          "type": "benefit",
+          "settings": {
+            "icon": "gift",
+            "title": "Get access to online rewards",
+            "body": "<p>Get access to the online Rewards Centre, where you can use your points for discounts and access exclusive rewards only available to members.</p>"
+          }
+        },
+        "early": {
+          "type": "benefit",
+          "settings": {
+            "icon": "calendar",
+            "title": "Enjoy early access",
+            "body": "<p>Enjoy early access to some of our most desirable products, invitations to special events, and members-only promotions like Double Points weekends.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "free",
+        "points",
+        "online",
+        "early"
+      ],
+      "settings": {
+        "columns": 2,
+        "icon_background": "#dd0000",
+        "title_color": "#dd0000",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 64,
+        "columns_tablet": 2,
+        "columns_mobile": 1
+      }
+    },
+    "start_today": {
+      "type": "brickline-media-text",
+      "settings": {
+        "heading": "Start Today And Build Your Balance Your Way",
+        "body": "<p>Collecting Brickline Rewards points can be as simple as following us on social media, telling us more about yourself, and of course buying your favorite sets.</p><p>Brickline Rewards works everywhere you shop — in-store and online.</p>",
+        "media_position": "start",
+        "image_ratio": "4 / 3",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 64
+      }
+    },
+    "rewards_centre": {
+      "type": "brickline-panel-mosaic",
+      "blocks": {
+        "feature": {
+          "type": "panel",
+          "settings": {
+            "title": "Get the Rewards You Really (Really) Want",
+            "body": "From unique digital unlocks to exclusive items.",
+            "background_color": "#00395d"
+          }
+        },
+        "redeem": {
+          "type": "panel",
+          "settings": {
+            "title": "Redeem your Rewards",
+            "body": "Once you're in, the only hard part is picking your reward.",
+            "background_color": "#006cb7"
+          }
+        },
+        "points": {
+          "type": "panel",
+          "settings": {
+            "title": "See Your Points In One Place",
+            "body": "The Rewards Centre is where you can check your points balance and history.",
+            "background_color": "#00395d"
+          }
+        }
+      },
+      "block_order": [
+        "feature",
+        "redeem",
+        "points"
+      ],
+      "settings": {
+        "heading": "About Rewards Centre",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 64
+      }
+    },
+    "steps": {
+      "type": "brickline-steps",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Sign up or sign in",
+            "body": "Sign up online or in-store and start collecting points right away."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Collect points",
+            "body": "Earn membership points for buying sets in stores and online."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Get awesome rewards",
+            "body": "Visit your Rewards Centre to unlock discounts and exclusives. It's everything Brickline, all in one place."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "heading": "It's easy as 1 2 3!",
+        "button_label": "Join Now",
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "newsletter": {
+      "type": "newsletter-band",
+      "settings": {
+        "heading": "Subscribe to Brickline",
+        "subheading": "Be the first to hear about new sets, exclusive products and promotions.",
+        "placeholder": "Your Email Address Here",
+        "button_label": "Go!",
+        "color_scheme": "scheme-white",
+        "section_width": "page-width",
+        "padding-block-start": 32,
+        "padding-block-end": 32
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "quick_links",
+    "faq",
+    "intro",
+    "benefits",
+    "start_today",
+    "rewards_centre",
+    "steps",
+    "newsletter"
+  ]
+}

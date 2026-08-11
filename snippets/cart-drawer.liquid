@@ -21,6 +21,20 @@
     src="{{ 'cart-drawer.js' | asset_url }}"
     fetchpriority="low"
   ></script>
+  <script
+    type="module"
+    src="{{ 'brickline-cart-actions.js' | asset_url }}"
+    fetchpriority="low"
+  ></script>
+
+  {%- comment -%}
+    Brickline skin for this drawer plus the free-shipping meter / upsell row below.
+    Horizon's cart markup and behaviour are left untouched so quantity changes,
+    removals and section re-renders keep working.
+  {%- endcomment -%}
+  <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'brickline-cart.css' | asset_url }}">
 
   {% capture empty_cart_drawer_content %}
     <div
@@ -111,9 +125,15 @@
                 aria-label="{{ 'accessibility.cart' | t }}"
                 style="--header-height: 60px;"
               >
+                <div class="brickline-drawer-extra">
+                  {% render 'brickline-shipping-meter' %}
+                </div>
+
                 <scroll-hint class="cart-drawer__items">
                   {% render 'cart-products', context: 'drawer' %}
                 </scroll-hint>
+
+                {% render 'brickline-cart-upsells' %}
 
                 <div class="cart-drawer__summary">
                   {% render 'cart-summary', section_id: 'cart-drawer-section' %}

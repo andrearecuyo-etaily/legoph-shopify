@@ -1,0 +1,291 @@
+{% liquid
+  assign banner_title = section.settings.heading
+  if banner_title == blank
+    case section.settings.title_source
+      when 'collection'
+        assign banner_title = collection.title
+      when 'page'
+        assign banner_title = page.title
+    endcase
+  endif
+
+  assign crumb = section.settings.breadcrumb_current
+  if crumb == blank
+    assign crumb = banner_title
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+{% if section.settings.show_breadcrumb %}
+  <div class="page-banner__breadcrumb brickline-container">
+    {% render 'brickline-breadcrumb',
+      current: crumb,
+      parent_label: section.settings.breadcrumb_parent,
+      parent_url: section.settings.breadcrumb_parent_url
+    %}
+  </div>
+{% endif %}
+
+<div
+  class="page-banner brickline-section spacing-style"
+  style="{% render 'spacing-padding', settings: section.settings %}; --banner-bg: {{ section.settings.background_color }}; --banner-fg: {{ section.settings.text_color }};"
+>
+  <div class="brickline-container page-banner__inner">
+    <h1 class="page-banner__title page-banner__title--{{ section.settings.title_size }}">{{ banner_title }}</h1>
+
+    {% if section.blocks.size > 0 %}
+      <div class="page-banner__actions">
+        {% for block in section.blocks %}
+          <a
+            href="{{ block.settings.link | default: '#' }}"
+            class="page-banner__button page-banner__button--{{ block.settings.style }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.label }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .page-banner__breadcrumb {
+    padding-block: 14px;
+  }
+
+  .page-banner {
+    background: var(--banner-bg, #006cb7);
+    color: var(--banner-fg, #ffffff);
+  }
+
+  .page-banner__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .page-banner__title {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    color: inherit;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .page-banner__title--small {
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .page-banner__title--large {
+    font-weight: 800;
+    font-size: 24px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .page-banner__title--small {
+      font-size: 22px;
+    }
+
+    .page-banner__title--large {
+      font-size: 28px;
+    }
+  }
+
+  .page-banner__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* On desktop the buttons sit flush right of the centred title, as in the design. */
+  @media screen and (min-width: 990px) {
+    .page-banner__actions {
+      position: absolute;
+      inset-inline-end: 0;
+    }
+  }
+
+  .page-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 18px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: filter 150ms ease;
+  }
+
+  .page-banner__button--dark {
+    background: var(--brand-black, #000000);
+    border-color: var(--brand-black, #000000);
+    color: var(--text-inverse, #ffffff);
+  }
+
+  .page-banner__button--light {
+    background: var(--surface-page, #ffffff);
+    border-color: var(--surface-page, #ffffff);
+    color: var(--brand-black, #000000);
+  }
+
+  .page-banner__button--outline {
+    background: transparent;
+    border-color: currentcolor;
+    color: inherit;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .page-banner__button:hover {
+      filter: brightness(0.92);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page banner",
+  "class": "section--page-banner",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "title_source",
+      "label": "Title source",
+      "options": [
+        { "value": "collection", "label": "Collection title" },
+        { "value": "page", "label": "Page title" },
+        { "value": "custom", "label": "Custom only" }
+      ],
+      "default": "collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Custom title",
+      "info": "Overrides the title source when set."
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffd400"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Breadcrumb"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_parent",
+      "label": "Parent label",
+      "default": "Sets by theme"
+    },
+    {
+      "type": "url",
+      "id": "breadcrumb_parent_url",
+      "label": "Parent link"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_current",
+      "label": "Current label",
+      "info": "Defaults to the banner title."
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Products"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "dark", "label": "Dark" },
+            { "value": "light", "label": "Light" },
+            { "value": "outline", "label": "Outline" }
+          ],
+          "default": "dark"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page banner"
+    }
+  ]
+}
+{% endschema %}

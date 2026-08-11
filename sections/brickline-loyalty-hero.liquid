@@ -1,0 +1,448 @@
+{% liquid
+  assign bullets = section.blocks | where: 'type', 'bullet'
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+
+<div
+  class="loyalty-hero brickline-section spacing-style section section--{{ section.settings.section_width }} loyalty-hero--mobile-{{ section.settings.mobile_order }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --loyalty-hero-bg: {{ section.settings.panel_color }};"
+>
+  {% if section.settings.show_breadcrumb %}
+    {% liquid
+      assign breadcrumb_label = section.settings.breadcrumb_label | default: page.title
+    %}
+    <div class="loyalty-hero__breadcrumb">
+      {% render 'brickline-breadcrumb', current: breadcrumb_label %}
+    </div>
+  {% endif %}
+
+  <div class="loyalty-hero__panel">
+    <div class="loyalty-hero__content">
+      {% if section.settings.heading != blank %}
+        <h1 class="loyalty-hero__heading">{{ section.settings.heading }}</h1>
+      {% endif %}
+
+      {% if section.settings.primary_label != blank or section.settings.secondary_label != blank %}
+        <div class="loyalty-hero__actions">
+          {% if section.settings.primary_label != blank %}
+            <a
+              href="{{ section.settings.primary_link | default: '#' }}"
+              class="loyalty-hero__button loyalty-hero__button--light"
+            >
+              {{ section.settings.primary_label }}
+            </a>
+          {% endif %}
+          {% if section.settings.secondary_label != blank %}
+            <a
+              href="{{ section.settings.secondary_link | default: '#' }}"
+              class="loyalty-hero__button loyalty-hero__button--dark"
+            >
+              {{ section.settings.secondary_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.signin_text != blank %}
+        <div class="loyalty-hero__signin">
+          <span class="loyalty-hero__signin-text">{{ section.settings.signin_text }}</span>
+          <a
+            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+            class="loyalty-hero__signin-link"
+          >
+            {%- if customer -%}
+              {{ section.settings.signin_label_customer | default: 'My account' }} &rsaquo;
+            {%- else -%}
+              {{ section.settings.signin_label | default: 'Sign In' }} &rsaquo;
+            {%- endif -%}
+          </a>
+        </div>
+      {% endif %}
+
+      {% if bullets.size > 0 %}
+        <ul class="loyalty-hero__bullets">
+          {% for bullet in bullets %}
+            <li
+              class="loyalty-hero__bullet"
+              {{ bullet.shopify_attributes }}
+            >
+              <span
+                class="loyalty-hero__bullet-marker"
+                aria-hidden="true"
+              >
+                &#9670;
+              </span>
+              <span>{{ bullet.settings.text }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="loyalty-hero__media">
+      {% if section.settings.image != blank %}
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          alt="{{ section.settings.image.alt | escape }}"
+          class="loyalty-hero__image"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+          loading="eager"
+        >
+      {% else %}
+        <div class="loyalty-hero__placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'loyalty-hero__placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .loyalty-hero__breadcrumb {
+    margin-block-end: 24px;
+  }
+
+  .loyalty-hero__panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--loyalty-hero-bg, #006cb7);
+    align-items: stretch;
+  }
+
+  /* Copy is first in the DOM; on mobile the image can be promoted above it. */
+  .loyalty-hero--mobile-media .loyalty-hero__media {
+    order: -1;
+  }
+
+  @media screen and (min-width: 750px) {
+    .loyalty-hero__panel {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .loyalty-hero--mobile-media .loyalty-hero__media {
+      order: 0;
+    }
+  }
+
+  .loyalty-hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  @media screen and (min-width: 750px) {
+    .loyalty-hero__content {
+      padding: 40px;
+    }
+  }
+
+  .loyalty-hero__heading {
+    margin: 0;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--text-inverse, #ffffff);
+  }
+
+  @media screen and (min-width: 750px) {
+    .loyalty-hero__heading {
+      font-size: 26px;
+    }
+  }
+
+  .loyalty-hero__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .loyalty-hero__button {
+    flex: 1 1 140px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: filter 150ms ease, transform 150ms ease;
+  }
+
+  .loyalty-hero__button--light {
+    background: var(--surface-page, #ffffff);
+    color: var(--brand-black, #000000);
+  }
+
+  .loyalty-hero__button--dark {
+    background: var(--brand-black, #000000);
+    color: var(--text-inverse, #ffffff);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .loyalty-hero__button:hover {
+      filter: brightness(0.92);
+    }
+  }
+
+  .loyalty-hero__button:active {
+    transform: scale(0.98);
+  }
+
+  .loyalty-hero__signin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: rgb(255 255 255 / 10%);
+    padding: 10px 14px;
+    margin-block-start: 4px;
+  }
+
+  .loyalty-hero__signin-text {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+  }
+
+  .loyalty-hero__signin-link {
+    background: var(--surface-page, #ffffff);
+    color: var(--brand-black, #000000);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 8px 16px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .loyalty-hero__bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .loyalty-hero__bullet {
+    display: flex;
+    gap: 8px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .loyalty-hero__bullet-marker {
+    flex-shrink: 0;
+  }
+
+  .loyalty-hero__media {
+    background: var(--surface-secondary, #fafafa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .loyalty-hero__media {
+      min-height: 320px;
+    }
+  }
+
+  .loyalty-hero__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .loyalty-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+
+  .loyalty-hero__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--surface-strong-neutral, #d9d9d9);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Loyalty hero",
+  "class": "section--loyalty-hero",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_label",
+      "label": "Breadcrumb label",
+      "default": "Brickline Rewards"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get Rewarded with Brickline Rewards. It's Free!"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "mobile_order",
+      "label": "Mobile order",
+      "info": "Which half comes first once the panel stacks below 750px.",
+      "options": [
+        { "value": "text", "label": "Text first" },
+        { "value": "media", "label": "Image first" }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "color",
+      "id": "panel_color",
+      "label": "Panel background",
+      "default": "#006cb7"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Get Rewards"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Join Online"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Sign in row"
+    },
+    {
+      "type": "text",
+      "id": "signin_text",
+      "label": "Text",
+      "default": "I have a Brickline Account and I'm already a Rewards Member"
+    },
+    {
+      "type": "text",
+      "id": "signin_label",
+      "label": "Link label (logged out)",
+      "default": "Sign In"
+    },
+    {
+      "type": "text",
+      "id": "signin_label_customer",
+      "label": "Link label (logged in)",
+      "default": "My account"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bullet",
+      "name": "Bullet",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Earn points for shopping in Brickline Certified Stores and online"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loyalty hero",
+      "blocks": [
+        {
+          "type": "bullet",
+          "settings": { "text": "Earn points for shopping in Brickline Certified Stores and online" }
+        },
+        { "type": "bullet", "settings": { "text": "Unlock members-only offers and experiences" } },
+        { "type": "bullet", "settings": { "text": "Get early access to new sets" } },
+        { "type": "bullet", "settings": { "text": "Receive monthly promotions and specials for members" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,195 @@
+{
+  "sections": {
+    "main": {
+      "type": "brickline-product-main",
+      "blocks": {
+        "gift": {
+          "type": "gift",
+          "settings": {
+            "text": "Sea Serpent — spend over ₱9,000 to unlock this gift",
+            "footnote": "Ends 07/12/2026 · Terms & Conditions"
+          }
+        },
+        "points_note": {
+          "type": "note",
+          "settings": {
+            "text": "<p>Earn Insiders Points on this set. <a href=\"/pages/loyalty\">Learn more</a></p>"
+          }
+        },
+        "shipping_note": {
+          "type": "note",
+          "settings": {
+            "text": "<p>Free shipping with orders over ₱2,000. <a href=\"/policies/shipping-policy\">Deliveries and Returns</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "gift",
+        "points_note",
+        "shipping_note"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "show_eyebrow": true,
+        "show_quantity": true,
+        "purchase_limit": 5,
+        "add_to_cart_label": "Add to Bag",
+        "price_badge": "Insiders Price",
+        "member_note": "Not a member? Join for free",
+        "gift_heading": "Gifts with Purchase",
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 0
+      }
+    },
+    "hero_band": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "stacked",
+        "image_ratio": "16 / 10",
+        "heading": "Bursting with blooms — and room to grow",
+        "body": "<p>Packed with vibrant flowers, this arrangement comes with a unique brick-built chalice that can accommodate other flower sets, sold separately, for the ultimate personal touch.</p>",
+        "background_color": "#00395d",
+        "text_color": "#ffffff",
+        "padding-block-start": 56,
+        "padding-block-end": 56
+      }
+    },
+    "variants_row": {
+      "type": "brickline-circle-grid",
+      "blocks": {
+        "c1": {
+          "type": "circle",
+          "settings": {
+            "color": "#dd0000",
+            "label": "Night Rider Camellia"
+          }
+        },
+        "c2": {
+          "type": "circle",
+          "settings": {
+            "color": "#ffd400",
+            "label": "Rich Peony"
+          }
+        },
+        "c3": {
+          "type": "circle",
+          "settings": {
+            "color": "#006cb7",
+            "label": "Hydrangea"
+          }
+        },
+        "c4": {
+          "type": "circle",
+          "settings": {
+            "color": "#f2f2f2",
+            "label": "Baby's Breath"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "heading": "Look what's blooming",
+        "columns": 4,
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "padding-block-start": 40,
+        "padding-block-end": 40,
+        "columns_tablet": 4,
+        "columns_mobile": 2
+      }
+    },
+    "split_band": {
+      "type": "brickline-feature-band",
+      "settings": {
+        "layout": "media-start",
+        "image_ratio": "4 / 3",
+        "heading": "2 ways to build, endless ways to customize",
+        "body": "<p>Grow your creativity with the ultimate set. Build it your way, then add stems and sprouts from other flower sets, sold separately.</p>",
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "creative_packs": {
+      "type": "brickline-editorial-grid",
+      "blocks": {
+        "p1": {
+          "type": "story",
+          "settings": {
+            "title": "Blue Diamond Creative Pack",
+            "subtitle": "A vibrant addition to your bouquet — design these stems yourself.",
+            "button_label": "Shop now"
+          }
+        },
+        "p2": {
+          "type": "story",
+          "settings": {
+            "title": "Pink Frog Creative Pack",
+            "subtitle": "Perfect to build with the one you love, or to add to your existing bouquet.",
+            "button_label": "Shop now"
+          }
+        },
+        "p3": {
+          "type": "story",
+          "settings": {
+            "title": "Black Spiders Creative Pack",
+            "subtitle": "Design these stems in black and white with creepy spiders and glow-in-the-dark pieces.",
+            "button_label": "Shop now"
+          }
+        },
+        "p4": {
+          "type": "story",
+          "settings": {
+            "title": "Purple Butterflies Creative Pack",
+            "subtitle": "Create a pastel-colored flower your way, or start a new arrangement.",
+            "button_label": "Shop now"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "heading": "Brickline Flowers Creative Packs",
+        "columns": 4,
+        "image_ratio": "1 / 1",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 0,
+        "columns_tablet": 2,
+        "columns_mobile": 2
+      }
+    },
+    "recommendations": {
+      "type": "brickline-product-recommendations",
+      "settings": {
+        "heading": "Recommended For You",
+        "products_to_show": 5,
+        "columns": 5,
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 56,
+        "columns_tablet": 3,
+        "columns_mobile": 2
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hero_band",
+    "variants_row",
+    "split_band",
+    "creative_packs",
+    "recommendations"
+  ]
+}

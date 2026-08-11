@@ -1,0 +1,452 @@
+{% liquid
+  assign upsell_collection = section.settings.upsell_collection
+  assign gift_blocks = section.blocks | where: 'type', 'gift'
+
+  assign free_shipping_threshold = settings.brickline_free_shipping_threshold | times: 100
+  assign qualifies_free_shipping = false
+  if free_shipping_threshold > 0 and cart.total_price >= free_shipping_threshold
+    assign qualifies_free_shipping = true
+  endif
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-product-card.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-cart.css' | asset_url }}">
+
+<div
+  class="main-cart brickline-section spacing-style section section--{{ section.settings.section_width }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --brickline-card-radius: {{ settings.brickline_card_radius }}px; --cols-mobile: {{ section.settings.upsell_columns_mobile }}; --cols-tablet: {{ section.settings.upsell_columns }}; --cols-desktop: {{ section.settings.upsell_columns }};"
+>
+  {% if section.settings.show_breadcrumb %}
+    <div class="main-cart__breadcrumb">
+      {% render 'brickline-breadcrumb', current: section.settings.heading | default: 'Your Bag' %}
+    </div>
+  {% endif %}
+
+  {% if cart.empty? %}
+    <div class="main-cart__empty">
+      <h1 class="main-cart__empty-title">{{ 'content.your_cart_is_empty' | t }}</h1>
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="main-cart__checkout"
+      >
+        {{ section.settings.continue_label | default: 'Continue Shopping' }}
+      </a>
+    </div>
+  {% else %}
+    <form
+      action="{{ routes.cart_url }}"
+      method="post"
+      novalidate
+      class="main-cart__layout"
+    >
+      <div class="main-cart__items">
+        <h1 class="main-cart__heading">
+          {{ section.settings.heading | default: 'Your Bag' }} ({{ cart.item_count }})
+        </h1>
+
+        <div class="main-cart__lines">
+          {% for item in cart.items %}
+            <div class="main-cart__line">
+              <a
+                href="{{ item.url }}"
+                class="main-cart__line-media"
+              >
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | image_url: width: 300 }}"
+                    alt="{{ item.image.alt | escape }}"
+                    width="{{ item.image.width }}"
+                    height="{{ item.image.height }}"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+
+              <div class="main-cart__line-body">
+                <a
+                  href="{{ item.url }}"
+                  class="main-cart__line-title"
+                >
+                  {{ item.product.title }}
+                </a>
+
+                {% unless item.product.has_only_default_variant %}
+                  <span class="main-cart__line-variant">{{ item.variant.title }}</span>
+                {% endunless %}
+
+                {% liquid
+                  assign line_age = item.product.metafields.custom.age
+                  assign line_pieces = item.product.metafields.custom.pieces
+                %}
+                {% if line_age != blank or line_pieces != blank %}
+                  <span class="main-cart__line-meta">
+                    {%- if line_age != blank %}{{ line_age }}{% endif -%}
+                    {%- if line_age != blank and line_pieces != blank %} · {% endif -%}
+                    {%- if line_pieces != blank %}{{ line_pieces }} pcs{% endif -%}
+                  </span>
+                {% endif %}
+
+                <div class="main-cart__line-controls">
+                  <div class="main-cart__quantity">
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}"
+                      class="main-cart__quantity-button"
+                      aria-label="Decrease quantity for {{ item.product.title | escape }}"
+                    >
+                      {%- render 'brickline-icon', icon: 'minus' -%}
+                    </a>
+                    <span class="main-cart__quantity-value">{{ item.quantity }}</span>
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}"
+                      class="main-cart__quantity-button"
+                      aria-label="Increase quantity for {{ item.product.title | escape }}"
+                    >
+                      {%- render 'brickline-icon', icon: 'plus' -%}
+                    </a>
+                  </div>
+
+                  <a
+                    href="{{ item.url_to_remove }}"
+                    class="main-cart__remove"
+                  >
+                    {{ 'actions.remove' | t | default: 'Remove' }}
+                  </a>
+                </div>
+              </div>
+
+              <div class="main-cart__line-price">
+                {% if item.original_line_price > item.final_line_price %}
+                  <span class="main-cart__line-price-compare">{{ item.original_line_price | money }}</span>
+                  <span class="main-cart__line-price-value main-cart__line-price-value--sale">
+                    {{- item.final_line_price | money -}}
+                  </span>
+                {% else %}
+                  <span class="main-cart__line-price-value">{{ item.final_line_price | money }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="main-cart__continue">
+          <a
+            href="{{ routes.all_products_collection_url }}"
+            class="main-cart__secondary-button"
+          >
+            {{ section.settings.continue_label | default: 'Continue Shopping' }}
+          </a>
+        </div>
+
+        {% if gift_blocks.size > 0 and qualifies_free_shipping %}
+          {% for gift in gift_blocks %}
+            <div
+              class="main-cart__gift"
+              {{ gift.shopify_attributes }}
+            >
+              <div class="main-cart__gift-text">
+                <span class="main-cart__gift-title">{{ gift.settings.title }}</span>
+                <span class="main-cart__gift-body">{{ gift.settings.body }}</span>
+              </div>
+              {% if gift.settings.ends != blank %}
+                <span class="main-cart__gift-ends">Ends {{ gift.settings.ends }}</span>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if upsell_collection != blank and upsell_collection.products.size > 0 %}
+          <div class="main-cart__upsells">
+            <span class="main-cart__upsells-heading">
+              {{ section.settings.upsell_heading | default: 'Add these to your bag' }}
+            </span>
+            <div class="main-cart__upsell-grid brickline-grid">
+              {% for upsell_product in upsell_collection.products limit: section.settings.upsell_columns %}
+                {% render 'brickline-product-card', product: upsell_product, show_meta: false, image_size: 400 %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <aside class="main-cart__summary">
+        <span class="main-cart__summary-heading">{{ section.settings.summary_heading | default: 'Order Summary' }}</span>
+
+        <div class="main-cart__summary-rows">
+          <div class="main-cart__summary-row">
+            <span>Subtotal</span>
+            <span>{{ cart.original_total_price | money }}</span>
+          </div>
+          {% if free_shipping_threshold > 0 %}
+            <div class="main-cart__summary-row">
+              <span>Shipping</span>
+              <span>
+                {%- if qualifies_free_shipping -%}
+                  Free
+                {%- else -%}
+                  Calculated at checkout
+                {%- endif -%}
+              </span>
+            </div>
+          {% endif %}
+          <div class="main-cart__summary-row">
+            <span>Estimated tax</span>
+            <span>Calculated at checkout</span>
+          </div>
+        </div>
+
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <div class="main-cart__summary-rows">
+            {% for discount in cart.cart_level_discount_applications %}
+              <div class="main-cart__summary-row main-cart__summary-row--discount">
+                <span>{{ discount.title }}</span>
+                <span>-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_discount_field %}
+          {% comment %}
+            Storefront discount codes are applied through /discount/<code>, which stores
+            the code on the session and surfaces it at checkout. Shopify has no Liquid
+            API for validating a code on the cart page itself.
+          {% endcomment %}
+          <brickline-discount-form class="main-cart__discount">
+            <label
+              for="cart-discount-{{ section.id }}"
+              class="visually-hidden"
+            >
+              Discount code
+            </label>
+            <input
+              id="cart-discount-{{ section.id }}"
+              type="text"
+              class="main-cart__discount-input"
+              placeholder="Discount code"
+              autocomplete="off"
+            >
+            <button
+              type="button"
+              class="main-cart__discount-button"
+            >
+              Apply
+            </button>
+          </brickline-discount-form>
+        {% endif %}
+
+        {% if section.settings.show_note %}
+          <div class="main-cart__note">
+            <label for="cart-note-{{ section.id }}">Order notes (optional)</label>
+            <textarea
+              id="cart-note-{{ section.id }}"
+              name="note"
+              rows="3"
+              placeholder="Add a note for your order, e.g. gift wrapping"
+            >{{ cart.note }}</textarea>
+          </div>
+        {% endif %}
+
+        <div class="main-cart__total">
+          <span class="main-cart__total-label">Total</span>
+          <span class="main-cart__total-value">{{ cart.total_price | money }}</span>
+        </div>
+
+        <button
+          type="submit"
+          name="checkout"
+          class="main-cart__checkout"
+        >
+          {{ section.settings.checkout_label | default: 'Check Out' }}
+        </button>
+
+        <button
+          type="submit"
+          name="update"
+          class="main-cart__update"
+        >
+          Update bag
+        </button>
+
+        <span class="main-cart__tax-note">Taxes and shipping calculated at checkout</span>
+      </aside>
+    </form>
+  {% endif %}
+</div>
+
+<script
+  src="{{ 'brickline-cart-actions.js' | asset_url }}"
+  type="module"
+></script>
+<script
+  src="{{ 'brickline-cart-page.js' | asset_url }}"
+  type="module"
+></script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "section--main-cart",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["cart"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your Bag"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "continue_label",
+      "label": "Continue shopping label",
+      "default": "Continue Shopping"
+    },
+    {
+      "type": "header",
+      "content": "Order summary"
+    },
+    {
+      "type": "text",
+      "id": "summary_heading",
+      "label": "Heading",
+      "default": "Order Summary"
+    },
+    {
+      "type": "text",
+      "id": "checkout_label",
+      "label": "Checkout button label",
+      "default": "Check Out"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount_field",
+      "label": "Show discount code field",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show order notes",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Cross-sell"
+    },
+    {
+      "type": "text",
+      "id": "upsell_heading",
+      "label": "Heading",
+      "default": "Add these to your bag"
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "upsell_columns",
+      "label": "Products shown — tablet and desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "upsell_columns_mobile",
+      "label": "Columns — mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gift",
+      "name": "Gift with purchase",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shown once the cart passes the free-shipping threshold set in theme settings."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Gift with Purchase Unlocked"
+        },
+        {
+          "type": "text",
+          "id": "body",
+          "label": "Body",
+          "default": "Sea Serpent added free with your order"
+        },
+        {
+          "type": "text",
+          "id": "ends",
+          "label": "End date",
+          "default": "07/12/2026"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart"
+    }
+  ]
+}
+{% endschema %}

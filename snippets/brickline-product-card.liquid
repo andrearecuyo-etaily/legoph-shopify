@@ -1,0 +1,168 @@
+{% comment %}
+  Brickline PLP product tile — square image with badge, optional age/pieces meta,
+  title, price, "Add to Bag" pill and wishlist toggle.
+
+  Accepts:
+  - product: {Product} required
+  - show_meta: {Boolean} render the age / pieces row (default true)
+  - image_size: {Number} width hint for the main image (default 600)
+
+  Optional metafields (namespace "custom"): age, pieces.
+
+  Styles live in sections/brickline-collection-grid.liquid; the card is also used
+  by sections that render a Brickline grid, so those pull in the same stylesheet.
+
+  Usage:
+  {% render 'brickline-product-card', product: product %}
+{% endcomment %}
+
+{% liquid
+  assign variant = product.selected_or_first_available_variant
+  assign price = variant.price
+  assign compare_at_price = variant.compare_at_price
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  assign meta_age = product.metafields.custom.age
+  assign meta_pieces = product.metafields.custom.pieces
+  assign has_meta = false
+  if show_meta != false
+    if meta_age != blank or meta_pieces != blank
+      assign has_meta = true
+    endif
+  endif
+
+  assign card_image_width = image_size | default: 600
+
+  # The design badges sets as New / Exclusive / Sale. "New" and "Exclusive" come
+  # from product tags so merchants control them from the product admin.
+  assign badge_label = ''
+  assign badge_tone = 'info'
+  if on_sale
+    assign badge_label = 'Sale'
+    assign badge_tone = 'sale'
+  elsif product.tags contains 'Exclusive'
+    assign badge_label = 'Exclusive'
+    assign badge_tone = 'info'
+  elsif product.tags contains 'New'
+    assign badge_label = 'New'
+    assign badge_tone = 'new'
+  endif
+
+  # Call to action mirrors the design's Add to Bag / Pre-order / Coming Soon states.
+  assign cta_label = 'Add to Bag'
+  if product.tags contains 'Pre-order'
+    assign cta_label = 'Pre-order'
+  elsif product.tags contains 'Backorder'
+    assign cta_label = 'Backorder'
+  endif
+%}
+
+<div class="brickline-card">
+  <a
+    href="{{ product.url }}"
+    class="brickline-card__media-link"
+    aria-label="{{ product.title | escape }}"
+  >
+    <span class="brickline-card__media">
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: card_image_width }}"
+          srcset="
+            {{ product.featured_image | image_url: width: 300 }} 300w,
+            {{ product.featured_image | image_url: width: 450 }} 450w,
+            {{ product.featured_image | image_url: width: 600 }} 600w
+          "
+          sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+          alt="{{ product.featured_image.alt | escape }}"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+          loading="lazy"
+          class="brickline-card__image"
+        >
+      {% else %}
+        <span class="brickline-card__placeholder"></span>
+      {% endif %}
+
+      {% if badge_label != blank %}
+        <span class="brickline-card__badge brickline-card__badge--{{ badge_tone }}">{{ badge_label }}</span>
+      {% elsif product.available == false %}
+        <span class="brickline-card__badge brickline-card__badge--neutral">
+          {{- 'products.product.sold_out' | t -}}
+        </span>
+      {% endif %}
+    </span>
+  </a>
+
+  <div class="brickline-card__body">
+    {% if has_meta %}
+      <span class="brickline-card__meta">
+        {%- if meta_age != blank -%}
+          {{ meta_age }}
+        {%- endif -%}
+        {%- if meta_age != blank and meta_pieces != blank %} · {% endif -%}
+        {%- if meta_pieces != blank -%}
+          {{ meta_pieces }} pcs
+        {%- endif -%}
+      </span>
+    {% endif %}
+
+    <a
+      href="{{ product.url }}"
+      class="brickline-card__title"
+    >
+      {{ product.title }}
+    </a>
+
+    <div class="brickline-card__price">
+      {% if on_sale %}
+        <span class="brickline-card__price-compare">{{ compare_at_price | money }}</span>
+        <span class="brickline-card__price-sale">{{ price | money }}</span>
+      {% else %}
+        <span class="brickline-card__price-regular">{{ price | money }}</span>
+      {% endif %}
+    </div>
+
+    <div class="brickline-card__actions">
+      {% if product.available %}
+        <add-to-cart-pill
+          class="brickline-card__add"
+          data-variant-id="{{ variant.id }}"
+          data-context="collection-grid"
+        >
+          <button
+            type="button"
+            class="brickline-card__add-button"
+          >
+            <span class="brickline-card__add-label">{{ cta_label }}</span>
+            <span class="brickline-card__add-label brickline-card__add-label--added">
+              {{- 'actions.added' | t -}}
+            </span>
+          </button>
+        </add-to-cart-pill>
+      {% else %}
+        <span class="brickline-card__add">
+          <button
+            type="button"
+            class="brickline-card__add-button"
+            disabled
+          >
+            {{ 'products.product.sold_out' | t }}
+          </button>
+        </span>
+      {% endif %}
+
+      <button
+        type="button"
+        class="brickline-card__wishlist"
+        aria-label="Add to wishlist"
+        aria-pressed="false"
+        data-wishlist-toggle
+      >
+        {%- render 'brickline-icon', icon: 'heart' -%}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+{% comment %}
+  Brickline breadcrumb trail: "Home › [parent] › current".
+
+  Accepts:
+  - current: {String} label for the current page (required — nothing renders without it)
+  - parent_label: {String} optional intermediate crumb label
+  - parent_url: {String} optional intermediate crumb link
+
+  Usage:
+  {% render 'brickline-breadcrumb', current: collection.title %}
+{% endcomment %}
+
+{%- if current != blank -%}
+  <nav
+    class="brickline-breadcrumb"
+    aria-label="Breadcrumb"
+  >
+    <a href="{{ routes.root_url }}">Home</a>
+    {%- if parent_label != blank -%}
+      <span aria-hidden="true">&rsaquo;</span>
+      {%- if parent_url != blank -%}
+        <a href="{{ parent_url }}">{{ parent_label }}</a>
+      {%- else -%}
+        <span>{{ parent_label }}</span>
+      {%- endif -%}
+    {%- endif -%}
+    <span aria-hidden="true">&rsaquo;</span>
+    <span aria-current="page">{{ current }}</span>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .brickline-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 13px;
+    color: var(--text-subtle, #636363);
+  }
+
+  .brickline-breadcrumb a {
+    color: var(--text-subtle, #636363);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .brickline-breadcrumb a:hover {
+      text-decoration: underline;
+    }
+  }
+{% endstylesheet %}

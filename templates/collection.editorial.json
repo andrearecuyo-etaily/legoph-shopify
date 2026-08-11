@@ -1,0 +1,177 @@
+{
+  "sections": {
+    "banner": {
+      "type": "brickline-page-banner",
+      "settings": {
+        "title_source": "collection",
+        "title_size": "large",
+        "background_color": "#dd0000",
+        "text_color": "#ffffff",
+        "show_breadcrumb": false,
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      },
+      "blocks": {
+        "learn_more": {
+          "type": "button",
+          "settings": {
+            "label": "Learn more",
+            "style": "light"
+          }
+        }
+      },
+      "block_order": [
+        "learn_more"
+      ]
+    },
+    "description": {
+      "type": "brickline-collection-description",
+      "settings": {
+        "collapsible": true,
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
+    },
+    "grid": {
+      "type": "brickline-collection-grid",
+      "blocks": {
+        "swatch_retiring": {
+          "type": "swatch",
+          "settings": {
+            "color": "#e3599d",
+            "label": "Retiring soon"
+          }
+        },
+        "swatch_new": {
+          "type": "swatch",
+          "settings": {
+            "color": "#ffd400",
+            "label": "New"
+          }
+        },
+        "swatch_big": {
+          "type": "swatch",
+          "settings": {
+            "color": "#006cb7",
+            "label": "3000+ pieces"
+          }
+        }
+      },
+      "block_order": [
+        "swatch_retiring",
+        "swatch_new",
+        "swatch_big"
+      ],
+      "settings": {
+        "products_per_page": 16,
+        "columns": 4,
+        "show_sort": true,
+        "show_filters": true,
+        "show_back_to_top": false,
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 0,
+        "columns_tablet": 3,
+        "columns_mobile": 2
+      }
+    },
+    "loyalty_promo": {
+      "type": "brickline-cta-banner",
+      "settings": {
+        "heading": "Celebrate Insiders Days with double loyalty points",
+        "subheading": "7/7–7/12, while supplies last.*",
+        "button_label": "Shop now",
+        "background_color": "#00af4d",
+        "text_color": "#ffffff",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 0
+      }
+    },
+    "editorial_pair": {
+      "type": "brickline-editorial-grid",
+      "blocks": {
+        "guide": {
+          "type": "story",
+          "settings": {
+            "title": "Guild Parents Guide",
+            "subtitle": "Read the Parents Guide to keep up with your kids' conversations about who's who and what's going on.",
+            "button_label": "Read more"
+          }
+        },
+        "best_sets": {
+          "type": "story",
+          "settings": {
+            "title": "Best Guild Sets",
+            "subtitle": "Discover the best sets for epic adventures, from powerful dragons to secret temples.",
+            "button_label": "Read more"
+          }
+        }
+      },
+      "block_order": [
+        "guide",
+        "best_sets"
+      ],
+      "settings": {
+        "columns": 2,
+        "image_ratio": "16 / 9",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 0,
+        "columns_tablet": 2,
+        "columns_mobile": 1
+      }
+    },
+    "editorial_trio": {
+      "type": "brickline-editorial-grid",
+      "blocks": {
+        "activities": {
+          "type": "story",
+          "settings": {
+            "title": "Activities and Play for Kids",
+            "subtitle": "Kids can become the ultimate builder. Here are some fun ways to play for the day and embrace the chaos.",
+            "button_label": "Read more"
+          }
+        },
+        "latest_build": {
+          "type": "story",
+          "settings": {
+            "title": "Explore the Latest Building in Guild City",
+            "subtitle": "Introducing the latest model in the City lineup, and all its intricate details.",
+            "button_label": "Read more"
+          }
+        },
+        "educational": {
+          "type": "story",
+          "settings": {
+            "title": "Best Educational Toys for Kids, Toddlers and Preschoolers",
+            "subtitle": "Find the best educational toys for your child by age and development area.",
+            "button_label": "Read more"
+          }
+        }
+      },
+      "block_order": [
+        "activities",
+        "latest_build",
+        "educational"
+      ],
+      "settings": {
+        "columns": 3,
+        "image_ratio": "4 / 3",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 56,
+        "columns_tablet": 3,
+        "columns_mobile": 1
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "description",
+    "grid",
+    "loyalty_promo",
+    "editorial_pair",
+    "editorial_trio"
+  ]
+}

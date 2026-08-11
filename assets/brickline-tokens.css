@@ -51,3 +51,36 @@
   margin-inline: auto;
   padding-inline: 20px;
 }
+
+/* Section padding is authored at desktop scale. Rather than give every section a
+   duplicate set of mobile padding fields, scale the same values down below the
+   tablet breakpoint. Re-declares the same longhand base.css uses (including
+   --section-top-offset) so nothing else is lost; .brickline-section.spacing-style
+   (0,2,0) outranks base.css's .spacing-style (0,1,0). */
+@media screen and (max-width: 749px) {
+  .brickline-section.spacing-style {
+    padding-block: calc(
+        (var(--padding-block-start) + var(--section-top-offset, 0px)) * var(--brickline-mobile-padding-scale, 0.7)
+      )
+      calc(var(--padding-block-end) * var(--brickline-mobile-padding-scale, 0.7));
+  }
+}
+
+/* Shared 3-tier responsive grid. Sections set the three counts from their
+   settings; every Brickline grid uses the same breakpoints (750px / 990px). */
+.brickline-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols-mobile, 1), minmax(0, 1fr));
+}
+
+@media screen and (min-width: 750px) {
+  .brickline-grid {
+    grid-template-columns: repeat(var(--cols-tablet, 2), minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .brickline-grid {
+    grid-template-columns: repeat(var(--cols-desktop, 4), minmax(0, 1fr));
+  }
+}

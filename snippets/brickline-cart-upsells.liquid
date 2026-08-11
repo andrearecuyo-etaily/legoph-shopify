@@ -1,0 +1,86 @@
+{% comment %}
+  "You might also like" row inside the cart drawer. Products come from the
+  collection set in theme settings (Brickline → Cart upsell collection);
+  anything already in the cart is skipped.
+
+  Usage:
+  {% render 'brickline-cart-upsells' %}
+{% endcomment %}
+
+{% liquid
+  # Theme settings hand back either a Collection object or its handle depending on
+  # the storefront version, so resolve both shapes.
+  assign upsell_collection = settings.brickline_cart_upsell_collection
+  if upsell_collection.products == nil
+    assign upsell_collection = collections[settings.brickline_cart_upsell_collection]
+  endif
+
+  assign cart_product_ids = ''
+  for item in cart.items
+    assign cart_product_ids = cart_product_ids | append: item.product_id | append: ','
+  endfor
+%}
+
+{%- if upsell_collection != blank and upsell_collection.products.size > 0 -%}
+  {% assign rendered = 0 %}
+  {% capture upsell_items %}
+    {% for upsell_product in upsell_collection.products %}
+      {% liquid
+        assign id_token = upsell_product.id | append: ','
+        assign already_in_cart = false
+        if cart_product_ids contains id_token
+          assign already_in_cart = true
+        endif
+      %}
+      {% if already_in_cart == false and upsell_product.available and rendered < 2 %}
+        {% assign rendered = rendered | plus: 1 %}
+        {% assign upsell_variant = upsell_product.selected_or_first_available_variant %}
+        <div class="brickline-drawer-upsell">
+          <a
+            href="{{ upsell_product.url }}"
+            class="brickline-drawer-upsell__media"
+          >
+            {% if upsell_product.featured_image %}
+              <img
+                src="{{ upsell_product.featured_image | image_url: width: 160 }}"
+                alt="{{ upsell_product.featured_image.alt | escape }}"
+                width="{{ upsell_product.featured_image.width }}"
+                height="{{ upsell_product.featured_image.height }}"
+                loading="lazy"
+              >
+            {% endif %}
+          </a>
+          <div class="brickline-drawer-upsell__body">
+            <a
+              href="{{ upsell_product.url }}"
+              class="brickline-drawer-upsell__title"
+            >
+              {{ upsell_product.title }}
+            </a>
+            <span class="brickline-drawer-upsell__price">{{ upsell_variant.price | money }}</span>
+          </div>
+          <add-to-cart-pill
+            data-variant-id="{{ upsell_variant.id }}"
+            data-context="cart-drawer-upsell"
+          >
+            <button
+              type="button"
+              class="brickline-drawer-upsell__button"
+            >
+              Add
+            </button>
+          </add-to-cart-pill>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endcapture %}
+
+  {% if rendered > 0 %}
+    <div class="brickline-drawer-upsells">
+      <span class="brickline-drawer-upsells__heading">You might also like</span>
+      <div class="brickline-drawer-upsells__list">
+        {{ upsell_items }}
+      </div>
+    </div>
+  {% endif %}
+{%- endif -%}

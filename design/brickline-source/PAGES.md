@@ -9,6 +9,15 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 ## Status
 
 - [x] Home — converted to Shopify (`sections/brickline-header.liquid`, `brickline-footer.liquid`, `hero-slider.liquid`, `category-tiles.liquid`, `product-rail.liquid`, `promo-banner.liquid`, `feature-grid.liquid`, `newsletter-band.liquid`, wired via `templates/index.json`)
+- [x] Loyalty — `templates/page.loyalty.json` (`brickline-loyalty-hero`, `brickline-icon-links`, `brickline-faq`, `brickline-media-text` ×2, `brickline-benefit-grid`, `brickline-panel-mosaic`, `brickline-steps`, `newsletter-band`)
+- [x] Collections — `templates/list-collections.json` (`brickline-page-banner`, `brickline-collection-index`)
+- [x] Collection 1 — `templates/collection.json` (`brickline-page-banner`, `brickline-collection-description`, `brickline-collection-grid`, `brickline-gift-banner`)
+- [x] Collection 2 — `templates/collection.editorial.json` (same core plus `brickline-cta-banner` and two `brickline-editorial-grid` bands)
+- [x] Product 1 — `templates/product.json` (`brickline-product-main`, `brickline-product-specs`, `brickline-product-reviews`, `brickline-product-recommendations`, `brickline-recently-viewed`)
+- [x] Product 2 — `templates/product.showcase.json` (adds `brickline-feature-band`, `brickline-circle-grid`, `brickline-editorial-grid`)
+- [x] Product 3 — `templates/product.cinematic.json` (adds `brickline-cta-banner` and two `brickline-feature-band` splits)
+- [x] Cart — `templates/cart.json` (`brickline-main-cart`)
+- [x] Cart Drawer — Horizon's `snippets/cart-drawer.liquid` reskinned via `assets/brickline-cart.css`, plus `brickline-shipping-meter` and `brickline-cart-upsells`
 - [ ] All other pages below — not started
 
 ## Pages available in the source project (not yet converted)
@@ -19,24 +28,15 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - Brickline Account Details
 - Brickline Account
 - Brickline Addresses
-- Brickline Cart Drawer
-- Brickline Cart
 - Brickline Checkout
-- Brickline Collection 1
-- Brickline Collection 2
-- Brickline Collections
 - Brickline Coming Soon
 - Brickline Contact Us
 - Brickline FAQs
 - Brickline Filters Drawer
-- Brickline Loyalty
 - Brickline Order Confirmation
 - Brickline Order History
 - Brickline Our Stores
 - Brickline Privacy Policy
-- Brickline Product 1
-- Brickline Product 2
-- Brickline Product 3
 - Brickline Returns
 - Brickline Search
 - Brickline Send Message
