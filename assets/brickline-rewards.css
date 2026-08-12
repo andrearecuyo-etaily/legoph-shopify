@@ -8,6 +8,14 @@
 .rewards__balance {
   display: flex;
   align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* ZAP can return several point currencies; the highest-priority one leads. */
+.rewards__currencies {
+  display: flex;
+  align-items: baseline;
   gap: 32px;
   flex-wrap: wrap;
 }
@@ -34,6 +42,12 @@
 
 .rewards__points--muted .rewards__points-value {
   font-size: 22px;
+  color: var(--text-meta, #939393);
+}
+
+.rewards__points-pending {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 12px;
   color: var(--text-meta, #939393);
 }
 
@@ -139,4 +153,66 @@
 
 .rewards__prompt .account__actions {
   margin-block-start: 20px;
+}
+
+.rewards__coupon-status {
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-meta, #939393);
+}
+
+/* Points activity — ZAP's user transactions, 10 per page. */
+.rewards__activity {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rewards__activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 14px;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+.rewards__activity-row:last-child {
+  border-bottom: none;
+}
+
+.rewards__activity-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rewards__activity-label {
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.rewards__activity-meta {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 12px;
+  color: var(--text-meta, #939393);
+}
+
+.rewards__activity-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: var(--surface-muted, #f2f2f2);
+  color: var(--text-subtle, #636363);
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
 }

@@ -1,24 +1,30 @@
 /**
- * ZAP loyalty client.
+ * ZAP loyalty client — ZAP Partner API v0-1, reached through a Shopify App Proxy.
  *
- * The theme never calls the ZAP Partner API — it calls a Shopify App Proxy on
- * this same origin, which forwards to an endpoint holding the partner
- * credentials. See docs/zap-app-proxy-contract.md for the endpoint shapes.
+ * The theme never calls partner.zap.com.ph directly: the Bearer access token
+ * would be readable in page source, and Earn Points needs only a mobile number
+ * and an amount. See docs/zap-app-proxy-contract.md for the endpoint mapping.
  *
  * Two rules this module exists to enforce:
  *
- * 1. No mobile number leaves the browser except during enrolment. Shopify signs
- *    every proxy request with logged_in_customer_id, and the endpoint resolves
- *    the linked number from that. If reads accepted a browser-supplied number,
- *    any shopper could read or spend a stranger's balance.
+ * 1. No mobile number leaves the browser except at enrolment. Shopify signs each
+ *    proxy request with logged_in_customer_id and the endpoint resolves the
+ *    linked number from that; otherwise anyone could read a stranger's balance.
  * 2. Nothing here is trusted for value. Redemptions are re-validated server-side
- *    against a fresh ZAP balance; this module only drives the UI.
+ *    against a fresh ZAP balance — this module only drives the UI.
+ *
+ * ZAP's merchant config decides whether a PIN and/or OTP is required
+ * (partnerGetBalanceByMobileAuthMode, partnerRedeemPointsByMobileAuthMode). The
+ * theme doesn't track which: the endpoint answers `otp_required` with a
+ * reference, and the caller retries the same request with the code.
  */
 
 const PROXY_ROOT = '/apps/zap';
 
-/** Distinguishes "no proxy deployed yet" from a genuine API failure. */
+/** No App Proxy deployed yet — distinct from a genuine API failure. */
 export const NOT_CONFIGURED = 'not_configured';
+/** ZAP wants an OTP for this call; retry with { otp, reference }. */
+export const OTP_REQUIRED = 'otp_required';
 
 async function call(path, { method = 'GET', body } = {}) {
   let response;
@@ -33,16 +39,14 @@ async function call(path, { method = 'GET', body } = {}) {
     return { ok: false, error: 'network' };
   }
 
-  // With no App Proxy installed the storefront serves its own 404 page, so a
-  // non-JSON response means "not wired up yet" rather than a real error.
-  const contentType = response.headers.get('content-type') || '';
-  if (!contentType.includes('application/json')) {
+  // Without the proxy installed the storefront serves its own 404 HTML, so a
+  // non-JSON body means "not wired up yet" rather than a real error.
+  if (!(response.headers.get('content-type') || '').includes('application/json')) {
     return { ok: false, error: NOT_CONFIGURED };
   }
 
   try {
     const data = await response.json();
-    // Trust the payload's own ok flag; fall back to the HTTP status.
     return typeof data.ok === 'boolean' ? data : { ...data, ok: response.ok };
   } catch {
     return { ok: false, error: NOT_CONFIGURED };
@@ -50,57 +54,89 @@ async function call(path, { method = 'GET', body } = {}) {
 }
 
 export const Zap = {
-  /** Register API — the one call that carries a mobile number. */
-  enrol(mobile, pin) {
-    return call('/enrol', { method: 'POST', body: { mobile, pin } });
+  /** POST /v0-1/register — the one call that carries a mobile number. */
+  enrol(fields) {
+    return call('/enrol', { method: 'POST', body: fields });
   },
 
-  /** Confirms the OTP from the Register step; the endpoint writes the metafields. */
+  /** POST /v0-1/otp/verify */
   verifyEnrolment(reference, otp) {
     return call('/enrol/verify', { method: 'POST', body: { reference, otp } });
   },
 
-  /** Inquire Balance API. */
-  balance() {
-    return call('/balance');
+  /** POST /v0-1/user/balance/inquiry — returns an array of currencies. */
+  balance({ otp, reference } = {}) {
+    const query = otp ? `?otp=${encodeURIComponent(otp)}&reference=${encodeURIComponent(reference)}` : '';
+    return call(`/balance${query}`);
   },
 
-  /** Inquire Coupon List API. */
+  /** POST /v0-1/membership — supplies rank.name as the tier. */
+  membership() {
+    return call('/membership');
+  },
+
+  /** POST /v0-1/user/coupon/inquiry */
   coupons() {
     return call('/coupons');
   },
 
-  /** Redeem Coupon API. */
-  redeemCoupon(couponId, otp) {
-    return call('/coupons/redeem', { method: 'POST', body: { coupon_id: couponId, otp } });
+  /** POST /v0-1/user/transactions — 10 per page; pass the previous marker. */
+  transactions(marker) {
+    return call(`/transactions${marker ? `?marker=${encodeURIComponent(marker)}` : ''}`);
   },
 
-  /** Redeem Points API. Server re-reads the real balance before honouring this. */
-  redeemPoints(amount, otp) {
-    return call('/points/redeem', { method: 'POST', body: { amount, otp } });
+  /** POST /v0-1/transaction/redeem — amount is a number of points. */
+  redeemPoints(amount, { otp, reference } = {}) {
+    return call('/points/redeem', { method: 'POST', body: { amount, otp, reference } });
+  },
+
+  /** POST /v0-1/transaction/redeem/coupon */
+  redeemCoupon(couponId, { otp, reference } = {}) {
+    return call('/coupons/redeem', { method: 'POST', body: { coupon_id: couponId, otp, reference } });
   },
 };
 
-/** Human-readable text for the error codes the contract defines. */
+/**
+ * Copy for ZAP's error codes, passed through verbatim by the proxy.
+ * Anything unmapped falls back to a generic line rather than leaking a raw code.
+ */
+const MESSAGES = {
+  [NOT_CONFIGURED]: 'The rewards programme isn’t connected yet. Please check back soon.',
+  network: 'We couldn’t reach the rewards service. Please check your connection and try again.',
+
+  '400-03': 'That doesn’t look like a valid mobile number.',
+  '400-05': 'That doesn’t look like a valid mobile number.',
+  '401-10': 'That doesn’t look like a valid mobile number.',
+  '400-04': 'That mobile number is already registered.',
+  '400-10': 'That coupon has already been used.',
+  '400-14': 'Some required details are missing. Please complete every field.',
+
+  '401-00': 'The rewards service rejected the request. Please try again shortly.',
+  '401-01': 'The rewards service rejected the request. Please try again shortly.',
+  '401-05': 'Please enter your PIN.',
+  '401-06': 'Please enter the code we sent you.',
+  '401-07': 'That PIN wasn’t right.',
+  '401-21': 'That coupon isn’t on your account.',
+
+  '403-01': 'Too many codes requested. Please wait a little before trying again.',
+  '403-03': 'That code wasn’t right. Please try again.',
+  '403-07': 'That code wasn’t right. Please try again.',
+  '403-04': 'Too many attempts. Please request a new code.',
+  '403-08': 'Too many attempts. Please request a new code.',
+
+  '404-05': 'The rewards service isn’t set up for this store yet.',
+  '404-07': 'That code has expired. Please request a new one.',
+  '404-09': 'That code has expired. Please request a new one.',
+
+  '409-00': 'You don’t have enough points for that redemption.',
+  '409-04': 'That code has expired. Please request a new one.',
+  '409-05': 'That code has expired. Please request a new one.',
+};
+
 export function describeError(error) {
-  switch (error) {
-    case NOT_CONFIGURED:
-      return 'The rewards programme isn’t connected yet. Please check back soon.';
-    case 'network':
-      return 'We couldn’t reach the rewards service. Please check your connection and try again.';
-    case 'already_enrolled':
-      return 'This mobile number is already registered.';
-    case 'invalid_mobile':
-      return 'That doesn’t look like a valid mobile number.';
-    case 'invalid_otp':
-      return 'That code wasn’t right. Please try again.';
-    case 'expired':
-      return 'That code has expired. Request a new one.';
-    case 'insufficient_points':
-      return 'You don’t have enough points for that redemption.';
-    case 'zap_unavailable':
-      return 'The rewards service is temporarily unavailable. Please try again shortly.';
-    default:
-      return 'Something went wrong. Please try again.';
+  if (MESSAGES[error]) return MESSAGES[error];
+  if (typeof error === 'string' && error.startsWith('500-')) {
+    return 'The rewards service is temporarily unavailable. Please try again shortly.';
   }
+  return 'Something went wrong. Please try again.';
 }

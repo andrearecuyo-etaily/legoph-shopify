@@ -7,6 +7,8 @@
         "show_account_nav": true,
         "show_redeem_points": true,
         "show_coupons": true,
+        "show_transactions": true,
+        "transactions_heading": "Points activity",
         "content_width": 1000,
         "padding-block-start": 40,
         "padding-block-end": 64

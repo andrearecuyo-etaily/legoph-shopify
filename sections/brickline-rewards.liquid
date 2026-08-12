@@ -162,25 +162,21 @@
 
           {% when 'member' %}
             <zap-dashboard class="rewards__dashboard">
-              {% comment %} Inquire Balance API. {% endcomment %}
+              {% comment %}
+                ZAP returns an array of currencies — a merchant can run more than
+                one (the docs' example has Angus Points and ZAPCash). JS renders
+                them in priority order, so this starts empty rather than assuming
+                a single figure.
+              {% endcomment %}
               <div class="account__panel rewards__balance">
-                <div class="rewards__points">
-                  <span
-                    class="rewards__points-value"
-                    data-zap-valid
-                  >
-                    —
-                  </span>
-                  <span class="rewards__points-label">{{ section.settings.points_label | default: 'Points available' }}</span>
-                </div>
-                <div class="rewards__points rewards__points--muted">
-                  <span
-                    class="rewards__points-value"
-                    data-zap-pending
-                  >
-                    —
-                  </span>
-                  <span class="rewards__points-label">Pending</span>
+                <div
+                  class="rewards__currencies"
+                  data-zap-currencies
+                >
+                  <div class="rewards__points">
+                    <span class="rewards__points-value">—</span>
+                    <span class="rewards__points-label">{{ section.settings.points_label | default: 'Points available' }}</span>
+                  </div>
                 </div>
                 <span
                   class="rewards__tier"
@@ -189,13 +185,43 @@
                 ></span>
               </div>
 
-              {% comment %} Redeem Points API — highest risk, so it asks for the PIN/OTP. {% endcomment %}
+              {% comment %}
+                Shown only when ZAP's auth mode wants a code for the balance
+                lookup — the endpoint answers otp_required and we retry.
+              {% endcomment %}
+              <form
+                class="account__panel account__form rewards__form"
+                data-zap-balance-otp
+                novalidate
+                hidden
+              >
+                <div class="account__form-field account__form-field--half">
+                  <label for="zap-balance-otp-{{ section.id }}">Enter the code we sent you</label>
+                  <input
+                    id="zap-balance-otp-{{ section.id }}"
+                    type="text"
+                    name="otp"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    required
+                  >
+                </div>
+                <div class="account__actions account__form-field--full">
+                  <button
+                    type="submit"
+                    class="account__button"
+                  >
+                    Show my points
+                  </button>
+                </div>
+              </form>
+
               {% if section.settings.show_redeem_points %}
                 <div class="account__panel">
                   <h2 class="account__panel-heading">{{ section.settings.redeem_heading | default: 'Redeem points' }}</h2>
                   <p class="account__empty">
                     {{ section.settings.redeem_body
-                      | default: 'Turn your points into a discount code to use at checkout.'
+                      | default: 'Turn your points into a discount to use at checkout.'
                     }}
                   </p>
                   <form
@@ -215,11 +241,15 @@
                         required
                       >
                     </div>
-                    <div class="account__form-field account__form-field--half">
-                      <label for="zap-redeem-otp-{{ section.id }}">PIN or code</label>
+                    <div
+                      class="account__form-field account__form-field--half"
+                      data-zap-redeem-otp
+                      hidden
+                    >
+                      <label for="zap-redeem-otp-{{ section.id }}">Verification code</label>
                       <input
                         id="zap-redeem-otp-{{ section.id }}"
-                        type="password"
+                        type="text"
                         name="otp"
                         inputmode="numeric"
                         autocomplete="one-time-code"
@@ -237,12 +267,31 @@
                 </div>
               {% endif %}
 
-              {% comment %} Inquire Coupon List API, then Redeem Coupon API. {% endcomment %}
               {% if section.settings.show_coupons %}
                 <div class="account__panel">
                   <h2 class="account__panel-heading">{{ section.settings.coupons_heading | default: 'Your coupons' }}</h2>
                   <div data-zap-coupons>
                     <p class="account__empty">Loading your coupons…</p>
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if section.settings.show_transactions %}
+                <div class="account__panel">
+                  <h2 class="account__panel-heading">{{ section.settings.transactions_heading | default: 'Points activity' }}</h2>
+                  <div data-zap-transactions>
+                    <p class="account__empty">Loading your activity…</p>
+                  </div>
+                  {% comment %} ZAP pages 10 at a time via an opaque marker. {% endcomment %}
+                  <div class="account__actions">
+                    <button
+                      type="button"
+                      class="account__button account__button--secondary"
+                      data-zap-more
+                      hidden
+                    >
+                      Load more
+                    </button>
                   </div>
                 </div>
               {% endif %}
@@ -254,6 +303,7 @@
                 hidden
               ></p>
             </zap-dashboard>
+
         {% endcase %}
       </div>
     </div>
@@ -358,6 +408,18 @@
       "id": "coupons_heading",
       "label": "Coupons heading",
       "default": "Your coupons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_transactions",
+      "label": "Show points activity",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "transactions_heading",
+      "label": "Activity heading",
+      "default": "Points activity"
     },
     {
       "type": "range",
