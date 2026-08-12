@@ -1,0 +1,11 @@
+# Transient files the CLI writes mid-sync. Without this, the file watcher can
+# pick one up before the rename completes and try to upload it, which Shopify
+# rejects with "contains illegal characters".
+*.tmp.*
+*.swp
+.DS_Store
+
+# Repo directories that aren't part of the theme. Shopify only accepts assets,
+# blocks, config, layout, locales, sections, snippets and templates.
+design/
+docs/
