@@ -127,6 +127,17 @@
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M12.1 8.64l-.1.1-.1-.1C10.14 6.6 7.1 6.6 5.14 8.5c-2 2-2 5.3 0 7.3l6.6 6.5c.15.15.4.15.55 0l6.6-6.5c2-2 2-5.3 0-7.3-1.96-1.9-5-1.9-6.9.14z"></path>
       </svg>
+      {% comment %}
+        Filled in by brickline-wishlist.js from localStorage. Starts hidden so a
+        shopper with an empty list never sees a "0", and so the cached header
+        markup doesn't flash a stale number.
+      {% endcomment %}
+      <span
+        class="brickline-header__badge"
+        data-wishlist-count
+        aria-hidden="true"
+        hidden
+      ></span>
     </a>
 
     {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
@@ -491,7 +502,30 @@
     display: block;
   }
 
+  .brickline-header__badge {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    min-width: 16px;
+    height: 16px;
+    padding-inline: 4px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: var(--status-discount-red, #dd0000);
+    color: var(--text-inverse, #ffffff);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  .brickline-header__badge[hidden] {
+    display: none;
+  }
+
   .brickline-header__icon-btn {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;

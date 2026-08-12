@@ -31,7 +31,8 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - [x] Coming Soon — `templates/password.json` (`brickline-coming-soon`, live countdown + storefront password form)
 - [x] Free Shipping — `templates/page.free-shipping.json` (`brickline-cta-banner`, `brickline-product-grid`, small-print `brickline-rich-text`, `brickline-feature-band`)
 - [x] Account / Account Details / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
-- [ ] Wishlist, Checkout — see note below
+- [x] Wishlist — `templates/page.wishlist.json` (`brickline-wishlist`, localStorage-backed; see note below)
+- [ ] Checkout — see note below
 
 ## Pages available in the source project (not yet converted)
 
@@ -85,10 +86,22 @@ built against the Shopify `customer` / `order` object model in the established
 Brickline visual language — worth a pass against those four design files before
 sign-off.
 
-**Wishlist.** Shopify has no native wishlist. Delivering this needs either an app
-(Wishlist Plus, Swym) whose markup we'd theme, or a custom implementation backed by
-customer metafields plus an App Proxy. The wishlist heart on the product cards is
-presentational only today — it toggles for the life of the page and persists nothing.
+**Wishlist — built, per-browser only.** Saved product ids live in `localStorage`
+under `brickline_wishlist`; `assets/brickline-wishlist.js` owns all reads and
+writes and fires `brickline:wishlist:change` so the header badge, the hearts on
+product cards and the wishlist page stay in sync. The page turns ids back into
+real product cards by asking the search route to render its own section
+(`/search?q=id:1 OR id:2&section_id=…`), the same trick recently-viewed uses — so
+price, availability and card markup stay server-rendered.
+
+The list does **not** follow a shopper to another device or survive clearing site
+data. Making it persistent means writing a customer metafield, and this store is
+on *classic* customer accounts: there is no Customer Account API, and the
+Storefront API cannot write customer metafields. That needs a hosted endpoint
+behind an App Proxy holding an Admin API token — it cannot be done from the theme.
+If that becomes a requirement, `WishlistStore` in `assets/brickline-wishlist.js` is
+the only module that changes (make its methods async and point them at the proxy);
+nothing else reads storage directly.
 
 **Checkout.** Not themeable outside Shopify Plus. On non-Plus plans the design can
 only be approximated through the checkout branding settings in admin.

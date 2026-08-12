@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "wishlist": {
+      "type": "brickline-wishlist",
+      "settings": {
+        "heading": "Wishlist",
+        "show_account_nav": true,
+        "products_to_show": 24,
+        "columns": 3,
+        "columns_tablet": 2,
+        "columns_mobile": 2,
+        "empty_title": "Your wishlist is empty",
+        "empty_body": "Save sets you love by tapping the heart icon on any product.",
+        "empty_label": "Browse Sets",
+        "content_width": 1000,
+        "padding-block-start": 40,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "wishlist"
+  ]
+}

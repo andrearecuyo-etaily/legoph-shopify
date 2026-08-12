@@ -1,0 +1,303 @@
+{% comment %}
+  Wishlist page.
+
+  Renders in two contexts, the same way brickline-recently-viewed does:
+  1. On the wishlist page it outputs the shell — sidebar, heading, empty state —
+     with an empty grid.
+  2. Fetched again through the Section Rendering API against the search route
+     (`/search?q=id:1 OR id:2&section_id=…`) it renders just the cards, which
+     brickline-wishlist-page.js moves into the shell.
+
+  Product ids live in localStorage, so the list can't be rendered server-side;
+  the search route is what turns ids back into real product cards without
+  needing an API token.
+{% endcomment %}
+
+{% liquid
+  assign per_page = section.settings.products_to_show | default: 24
+%}
+
+<link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-product-card.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'brickline-account.css' | asset_url }}">
+
+{% if search.performed %}
+  {% comment %} Section-rendering pass: cards only. {% endcomment %}
+  <div class="wishlist__items brickline-grid">
+    {% for result in search.results limit: per_page %}
+      {% if result.object_type == 'product' %}
+        {% render 'brickline-product-card',
+          product: result,
+          show_meta: false,
+          secondary_action: 'remove'
+        %}
+      {% endif %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div
+    class="wishlist account brickline-section spacing-style"
+    style="{% render 'spacing-padding', settings: section.settings %}; --account-width: {{ section.settings.content_width }}px; --cols-mobile: {{ section.settings.columns_mobile }}; --cols-tablet: {{ section.settings.columns_tablet }}; --cols-desktop: {{ section.settings.columns }}; --brickline-card-radius: {{ settings.brickline_card_radius }}px;"
+    data-wishlist-page="{{ section.id }}"
+  >
+    <div class="account__inner">
+      <div class="account__layout">
+        {% if section.settings.show_account_nav %}
+          {% render 'brickline-account-nav', current: 'wishlist' %}
+        {% endif %}
+
+        <div>
+          <div class="account__header">
+            <h1 class="account__heading">{{ section.settings.heading | default: 'Wishlist' }}</h1>
+            <span
+              class="account__meta"
+              data-wishlist-summary
+              hidden
+            ></span>
+          </div>
+
+          {% comment %} Filled by JS; stays empty when nothing is saved. {% endcomment %}
+          <div
+            class="wishlist__items brickline-grid"
+            data-wishlist-grid
+            hidden
+          ></div>
+
+          <div
+            class="wishlist__empty"
+            data-wishlist-empty
+          >
+            <span class="wishlist__empty-title">
+              {{ section.settings.empty_title | default: 'Your wishlist is empty' }}
+            </span>
+            <span class="wishlist__empty-body">
+              {{ section.settings.empty_body | default: 'Save sets you love by tapping the heart icon on any product.' }}
+            </span>
+            <a
+              href="{{ section.settings.empty_link | default: routes.all_products_collection_url }}"
+              class="wishlist__empty-button"
+            >
+              {{ section.settings.empty_label | default: 'Browse Sets' }}
+            </a>
+          </div>
+
+          {% comment %}
+            Shown only if the fetch fails — better than an empty page that looks
+            like the shopper lost their list.
+          {% endcomment %}
+          <p
+            class="wishlist__error"
+            data-wishlist-error
+            role="alert"
+            hidden
+          >
+            We couldn't load your saved sets just now. Please refresh to try again.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<script
+  src="{{ 'brickline-wishlist-page.js' | asset_url }}"
+  type="module"
+></script>
+<script
+  src="{{ 'brickline-cart-actions.js' | asset_url }}"
+  type="module"
+></script>
+
+{% stylesheet %}
+  .wishlist__items {
+    gap: 20px;
+  }
+
+  .wishlist__items[hidden] {
+    display: none;
+  }
+
+  .wishlist__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .wishlist__empty[hidden] {
+    display: none;
+  }
+
+  .wishlist__empty-title {
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .wishlist__empty-body {
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+    color: var(--text-subtle, #636363);
+    max-width: 40ch;
+  }
+
+  .wishlist__empty-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-default, #d9d9d9);
+    background: var(--surface-page, #ffffff);
+    color: var(--text-default, #141414);
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 11px 22px;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .wishlist__empty-button:hover {
+      border-color: var(--brand-black, #000000);
+      background: var(--surface-tertiary, #f7f7f7);
+    }
+  }
+
+  .wishlist__error {
+    margin: 0;
+    padding: 16px;
+    background: var(--surface-tertiary, #f7f7f7);
+    border-inline-start: 4px solid var(--status-discount-red, #dd0000);
+    font-family: "Cera Pro", var(--font-body--family), sans-serif;
+    font-size: 14px;
+  }
+
+  .wishlist__error[hidden] {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Wishlist",
+  "class": "section--wishlist",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Saved products live in the shopper's browser, so this list does not follow them to another device."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_nav",
+      "label": "Show account sidebar",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns — desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "label": "Columns — tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns — mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Empty state"
+    },
+    {
+      "type": "text",
+      "id": "empty_title",
+      "label": "Title",
+      "default": "Your wishlist is empty"
+    },
+    {
+      "type": "text",
+      "id": "empty_body",
+      "label": "Body",
+      "default": "Save sets you love by tapping the heart icon on any product."
+    },
+    {
+      "type": "text",
+      "id": "empty_label",
+      "label": "Button label",
+      "default": "Browse Sets"
+    },
+    {
+      "type": "url",
+      "id": "empty_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 800,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1000
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ]
+}
+{% endschema %}

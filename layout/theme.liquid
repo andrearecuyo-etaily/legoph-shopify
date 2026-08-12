@@ -80,6 +80,17 @@
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+
+    {%- comment -%}
+      Wishlist state is read from localStorage on every page: the header badge
+      needs it site-wide, and product cards need it wherever they appear.
+      Must come after 'scripts', which renders the import map — a module script
+      that loads first makes the browser discard the map.
+    {%- endcomment -%}
+    <script
+      src="{{ 'brickline-wishlist.js' | asset_url }}"
+      type="module"
+    ></script>
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
 

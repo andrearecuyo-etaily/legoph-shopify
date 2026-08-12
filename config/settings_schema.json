@@ -188,6 +188,12 @@
         "default": 70
       },
       {
+        "type": "url",
+        "id": "brickline_wishlist_url",
+        "label": "Wishlist page",
+        "info": "Also used by the account sidebar link. Point the header's wishlist icon here too."
+      },
+      {
         "type": "header",
         "content": "Cart"
       },

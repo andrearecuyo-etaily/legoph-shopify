@@ -6,6 +6,8 @@
   - product: {Product} required
   - show_meta: {Boolean} render the age / pieces row (default true)
   - image_size: {Number} width hint for the main image (default 600)
+  - secondary_action: {String} 'wishlist' (default) renders the heart toggle;
+    'remove' renders an X that drops the product from the wishlist
 
   Optional metafields (namespace "custom"): age, pieces.
 
@@ -154,15 +156,30 @@
         </span>
       {% endif %}
 
-      <button
-        type="button"
-        class="brickline-card__wishlist"
-        aria-label="Add to wishlist"
-        aria-pressed="false"
-        data-wishlist-toggle
-      >
-        {%- render 'brickline-icon', icon: 'heart' -%}
-      </button>
+      {% if secondary_action == 'remove' %}
+        <button
+          type="button"
+          class="brickline-card__wishlist"
+          aria-label="Remove {{ product.title | escape }} from wishlist"
+          data-wishlist-remove="{{ product.id }}"
+        >
+          {%- render 'brickline-icon', icon: 'close' -%}
+        </button>
+      {% else %}
+        {% comment %}
+          State is painted by brickline-wishlist.js on load — the card is cached
+          server-side, so it can't know whether this shopper saved the product.
+        {% endcomment %}
+        <button
+          type="button"
+          class="brickline-card__wishlist"
+          aria-label="Add to wishlist"
+          aria-pressed="false"
+          data-wishlist-toggle="{{ product.id }}"
+        >
+          {%- render 'brickline-icon', icon: 'heart' -%}
+        </button>
+      {% endif %}
     </div>
   </div>
 </div>

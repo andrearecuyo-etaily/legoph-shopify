@@ -83,16 +83,6 @@ export class AddToCartPill extends HTMLElement {
   };
 }
 
-// Wishlist is presentational for now — no persistence back-end is wired up yet,
-// so the toggle only reflects state for the life of the page.
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-wishlist-toggle]');
-  if (!button) return;
-  const isActive = button.hasAttribute('data-active');
-  button.toggleAttribute('data-active', !isActive);
-  button.setAttribute('aria-pressed', String(!isActive));
-});
-
 if (!customElements.get('add-to-cart-pill')) {
   customElements.define('add-to-cart-pill', AddToCartPill);
 }
