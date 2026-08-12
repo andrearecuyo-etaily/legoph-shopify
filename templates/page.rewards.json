@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "rewards": {
+      "type": "brickline-rewards",
+      "settings": {
+        "heading": "Insiders Points",
+        "show_account_nav": true,
+        "show_redeem_points": true,
+        "show_coupons": true,
+        "content_width": 1000,
+        "padding-block-start": 40,
+        "padding-block-end": 64
+      }
+    }
+  },
+  "order": [
+    "rewards"
+  ]
+}

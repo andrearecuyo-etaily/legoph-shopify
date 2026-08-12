@@ -1,0 +1,142 @@
+/* ZAP rewards account page — see sections/brickline-rewards.liquid.
+   Layout chrome (panels, buttons, forms) comes from brickline-account.css. */
+
+.rewards__dashboard {
+  display: block;
+}
+
+.rewards__balance {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.rewards__points {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rewards__points-value {
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+@media screen and (min-width: 750px) {
+  .rewards__points-value {
+    font-size: 40px;
+  }
+}
+
+.rewards__points--muted .rewards__points-value {
+  font-size: 22px;
+  color: var(--text-meta, #939393);
+}
+
+.rewards__points-label {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-subtle, #636363);
+}
+
+.rewards__tier {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: var(--brand-yellow, #ffd400);
+  color: var(--brand-black, #000000);
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rewards__tier[hidden] {
+  display: none;
+}
+
+.rewards__form {
+  margin-block-start: 16px;
+}
+
+/* Buttons inside a disabled panel still need to read as unavailable. */
+.rewards__form button[disabled],
+.rewards__coupon button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rewards__coupons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rewards__coupon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+}
+
+.rewards__coupon:last-child {
+  border-bottom: none;
+  padding-block-end: 0;
+}
+
+.rewards__coupon > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rewards__coupon-name {
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.rewards__coupon-validity {
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 12px;
+  color: var(--text-meta, #939393);
+}
+
+.rewards__message {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  font-family: "Cera Pro", var(--font-body--family), sans-serif;
+  font-size: 14px;
+  background: var(--surface-tertiary, #f7f7f7);
+  border-inline-start: 4px solid var(--text-meta, #939393);
+}
+
+.rewards__message[hidden] {
+  display: none;
+}
+
+.rewards__message[data-tone="error"] {
+  border-inline-start-color: var(--status-discount-red, #dd0000);
+}
+
+.rewards__message[data-tone="success"] {
+  border-inline-start-color: var(--status-success-green, #008439);
+}
+
+.rewards__prompt .account__actions {
+  margin-block-start: 20px;
+}

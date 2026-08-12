@@ -2,7 +2,7 @@
   Shared sidebar for the customer-account pages.
 
   Accepts:
-  - current: {String} one of 'account', 'addresses', 'wishlist' — marks the active link
+  - current: {String} one of 'account', 'addresses', 'rewards', 'wishlist' — marks the active link
 
   Usage:
   {% render 'brickline-account-nav', current: 'account' %}
@@ -30,6 +30,17 @@
   >
     My Addresses
   </a>
+  {% if settings.brickline_rewards_url != blank %}
+    <a
+      href="{{ settings.brickline_rewards_url }}"
+      class="account__nav-link{% if current == 'rewards' %} is-active{% endif %}"
+      {% if current == 'rewards' %}
+        aria-current="page"
+      {% endif %}
+    >
+      Insiders Points
+    </a>
+  {% endif %}
   {% if settings.brickline_wishlist_url != blank %}
     <a
       href="{{ settings.brickline_wishlist_url }}"
