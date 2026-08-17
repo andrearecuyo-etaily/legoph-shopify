@@ -131,10 +131,11 @@ class ZapDashboard extends HTMLElement {
   }
 
   #validPoints = 0;
+  #currency = null;
   #marker = null;
   #redeemReference = null;
 
-  async #loadBalance(auth) {
+  async #loadBalance(auth, { preserveMessage = false } = {}) {
     const result = await Zap.balance(auth);
 
     if (result.error === OTP_REQUIRED) {
@@ -154,11 +155,17 @@ class ZapDashboard extends HTMLElement {
     }
 
     if (this.balanceOtpForm) this.balanceOtpForm.hidden = true;
-    message(this, '');
+    // A refresh triggered by a redemption must not wipe the confirmation the
+    // shopper just earned — only clear prompts this method put up itself.
+    if (!preserveMessage) message(this, '');
 
     const currencies = (result.currencies || []).slice().sort((a, b) => (b.priority || 0) - (a.priority || 0));
     if (currencies.length === 0) return;
 
+    // Redemptions are validated against the currency shown first, so remember
+    // which one that is and tell the endpoint — ZAP's array order is not the
+    // display order.
+    this.#currency = currencies[0];
     this.#validPoints = Number(currencies[0].validPoints || 0);
     this.currencies.replaceChildren();
 
@@ -318,12 +325,17 @@ class ZapDashboard extends HTMLElement {
     // Courtesy check only — the endpoint re-reads the real balance from ZAP
     // before honouring anything, because this figure came from the browser.
     if (this.#validPoints && amount > this.#validPoints) {
-      message(this, `You only have ${formatPoints(this.#validPoints)} points available.`, 'error');
+      const name = this.#currency?.name || 'points';
+      message(this, `You only have ${formatPoints(this.#validPoints)} ${name} available.`, 'error');
       return;
     }
 
     busy(this.redeemForm, true);
-    const result = await Zap.redeemPoints(amount, { otp, reference: this.#redeemReference });
+    const result = await Zap.redeemPoints(amount, {
+      otp,
+      reference: this.#redeemReference,
+      currencyId: this.#currency?.id,
+    });
     busy(this.redeemForm, false);
 
     if (result.error === OTP_REQUIRED) {
@@ -343,7 +355,7 @@ class ZapDashboard extends HTMLElement {
     this.redeemForm.reset();
     this.#redeemReference = null;
     if (this.redeemOtpField) this.redeemOtpField.hidden = true;
-    this.#loadBalance();
+    this.#loadBalance(undefined, { preserveMessage: true });
     if (this.transactionsRoot) this.#loadTransactions();
   };
 

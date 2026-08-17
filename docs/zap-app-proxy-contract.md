@@ -47,10 +47,12 @@ number from that. Otherwise any shopper could read or spend a stranger's balance
 | Metafield | Type | Purpose |
 |---|---|---|
 | `customer.zap.enrolled_at` | `date_time` | Presence means enrolled; picks the page state in Liquid |
+| `customer.zap.mobile` | `single_line_text_field` | The real number, read by the endpoint on every call |
 | `customer.zap.mobile_masked` | `single_line_text_field` | Display only, e.g. `•••• ••• 5792` |
 | `customer.zap.user_id` | `single_line_text_field` | `data.id` from Register |
 
-The full mobile number stays server-side — Liquid has no use for it and page
+Only `enrolled_at` and `mobile_masked` are ever rendered. `zap.mobile` is the
+endpoint's own lookup key — nothing in the theme should read it, since page
 source is public to anyone sharing the device.
 
 ## Auth modes change what's required
@@ -79,18 +81,39 @@ The only call carrying a mobile number. `branchId` is added server-side.
   "firstName": "John", "lastName": "Smith", "email": "…", "birthday": "1990-01-01" }
 // response — ZAP returns data.id; write the metafields, then:
 { "ok": true, "user_id": "2a9da6f2-…", "mobile_masked": "•••• ••• 4567" }
-{ "ok": false, "error": "otp_required", "reference": "<refId>" }
+{ "ok": false, "error": "otp_required", "reference": "<opaque>" }
 { "ok": false, "error": "400-04" }   // mobile already registered
 ```
 Registration fields marked required in the Merchant Dashboard must be collected,
-or ZAP returns `400-14 Required Fields Missing`.
+or ZAP returns `400-14 Required Fields Missing`. `pin` must be forwarded to
+Register — on a `Pin` or `PinOtp` merchant an account without one cannot pass
+any later balance or redemption check.
+
+Merchants that verify the number before creating the account go through the OTP
+step: ZAP either hands back a `refId` instead of an `id`, or rejects Register
+with `401-06`. Either way the endpoint answers `otp_required` and the theme
+shows its code field. The OTP purpose string for registration is not in the docs
+we have — `ZAP_OTP_PURPOSE_REGISTER` overrides the worker's `REGISTRATION`
+guess. Confirm it with ZAP.
 
 ### `POST /apps/zap/enrol/verify` → `POST /v0-1/otp/verify`
+This is the call that links the customer: it writes the metafields above, so the
+theme can reload and let Liquid render the member state. Verifying the code
+without writing them would leave the shopper stuck on the enrolment form.
 ```jsonc
-{ "reference": "<refId>", "otp": "6721" }
-{ "ok": true, "mobile_masked": "•••• ••• 4567" }
+{ "reference": "<opaque>", "otp": "6721" }
+{ "ok": true, "user_id": "2a9da6f2-…", "mobile_masked": "•••• ••• 4567" }
 { "ok": false, "error": "403-03" }   // invalid OTP
+{ "ok": false, "error": "404-07" }   // reference expired or tampered with
 ```
+
+**`reference` is opaque, and for enrolment it is not the bare `refId`.** The
+endpoint is stateless, so at verify time it has no metafield to resolve the
+mobile number from — and it must not take the browser's word for it, or a
+shopper could verify a code sent to their own number and then link someone
+else's. The reference therefore carries the mobile number and customer id
+signed with the app secret, and expires after ten minutes. The theme just
+echoes it back.
 
 ### `GET /apps/zap/balance` → `POST /v0-1/user/balance/inquiry`
 ZAP returns **an array of currencies** — a merchant can run more than one (the
@@ -133,7 +156,7 @@ Ten per request; pass back `marker` from the previous response to page.
 ### `POST /apps/zap/points/redeem` → `POST /v0-1/transaction/redeem`
 `transactionAmount` is the **number of points**, not currency.
 ```jsonc
-{ "amount": 500, "otp": "6721", "reference": "<refId>" }
+{ "amount": 500, "currency_id": 2, "otp": "6721", "reference": "<refId>" }
 { "ok": true, "transaction_ref": "Z31945680594",
   "points": { "valid": 100, "pending": 10, "redeemed": 500 } }
 { "ok": false, "error": "409-00" }   // insufficient points
@@ -141,6 +164,16 @@ Ten per request; pass back `marker` from the previous response to page.
 ```
 The endpoint **must re-read the balance from ZAP before redeeming**. Never trust
 an amount the browser claims is affordable.
+
+`currency_id` names the wallet the page displayed and validated against. It is
+not a trust boundary — the endpoint re-reads that wallet's real balance — it
+exists so both sides check the *same* one. ZAP returns currencies unordered
+while the theme sorts by `priority`, so "the first currency" means different
+things on each side. Unknown or absent ids fall back to the highest priority.
+
+Note that ZAP's redeem call itself takes no currency, so on a multi-currency
+merchant ZAP decides which wallet is actually debited. Confirm that behaviour
+before turning on a second currency.
 
 ### `POST /apps/zap/coupons/redeem` → `POST /v0-1/transaction/redeem/coupon`
 Note the path: the docs' heading says `/transaction/redeem`, but the sample curl
@@ -184,6 +217,16 @@ holds the copy.
 | `409-00` | insufficient points |
 | `409-04` / `409-05` | session expired or already complete |
 | `500-*` | ZAP internal error |
+
+The endpoint adds a few of its own, which the theme also has copy for:
+
+| Code | Meaning |
+|---|---|
+| `not_configured` | no App Proxy deployed — the response wasn't JSON |
+| `network` | the request never reached the proxy |
+| `not_enrolled` | marked enrolled, but no `zap.mobile` to look up |
+| `unauthorized` | bad proxy signature, no customer id, or a reference issued to someone else |
+| `otp_required` | retry the same call with `otp` and `reference` |
 
 ## Not configured
 
