@@ -43,11 +43,6 @@
     endif
     if band.image.value != blank
       assign image = band.image.value
-      # A file_reference resolves to a media_image, but image_picker gives a
-      # plain image. Unwrap so image_url / alt / width / height work on either.
-      if image.image != blank
-        assign image = image.image
-      endif
     endif
     if band.button_label.value != blank
       assign button_label = band.button_label.value
@@ -63,16 +58,30 @@
     endif
   endif
 
-  # Last resort: borrow from the product gallery so an unfilled band shows a
-  # picture rather than an empty box. Band 1 takes the second image, band 2 the
-  # third, and so on, so two bands never show the same shot. Off by default —
-  # bands usually want lifestyle imagery, not a repeat of the gallery.
-  if image == blank and section.settings.fallback_to_product_media and position > 0
-    # product.media gives a media object; preview_image is the plain image, so
-    # image_url / alt / width / height match the other two sources.
-    assign fallback = product.media[position].preview_image
-    if fallback != blank
-      assign image = fallback
+  # Three sources, three shapes: image_picker gives a plain image, a metaobject
+  # file_reference gives a media_image wrapping one, product.media gives a media
+  # object. Normalise first so image_url / alt / width / height work on all of
+  # them — and so the check below sees a real image.
+  if image.image != blank
+    assign image = image.image
+  endif
+
+  # An image_picker holds a file reference, never Liquid: settings are stored
+  # verbatim and never evaluated. Typing "{{ product.featured_image }}" into that
+  # field in the theme editor leaves a value that is not blank and not an image
+  # either, so drop anything that has no dimensions.
+  if image != blank and image.width == blank
+    assign image = blank
+  endif
+
+  # Nothing usable? Borrow from the product rather than show an empty box.
+  # "gallery" walks the product's photos by band position, so band 1 takes the
+  # second photo and band 2 the third, and no two bands repeat a shot.
+  if image == blank and product != blank
+    if section.settings.product_image_source == 'featured'
+      assign image = product.featured_image
+    elsif section.settings.product_image_source == 'gallery' and position > 0
+      assign image = product.media[position].preview_image
     endif
   endif
 %}
@@ -306,11 +315,16 @@
       "default": 0
     },
     {
-      "type": "checkbox",
-      "id": "fallback_to_product_media",
-      "label": "Fall back to the product's gallery",
-      "info": "When the story band has no image, borrow one from the product's photos instead of leaving an empty box. Band 1 takes the second photo, band 2 the third.",
-      "default": false
+      "type": "select",
+      "id": "product_image_source",
+      "label": "Image when the band has none",
+      "info": "Used only when neither the story band nor the Image below has one. Do not type Liquid into the Image field — it is stored as text and never evaluated.",
+      "options": [
+        { "value": "none", "label": "Leave empty" },
+        { "value": "featured", "label": "The product's main photo" },
+        { "value": "gallery", "label": "The product's gallery, by band position" }
+      ],
+      "default": "none"
     },
     {
       "type": "select",

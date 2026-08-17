@@ -34,18 +34,26 @@
           if from_product
             assign swatch_link = item.link.value
             assign swatch_color = item.color.value
-            # A file_reference resolves to a media_image, but image_picker gives a
-            # plain image. Unwrap so image_url / alt / width / height work on either.
             assign swatch_image = item.image.value
-            if swatch_image.image != blank
-              assign swatch_image = swatch_image.image
-            endif
             assign swatch_label = item.label.value
           else
             assign swatch_link = item.settings.link
             assign swatch_color = item.settings.color
             assign swatch_image = item.settings.image
             assign swatch_label = item.settings.label
+          endif
+
+          # A metaobject file_reference gives a media_image wrapping the image;
+          # image_picker gives a plain one. Normalise so image_url / alt / width /
+          # height work on either.
+          if swatch_image.image != blank
+            assign swatch_image = swatch_image.image
+          endif
+
+          # Settings are stored verbatim and never evaluated, so Liquid typed into
+          # an image field leaves a value that is not blank and not an image.
+          if swatch_image != blank and swatch_image.width == blank
+            assign swatch_image = blank
           endif
 
           assign tag = 'div'

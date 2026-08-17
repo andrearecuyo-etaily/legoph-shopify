@@ -32,12 +32,7 @@
     {% for item in items %}
       {% liquid
         if from_product
-          # A file_reference resolves to a media_image, but image_picker gives a
-          # plain image. Unwrap so image_url / alt / width / height work on either.
           assign card_image = item.image.value
-          if card_image.image != blank
-            assign card_image = card_image.image
-          endif
           assign card_title = item.title.value
           assign card_subtitle = item.subtitle.value
           assign card_button_label = item.button_label.value
@@ -48,6 +43,19 @@
           assign card_subtitle = item.settings.subtitle
           assign card_button_label = item.settings.button_label
           assign card_button_link = item.settings.button_link
+        endif
+
+        # A metaobject file_reference gives a media_image wrapping the image;
+        # image_picker gives a plain one. Normalise so image_url / alt / width /
+        # height work on either.
+        if card_image.image != blank
+          assign card_image = card_image.image
+        endif
+
+        # Settings are stored verbatim and never evaluated, so Liquid typed into
+        # an image field leaves a value that is not blank and not an image.
+        if card_image != blank and card_image.width == blank
+          assign card_image = blank
         endif
       %}
       <article

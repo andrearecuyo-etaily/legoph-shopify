@@ -113,11 +113,28 @@ referencing the same story band share it, so editing that band's image changes
 both. Useful for something like a shared shipping-promise band; surprising
 otherwise. Give each product its own entries unless the sharing is wanted.
 
-The feature band also has **Fall back to the product's gallery** (off by
-default). With it on, a band with no image borrows one from the product's
-photos — band 1 takes the second photo, band 2 the third, so two bands never
-show the same shot. Left off, an unfilled band shows an empty box, which is a
-clearer "not done yet" signal while you are still filling products in.
+The feature band also has **Image when the band has none**, used only when
+neither the story band nor the section has one:
+
+| Option | Result |
+|---|---|
+| Leave empty | An empty box — the clearest "not filled in yet" signal |
+| The product's main photo | `product.featured_image` |
+| The product's gallery, by band position | Band 1 takes the second photo, band 2 the third, so no two bands repeat a shot |
+
+`product.showcase` and `product.cinematic` are set to **the product's main
+photo**.
+
+## Never type Liquid into an image field
+
+A section setting is stored **verbatim and never evaluated**. Putting
+`{{ product.featured_image }}` into an Image field in the theme editor does not
+resolve to the product's photo — the section receives that text as a string.
+It was tried on both product templates and had to be undone; use the setting
+above instead.
+
+All three sections now discard an image value that has no dimensions, so a
+repeat of that mistake renders an empty box rather than a broken one.
 
 None of the product templates currently set a section image, so before this
 change the bands and grids on `product.showcase` and `product.cinematic`
