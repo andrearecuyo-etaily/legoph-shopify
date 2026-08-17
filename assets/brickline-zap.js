@@ -85,9 +85,16 @@ export const Zap = {
     return call(`/transactions${marker ? `?marker=${encodeURIComponent(marker)}` : ''}`);
   },
 
-  /** POST /v0-1/transaction/redeem — amount is a number of points. */
-  redeemPoints(amount, { otp, reference } = {}) {
-    return call('/points/redeem', { method: 'POST', body: { amount, otp, reference } });
+  /**
+   * POST /v0-1/transaction/redeem — amount is a number of points.
+   * `currencyId` names the wallet the page validated against, so the endpoint
+   * checks the same one rather than whichever ZAP lists first.
+   */
+  redeemPoints(amount, { otp, reference, currencyId } = {}) {
+    return call('/points/redeem', {
+      method: 'POST',
+      body: { amount, otp, reference, currency_id: currencyId },
+    });
   },
 
   /** POST /v0-1/transaction/redeem/coupon */
@@ -103,6 +110,10 @@ export const Zap = {
 const MESSAGES = {
   [NOT_CONFIGURED]: 'The rewards programme isn’t connected yet. Please check back soon.',
   network: 'We couldn’t reach the rewards service. Please check your connection and try again.',
+  // Returned when the account is marked enrolled but has no linked number —
+  // and by the endpoint when an enrolment token no longer matches the shopper.
+  not_enrolled: 'We couldn’t find your rewards membership. Please join the programme again.',
+  unauthorized: 'Please sign in again to see your rewards.',
 
   '400-03': 'That doesn’t look like a valid mobile number.',
   '400-05': 'That doesn’t look like a valid mobile number.',

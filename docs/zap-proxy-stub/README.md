@@ -80,6 +80,20 @@ Worth checking here specifically:
 - **Required registration fields.** ZAP returns `400-14` if the Merchant
   Dashboard marks fields the enrolment form doesn't collect. The form currently
   sends mobile and PIN only — add fields to the section if your config needs more.
+- **The registration OTP purpose.** The worker sends `/otp/send/REGISTRATION`,
+  which is a guess — the docs we have only name `GET_BALANCE` and `USE_POINTS`.
+  Set `ZAP_OTP_PURPOSE_REGISTER` once ZAP confirms it.
+- **Whether Register accepts `pin`.** The worker forwards the PIN the shopper
+  chooses. If ZAP names that field differently, enrolment will succeed with no
+  PIN set and `Pin`/`PinOtp` merchants will fail every call afterwards.
+
+### A gap that is still open
+
+On a `Pin` or `PinOtp` merchant the balance call can come back `401-05` (PIN
+missing). The theme has copy for it but no PIN field outside enrolment, so the
+shopper reads "Please enter your PIN" with nowhere to type it — the same
+dead end the OTP path used to have. If staging shows that auth mode, the redeem
+and balance panels need a PIN input the way they already have an OTP one.
 
 ## What is not wired up
 

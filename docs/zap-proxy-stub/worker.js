@@ -22,6 +22,9 @@
  *   ZAP_TOKEN            ZAP partner access token
  *   ZAP_MERCHANT_ID      as provided by ZAP
  *   ZAP_BRANCH_ID        as provided by ZAP
+ *
+ * Optional:
+ *   ZAP_OTP_PURPOSE_REGISTER  OTP purpose used at enrolment, default REGISTRATION
  */
 
 const json = (body, status = 200) =>
@@ -29,6 +32,27 @@ const json = (body, status = 200) =>
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+
+/* ------------------------------------------------------------------ crypto */
+
+async function hmac(secret, message) {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
 
 /* --------------------------------------------------- proxy signature check */
 
@@ -47,21 +71,41 @@ async function verifyProxySignature(url, secret) {
     .map(([k, v]) => `${k}=${v}`)
     .join('');
 
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
-  const expected = [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  return timingSafeEqual(await hmac(secret, message), signature);
+}
 
-  // Constant-time compare.
-  if (expected.length !== signature.length) return false;
-  let diff = 0;
-  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
-  return diff === 0;
+/* -------------------------------------------------- enrolment state token */
+
+/**
+ * The worker is stateless, but /enrol/verify has to know which mobile number
+ * the code was sent to — and it cannot simply take the browser's word for it,
+ * or a shopper could verify a code for their own number and then link someone
+ * else's. So the number is signed into the `reference` the theme echoes back.
+ *
+ * The theme treats `reference` as opaque, so this stays inside the contract.
+ */
+const ENROLMENT_TTL_MS = 10 * 60 * 1000;
+
+const b64url = (s) => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64url = (s) => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+
+async function packEnrolment(env, data) {
+  const payload = b64url(JSON.stringify({ ...data, exp: Date.now() + ENROLMENT_TTL_MS }));
+  return `${payload}~${await hmac(env.SHOPIFY_APP_SECRET, payload)}`;
+}
+
+async function unpackEnrolment(env, reference) {
+  const [payload, signature] = String(reference || '').split('~');
+  if (!payload || !signature) return null;
+  if (!timingSafeEqual(await hmac(env.SHOPIFY_APP_SECRET, payload), signature)) return null;
+
+  let data;
+  try {
+    data = JSON.parse(unb64url(payload));
+  } catch {
+    return null;
+  }
+  return data.exp && Date.now() < data.exp ? data : null;
 }
 
 /* ------------------------------------------- customer <-> mobile number map */
@@ -140,6 +184,46 @@ async function requireOtp(env, mobile, purpose) {
   return json({ ok: false, error: 'otp_required', reference: sent.data.refId });
 }
 
+/**
+ * Same, for enrolment — but the reference carries the signed mobile number,
+ * because at verify time there is no metafield to resolve it from yet.
+ *
+ * `refId` is passed in when Register already started an OTP session itself;
+ * otherwise we open one. ZAP's purpose string for registration is not in the
+ * docs we have — override it with ZAP_OTP_PURPOSE_REGISTER once confirmed.
+ */
+async function requireEnrolmentOtp(env, { mobile, customerId, zapUserId, refId }) {
+  let reference = refId;
+
+  if (!reference) {
+    const purpose = env.ZAP_OTP_PURPOSE_REGISTER || 'REGISTRATION';
+    const sent = await zap(env, `/otp/send/${purpose}`, { mobileNumber: mobile, merchantId: env.ZAP_MERCHANT_ID });
+    if (!sent.success) return fail(sent);
+    reference = sent.data.refId;
+  }
+
+  return json({
+    ok: false,
+    error: 'otp_required',
+    reference: await packEnrolment(env, { refId: reference, mobile, customerId, zapUserId: zapUserId || null }),
+  });
+}
+
+/**
+ * The theme renders currencies in `priority` order and validates the redemption
+ * against the first one, so the endpoint has to agree — ZAP returns the array
+ * unordered, and taking it at face value checks a different wallet than the one
+ * the shopper is looking at.
+ *
+ * ZAP's redeem call itself carries no currency, so on a multi-currency merchant
+ * ZAP decides which wallet is debited. Confirm that before enabling a second.
+ */
+function pickCurrency(currencies, currencyId) {
+  const byPriority = (currencies || []).slice().sort((a, b) => (b.priority || 0) - (a.priority || 0));
+  if (currencyId == null) return byPriority[0];
+  return byPriority.find((c) => String(c.id) === String(currencyId)) || byPriority[0];
+}
+
 /* ------------------------------------------------------------ mock fixtures */
 
 const MOCK = {
@@ -213,31 +297,67 @@ export default {
       }
     }
 
-    const mobile = await getLinkedMobile(env, customerId);
+    // Enrolment is what creates the mapping, so don't spend an Admin API call
+    // looking one up.
+    const mobile = route.startsWith('/enrol') ? null : await getLinkedMobile(env, customerId);
 
     switch (route) {
       case '/enrol': {
+        const enrolMobile = String(payload.mobile || '').trim();
+        if (!enrolMobile) return json({ ok: false, error: '400-03' });
+
         const res = await zap(env, '/register', {
-          mobileNumber: payload.mobile,
+          mobileNumber: enrolMobile,
           branchId: env.ZAP_BRANCH_ID,
+          // The shopper chooses this on the form; without it the account has no
+          // PIN, and every later call on a Pin/PinOtp merchant fails.
+          pin: payload.pin,
           firstName: payload.firstName,
           lastName: payload.lastName,
           email: payload.email,
           birthday: payload.birthday,
         });
+
+        // Some merchant configs verify the number before the account exists.
+        // ZAP signals that either by handing back a refId instead of an id, or
+        // by rejecting the call with 401-06 (otp/refId missing).
+        const startedOtp = res.success ? res.data?.refId : null;
+        if (startedOtp || (!res.success && res.errorCode === '401-06')) {
+          return requireEnrolmentOtp(env, {
+            mobile: enrolMobile,
+            customerId,
+            zapUserId: res.data?.id,
+            refId: startedOtp,
+          });
+        }
+
         if (!res.success) return fail(res);
-        const masked = await linkCustomer(env, customerId, payload.mobile, res.data?.id);
+        const masked = await linkCustomer(env, customerId, enrolMobile, res.data?.id);
         return json({ ok: true, user_id: res.data?.id, mobile_masked: masked });
       }
 
       case '/enrol/verify': {
+        const pending = await unpackEnrolment(env, payload.reference);
+        // Tampered or older than ENROLMENT_TTL_MS: send them back to the start
+        // rather than trusting a mobile number the browser supplied.
+        if (!pending) return json({ ok: false, error: '404-07' });
+        if (String(pending.customerId) !== String(customerId)) {
+          return json({ ok: false, error: 'unauthorized' }, 401);
+        }
+
         const res = await zap(env, '/otp/verify', {
-          refId: payload.reference,
+          refId: pending.refId,
           otp: payload.otp,
           merchantId: env.ZAP_MERCHANT_ID,
         });
         if (!res.success) return fail(res);
-        return json({ ok: true });
+
+        // Only now is the number proven to be this shopper's, so link it. This
+        // is what writes enrolled_at — without it the reloaded page would keep
+        // rendering the enrolment form.
+        const userId = pending.zapUserId || res.data?.id || null;
+        const masked = await linkCustomer(env, customerId, pending.mobile, userId);
+        return json({ ok: true, user_id: userId, mobile_masked: masked });
       }
 
       case '/balance': {
@@ -285,7 +405,12 @@ export default {
 
         // Re-read the real balance — never trust an amount from the browser.
         const bal = await zap(env, '/user/balance/inquiry', { mobileNumber: mobile, branchId: env.ZAP_BRANCH_ID });
-        const available = bal?.data?.currencies?.[0]?.validPoints ?? 0;
+        if (!bal.success) return fail(bal);
+
+        // Check the same wallet the page is showing, not whichever ZAP happened
+        // to list first.
+        const wallet = pickCurrency(bal.data?.currencies, payload.currency_id);
+        const available = Number(wallet?.validPoints ?? 0);
         if (Number(payload.amount) > available) return json({ ok: false, error: '409-00' });
 
         const res = await zap(env, '/transaction/redeem', {
