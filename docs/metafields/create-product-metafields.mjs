@@ -133,16 +133,57 @@ if (!token && !dryRun) {
 }
 
 async function admin(query, variables) {
-  const res = await fetch(`https://${shop}/admin/api/${API_VERSION}/graphql.json`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Shopify-Access-Token': token },
-    body: JSON.stringify({ query, variables }),
-  });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} — check the shop domain and token`);
+  let res;
+  try {
+    res = await fetch(`https://${shop}/admin/api/${API_VERSION}/graphql.json`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Shopify-Access-Token': token },
+      body: JSON.stringify({ query, variables }),
+    });
+  } catch (err) {
+    throw new Error(`could not reach https://${shop} — ${err.message}`);
+  }
+
+  if (!res.ok) {
+    const detail = (await res.text()).slice(0, 200).replace(/\s+/g, ' ');
+    throw new Error(`HTTP ${res.status} ${res.statusText}${detail ? ` — ${detail}` : ''}`);
+  }
 
   const body = await res.json();
   if (body.errors) throw new Error(JSON.stringify(body.errors));
   return body.data;
+}
+
+/**
+ * One cheap call before the real work, so a bad token or domain is reported once
+ * and in plain terms rather than ten times as a mutation failure.
+ */
+async function preflight() {
+  try {
+    const data = await admin('{ shop { name myshopifyDomain } }');
+    console.log(`Connected to ${data.shop.name} (${data.shop.myshopifyDomain})\n`);
+    return true;
+  } catch (err) {
+    const msg = err.message;
+    console.error(`\nCannot talk to the Admin API: ${msg}\n`);
+
+    if (/HTTP 401/.test(msg)) {
+      console.error('  401 means the token was rejected. Most often:');
+      console.error('   - the app was never Installed after saving its scopes');
+      console.error('   - this is a Storefront API token, not an Admin API one (must start shpat_)');
+      console.error('   - the token belongs to a different store\n');
+    } else if (/HTTP 40[34]/.test(msg)) {
+      console.error(`  Check the shop domain. You passed: ${shop}`);
+      console.error('  It should look like your-store.myshopify.com, not the admin URL.\n');
+    } else if (/could not reach/.test(msg)) {
+      console.error(`  Check the shop domain and your connection. You passed: ${shop}\n`);
+    }
+
+    console.error('  Scopes needed: write_products, write_metaobject_definitions');
+    console.error(`  Verify with:\n    curl -s -o /dev/null -w '%{http_code}\\n' \\\n      -H "X-Shopify-Access-Token: $SHOPIFY_ADMIN_TOKEN" \\\n      https://${shop}/admin/api/${API_VERSION}/shop.json\n`);
+    console.error('  200 = good, 401 = token, 404 = domain.\n');
+    return false;
+  }
 }
 
 const Q_METAOBJECT_BY_TYPE = `query($type: String!) { metaobjectDefinitionByType(type: $type) { id } }`;
@@ -167,6 +208,8 @@ const tally = { created: 0, existed: 0, failed: 0 };
 const ids = {};
 
 console.log(`\n${dryRun ? 'Would set up' : 'Setting up'} product content on ${shop}\n`);
+
+if (!dryRun && !(await preflight())) process.exit(1);
 
 /* -- metaobject definitions -- */
 
