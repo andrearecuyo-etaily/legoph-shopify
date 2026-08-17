@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -30,11 +39,18 @@
       ],
       "settings": {
         "show_breadcrumb": true,
+        "image_ratio": "4 / 3",
         "show_eyebrow": true,
         "show_quantity": true,
         "purchase_limit": 3,
         "add_to_cart_label": "Add to Bag",
+        "price_badge": "",
+        "member_note": "",
+        "secondary_label": "",
+        "secondary_link": "",
         "gift_heading": "Gifts with Purchase",
+        "gift_button_label": "",
+        "gift_button_link": "",
         "section_width": "page-width",
         "padding-block-start": 24,
         "padding-block-end": 0
@@ -45,6 +61,7 @@
       "settings": {
         "heading": "Become a member and unlock perks right away!",
         "subheading": "Start earning loyalty points with every purchase — which you can redeem for savings, rewards, experiences and more.",
+        "alignment": "split",
         "button_label": "Become a member",
         "button_link": "/pages/loyalty",
         "background_color": "#00af4d",
@@ -58,9 +75,15 @@
       "type": "brickline-feature-band",
       "settings": {
         "layout": "media-start",
+        "text_alignment": "start",
+        "mobile_order": "media",
+        "image": "{{ product.featured_image }}",
         "image_ratio": "4 / 3",
+        "eyebrow": "",
         "heading": "Embark on an out-of-this-world mission",
         "body": "<p>Launch into the realm of cinematic science fiction with this Icons spacecraft model kit for adults.</p>",
+        "button_label": "",
+        "button_link": "",
         "background_color": "#000000",
         "text_color": "#ffffff",
         "padding-block-start": 56,
@@ -73,25 +96,31 @@
         "h1": {
           "type": "story",
           "settings": {
+            "image": "{{ product.featured_image }}",
             "title": "Captivating space decor",
             "subtitle": "A striking centerpiece for the home or office.",
-            "button_label": ""
+            "button_label": "",
+            "button_link": ""
           }
         },
         "h2": {
           "type": "story",
           "settings": {
+            "image": "{{ product.featured_image }}",
             "title": "Dynamic display stand",
             "subtitle": "Turn the crank to simulate the centrifugal gravity system.",
-            "button_label": ""
+            "button_label": "",
+            "button_link": ""
           }
         },
         "h3": {
           "type": "story",
           "settings": {
+            "image": "{{ product.featured_image }}",
             "title": "Includes iconic minifigures",
             "subtitle": "Comes with two crew minifigures and a companion robot figure.",
-            "button_label": ""
+            "button_label": "",
+            "button_link": ""
           }
         }
       },
@@ -101,24 +130,29 @@
         "h3"
       ],
       "settings": {
+        "heading": "",
         "columns": 3,
+        "columns_tablet": 3,
+        "columns_mobile": 1,
         "image_ratio": "4 / 3",
         "section_width": "page-width",
         "padding-block-start": 64,
-        "padding-block-end": 0,
-        "columns_tablet": 3,
-        "columns_mobile": 1
+        "padding-block-end": 0
       }
     },
     "gift_band": {
       "type": "brickline-feature-band",
       "settings": {
         "layout": "media-end",
+        "text_alignment": "start",
+        "mobile_order": "media",
+        "image": "{{ product.featured_image }}",
         "image_ratio": "4 / 3",
         "eyebrow": "Adults Welcome",
         "heading": "A stellar Brickline gift for sci-fi fans",
         "body": "<p>Treat yourself or surprise a movie lover with this set, perfect for fans of science fiction and space adventure stories.</p>",
         "button_label": "Shop now",
+        "button_link": "",
         "background_color": "#000000",
         "text_color": "#ffffff",
         "padding-block-start": 56,
@@ -131,11 +165,12 @@
         "heading": "Recommended For You",
         "products_to_show": 5,
         "columns": 5,
+        "columns_tablet": 3,
+        "columns_mobile": 2,
+        "collection": "",
         "section_width": "page-width",
         "padding-block-start": 64,
-        "padding-block-end": 24,
-        "columns_tablet": 3,
-        "columns_mobile": 2
+        "padding-block-end": 24
       }
     },
     "recently_viewed": {
@@ -144,11 +179,11 @@
         "heading": "Recently Viewed Sets",
         "products_to_show": 5,
         "columns": 5,
+        "columns_tablet": 3,
+        "columns_mobile": 2,
         "section_width": "page-width",
         "padding-block-start": 0,
-        "padding-block-end": 72,
-        "columns_tablet": 3,
-        "columns_mobile": 2
+        "padding-block-end": 72
       }
     }
   },
