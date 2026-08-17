@@ -11,36 +11,71 @@
     {% endif %}
 
     <div class="circle-grid__items brickline-grid">
-      {% for block in section.blocks %}
+      {% comment %}
+        Circles come from the product's `custom.swatches` when this is a product
+        template and that list is filled in, so products sharing a template don't
+        share its swatches. Otherwise the section's own blocks are used.
+      {% endcomment %}
+      {% liquid
+        assign items = section.blocks
+        assign from_product = false
+
+        if section.settings.use_product_swatches and product != blank
+          assign product_swatches = product.metafields.custom.swatches.value
+          if product_swatches != blank
+            assign items = product_swatches
+            assign from_product = true
+          endif
+        endif
+      %}
+
+      {% for item in items %}
         {% liquid
+          if from_product
+            assign swatch_link = item.link.value
+            assign swatch_color = item.color.value
+            # A file_reference resolves to a media_image, but image_picker gives a
+            # plain image. Unwrap so image_url / alt / width / height work on either.
+            assign swatch_image = item.image.value
+            if swatch_image.image != blank
+              assign swatch_image = swatch_image.image
+            endif
+            assign swatch_label = item.label.value
+          else
+            assign swatch_link = item.settings.link
+            assign swatch_color = item.settings.color
+            assign swatch_image = item.settings.image
+            assign swatch_label = item.settings.label
+          endif
+
           assign tag = 'div'
-          if block.settings.link != blank
+          if swatch_link != blank
             assign tag = 'a'
           endif
         %}
         <{{ tag }}
           {% if tag == 'a' %}
-            href="{{ block.settings.link }}"
+            href="{{ swatch_link }}"
           {% endif %}
           class="circle-grid__item"
-          {{ block.shopify_attributes }}
+          {% unless from_product %}{{ item.shopify_attributes }}{% endunless %}
         >
           <span
             class="circle-grid__circle"
-            style="background: {{ block.settings.color }};"
+            style="background: {{ swatch_color }};"
           >
-            {% if block.settings.image != blank %}
+            {% if swatch_image != blank %}
               <img
-                src="{{ block.settings.image | image_url: width: 300 }}"
+                src="{{ swatch_image | image_url: width: 300 }}"
                 alt=""
                 class="circle-grid__image"
-                width="{{ block.settings.image.width }}"
-                height="{{ block.settings.image.height }}"
+                width="{{ swatch_image.width }}"
+                height="{{ swatch_image.height }}"
                 loading="lazy"
               >
             {% endif %}
           </span>
-          <span class="circle-grid__label">{{ block.settings.label }}</span>
+          <span class="circle-grid__label">{{ swatch_label }}</span>
         </{{ tag }}>
       {% endfor %}
     </div>
@@ -112,6 +147,13 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_product_swatches",
+      "label": "Use the product's swatches",
+      "info": "On a product template, fills this row from the product's Swatches metafield. Falls back to the blocks below when it is empty.",
+      "default": false
+    },
     {
       "type": "text",
       "id": "heading",

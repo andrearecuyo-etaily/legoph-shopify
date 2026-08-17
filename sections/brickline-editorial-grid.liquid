@@ -10,36 +10,75 @@
   {% endif %}
 
   <div class="editorial-grid__items brickline-grid">
-    {% for block in section.blocks %}
+    {% comment %}
+      Tiles come from the product's `custom.story_cards` when this is a product
+      template and that list is filled in, so products sharing a template don't
+      share its copy. Otherwise the section's own blocks are used, which is what
+      every non-product template does.
+    {% endcomment %}
+    {% liquid
+      assign items = section.blocks
+      assign from_product = false
+
+      if section.settings.use_product_cards and product != blank
+        assign product_cards = product.metafields.custom.story_cards.value
+        if product_cards != blank
+          assign items = product_cards
+          assign from_product = true
+        endif
+      endif
+    %}
+
+    {% for item in items %}
+      {% liquid
+        if from_product
+          # A file_reference resolves to a media_image, but image_picker gives a
+          # plain image. Unwrap so image_url / alt / width / height work on either.
+          assign card_image = item.image.value
+          if card_image.image != blank
+            assign card_image = card_image.image
+          endif
+          assign card_title = item.title.value
+          assign card_subtitle = item.subtitle.value
+          assign card_button_label = item.button_label.value
+          assign card_button_link = item.button_link.value
+        else
+          assign card_image = item.settings.image
+          assign card_title = item.settings.title
+          assign card_subtitle = item.settings.subtitle
+          assign card_button_label = item.settings.button_label
+          assign card_button_link = item.settings.button_link
+        endif
+      %}
       <article
         class="editorial-grid__item"
-        {{ block.shopify_attributes }}
+        {% unless from_product %}{{ item.shopify_attributes }}{% endunless %}
       >
         <div class="editorial-grid__media">
-          {% if block.settings.image != blank %}
+          {% if card_image != blank %}
             <img
-              src="{{ block.settings.image | image_url: width: 900 }}"
-              alt="{{ block.settings.image.alt | escape }}"
+              src="{{ card_image | image_url: width: 900 }}"
+              alt="{{ card_image.alt | escape }}"
               class="editorial-grid__image"
-              width="{{ block.settings.image.width }}"
-              height="{{ block.settings.image.height }}"
+              width="{{ card_image.width }}"
+              height="{{ card_image.height }}"
               loading="lazy"
             >
           {% endif %}
         </div>
 
-        {% if block.settings.title != blank %}
-          <h3 class="editorial-grid__title">{{ block.settings.title }}</h3>
+        {% if card_title != blank %}
+          <h3 class="editorial-grid__title">{{ card_title }}</h3>
         {% endif %}
-        {% if block.settings.subtitle != blank %}
-          <p class="editorial-grid__subtitle">{{ block.settings.subtitle }}</p>
+        {% if card_subtitle != blank %}
+          <p class="editorial-grid__subtitle">{{ card_subtitle }}</p>
         {% endif %}
-        {% if block.settings.button_label != blank %}
+        {% if card_button_label != blank %}
           <a
-            href="{{ block.settings.button_link | default: '#' }}"
+            href="{{ card_button_link | default: '#' }}"
             class="editorial-grid__button"
           >
-            {{ block.settings.button_label }}
+            {{ card_button_label }}
           </a>
         {% endif %}
       </article>
@@ -136,6 +175,13 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_product_cards",
+      "label": "Use the product's story cards",
+      "info": "On a product template, fills this grid from the product's Story cards metafield. Falls back to the blocks below when it is empty.",
+      "default": false
+    },
     {
       "type": "text",
       "id": "heading",

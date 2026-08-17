@@ -1,40 +1,119 @@
+{% comment %}
+  Content can come from the product instead of the section, so several products
+  can share one product template without sharing its copy. Section settings in a
+  template JSON belong to the template, not the product.
+
+  "Band position" picks one entry from the product's `custom.story_bands` list;
+  0 keeps the section's own settings. Layout, ratio and padding always stay
+  section settings — those belong to the template's design, not the product.
+
+  Anything the metaobject leaves empty falls back to the section setting, so a
+  product can override only its heading and inherit the rest.
+{% endcomment %}
+
+{% liquid
+  assign band = blank
+  assign position = section.settings.product_band_position
+
+  if position > 0 and product != blank
+    assign bands = product.metafields.custom.story_bands.value
+    if bands != blank
+      assign band = bands[position | minus: 1]
+    endif
+  endif
+
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign body = section.settings.body
+  assign image = section.settings.image
+  assign button_label = section.settings.button_label
+  assign button_link = section.settings.button_link
+  assign band_bg = section.settings.background_color
+  assign band_fg = section.settings.text_color
+
+  if band != blank
+    if band.eyebrow.value != blank
+      assign eyebrow = band.eyebrow.value
+    endif
+    if band.heading.value != blank
+      assign heading = band.heading.value
+    endif
+    if band.body != blank
+      assign body = band.body
+    endif
+    if band.image.value != blank
+      assign image = band.image.value
+      # A file_reference resolves to a media_image, but image_picker gives a
+      # plain image. Unwrap so image_url / alt / width / height work on either.
+      if image.image != blank
+        assign image = image.image
+      endif
+    endif
+    if band.button_label.value != blank
+      assign button_label = band.button_label.value
+    endif
+    if band.button_link.value != blank
+      assign button_link = band.button_link.value
+    endif
+    if band.background_color.value != blank
+      assign band_bg = band.background_color.value
+    endif
+    if band.text_color.value != blank
+      assign band_fg = band.text_color.value
+    endif
+  endif
+
+  # Last resort: borrow from the product gallery so an unfilled band shows a
+  # picture rather than an empty box. Band 1 takes the second image, band 2 the
+  # third, and so on, so two bands never show the same shot. Off by default —
+  # bands usually want lifestyle imagery, not a repeat of the gallery.
+  if image == blank and section.settings.fallback_to_product_media and position > 0
+    # product.media gives a media object; preview_image is the plain image, so
+    # image_url / alt / width / height match the other two sources.
+    assign fallback = product.media[position].preview_image
+    if fallback != blank
+      assign image = fallback
+    endif
+  endif
+%}
+
 <link rel="stylesheet" href="{{ 'brickline-cera-pro.css' | asset_url }}">
 <link rel="stylesheet" href="{{ 'brickline-tokens.css' | asset_url }}">
 
 <div
   class="feature-band feature-band--{{ section.settings.layout }} feature-band--mobile-{{ section.settings.mobile_order }} feature-band--text-{{ section.settings.text_alignment }} brickline-section spacing-style"
-  style="{% render 'spacing-padding', settings: section.settings %}; --band-bg: {{ section.settings.background_color }}; --band-fg: {{ section.settings.text_color }}; --band-ratio: {{ section.settings.image_ratio }};"
+  style="{% render 'spacing-padding', settings: section.settings %}; --band-bg: {{ band_bg }}; --band-fg: {{ band_fg }}; --band-ratio: {{ section.settings.image_ratio }};"
 >
   <div class="brickline-container feature-band__inner">
     <div class="feature-band__media">
-      {% if section.settings.image != blank %}
+      {% if image != blank %}
         <img
-          src="{{ section.settings.image | image_url: width: 1400 }}"
-          alt="{{ section.settings.image.alt | escape }}"
+          src="{{ image | image_url: width: 1400 }}"
+          alt="{{ image.alt | escape }}"
           class="feature-band__image"
-          width="{{ section.settings.image.width }}"
-          height="{{ section.settings.image.height }}"
+          width="{{ image.width }}"
+          height="{{ image.height }}"
           loading="lazy"
         >
       {% endif %}
     </div>
 
     <div class="feature-band__content">
-      {% if section.settings.eyebrow != blank %}
-        <span class="feature-band__eyebrow">{{ section.settings.eyebrow }}</span>
+      {% if eyebrow != blank %}
+        <span class="feature-band__eyebrow">{{ eyebrow }}</span>
       {% endif %}
-      {% if section.settings.heading != blank %}
-        <h2 class="feature-band__heading">{{ section.settings.heading }}</h2>
+      {% if heading != blank %}
+        <h2 class="feature-band__heading">{{ heading }}</h2>
       {% endif %}
-      {% if section.settings.body != blank %}
-        <div class="feature-band__body">{{ section.settings.body }}</div>
+      {% if body != blank %}
+        <div class="feature-band__body">{{ body }}</div>
       {% endif %}
-      {% if section.settings.button_label != blank %}
+      {% if button_label != blank %}
         <a
-          href="{{ section.settings.button_link | default: '#' }}"
+          href="{{ button_link | default: '#' }}"
           class="feature-band__button"
         >
-          {{ section.settings.button_label }}
+          {{ button_label }}
         </a>
       {% endif %}
     </div>
@@ -212,6 +291,27 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "On a product template, set Band position to pull this band's copy from the product's Story bands metafield instead of the settings below. Empty metaobject fields fall back to these settings."
+    },
+    {
+      "type": "range",
+      "id": "product_band_position",
+      "label": "Band position (product templates)",
+      "info": "0 = use the settings below. 1 = the product's first story band, 2 the second, and so on.",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "fallback_to_product_media",
+      "label": "Fall back to the product's gallery",
+      "info": "When the story band has no image, borrow one from the product's photos instead of leaving an empty box. Band 1 takes the second photo, band 2 the third.",
+      "default": false
+    },
     {
       "type": "select",
       "id": "layout",
