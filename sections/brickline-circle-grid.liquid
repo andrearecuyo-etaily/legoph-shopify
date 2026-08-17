@@ -43,6 +43,15 @@
             assign swatch_label = item.settings.label
           endif
 
+          # custom.swatch_images lets a product supply its own circle pictures
+          # in order, without the metaobject setup.
+          if product != blank
+            assign swatch_images = product.metafields.custom.swatch_images.value
+            if swatch_images != blank and swatch_images[forloop.index0] != blank
+              assign swatch_image = swatch_images[forloop.index0]
+            endif
+          endif
+
           # A metaobject file_reference gives a media_image wrapping the image;
           # image_picker gives a plain one. Normalise so image_url / alt / width /
           # height work on either.

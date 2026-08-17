@@ -27,6 +27,22 @@ product admin, so the rating stars and the "Ages · Pieces" row render empty.
 plain decimal, not Shopify's `rating` type — that type is an object, and the
 theme's `| round` would not work on it.
 
+### Just the pictures — no metaobjects needed
+
+If the copy on the template is fine and only the images differ per product, these
+three are the whole job. Each is an ordered list of image files, so they take
+about two minutes to create by hand — **Settings → Custom data → Products → Add
+definition**, type **File**, tick **List of files**, and limit to images.
+
+| Metafield | Fills |
+|---|---|
+| `custom.band_images` | Feature band pictures, by band position — position 1 takes the first |
+| `custom.story_images` | Editorial grid tiles, in order |
+| `custom.swatch_images` | Circle grid pictures, in order |
+
+Then set **Band position** on each feature band and upload the images on the
+product. Nothing else is required — no metaobjects, no script.
+
 ### Per-product page content
 
 There are three product templates (`product`, `product.showcase`,
@@ -45,6 +61,14 @@ These metaobjects move that copy onto the product:
 
 Each is referenced from an ordered list on the product: `custom.story_bands`,
 `custom.story_cards`, `custom.swatches`.
+
+Use these when the *copy* differs per product too. If only the pictures differ,
+the image lists above are simpler and the sections read both.
+
+Where several sources could supply the same picture, the most specific wins:
+the story band metaobject, then the product's image list, then the section's own
+Image setting, then the fallback. Per-product beats the section setting because
+that one is shared by every product on the template.
 
 **Metaobjects hold content; section settings keep design.** Layout, image ratio,
 column counts and padding stay in the section, because they belong to the

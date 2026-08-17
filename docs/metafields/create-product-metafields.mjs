@@ -100,6 +100,24 @@ const METAFIELDS = [
     description: 'Number of reviews, shown in brackets after the stars.',
     type: 'number_integer',
   },
+  // Image-only route. These need no metaobjects, so they can be created by hand
+  // in a couple of minutes and cover the common case: the copy is fine on the
+  // template, only the pictures differ per product.
+  {
+    namespace: 'custom', key: 'band_images', name: 'Band images',
+    description: 'Pictures for this product\'s content bands, in order. Band position 1 takes the first.',
+    type: 'list.file_reference', validations: [{ name: 'file_type_options', value: '["Image"]' }],
+  },
+  {
+    namespace: 'custom', key: 'story_images', name: 'Story images',
+    description: 'Pictures for this product\'s editorial grid tiles, in order.',
+    type: 'list.file_reference', validations: [{ name: 'file_type_options', value: '["Image"]' }],
+  },
+  {
+    namespace: 'custom', key: 'swatch_images', name: 'Swatch images',
+    description: 'Pictures for this product\'s colour circles, in order.',
+    type: 'list.file_reference', validations: [{ name: 'file_type_options', value: '["Image"]' }],
+  },
   {
     namespace: 'custom', key: 'story_bands', name: 'Story bands',
     description: 'Content bands for this product, in order. Each feature band section picks one by position.',

@@ -45,6 +45,16 @@
           assign card_button_link = item.settings.button_link
         endif
 
+        # custom.story_images lets a product supply its own tile pictures in
+        # order, without the metaobject setup. Per-product beats the block
+        # setting, which every product on this template shares.
+        if product != blank
+          assign story_images = product.metafields.custom.story_images.value
+          if story_images != blank and story_images[forloop.index0] != blank
+            assign card_image = story_images[forloop.index0]
+          endif
+        endif
+
         # A metaobject file_reference gives a media_image wrapping the image;
         # image_picker gives a plain one. Normalise so image_url / alt / width /
         # height work on either.

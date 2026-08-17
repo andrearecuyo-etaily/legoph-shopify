@@ -25,7 +25,6 @@
   assign eyebrow = section.settings.eyebrow
   assign heading = section.settings.heading
   assign body = section.settings.body
-  assign image = section.settings.image
   assign button_label = section.settings.button_label
   assign button_link = section.settings.button_link
   assign band_bg = section.settings.background_color
@@ -41,9 +40,6 @@
     if band.body != blank
       assign body = band.body
     endif
-    if band.image.value != blank
-      assign image = band.image.value
-    endif
     if band.button_label.value != blank
       assign button_label = band.button_label.value
     endif
@@ -58,7 +54,31 @@
     endif
   endif
 
-  # Three sources, three shapes: image_picker gives a plain image, a metaobject
+  # The picture, most specific source first:
+  #   1. the story band metaobject, if this product has one
+  #   2. custom.band_images on the product, by band position — the simple route,
+  #      just an ordered list of files and no metaobjects to set up
+  #   3. the section's own Image, which every product on this template shares
+  #   4. the fallback chosen below
+  # Per-product beats the section setting, since that one is template-wide.
+  assign image = blank
+
+  if band != blank
+    assign image = band.image.value
+  endif
+
+  if image == blank and position > 0 and product != blank
+    assign band_images = product.metafields.custom.band_images.value
+    if band_images != blank
+      assign image = band_images[position | minus: 1]
+    endif
+  endif
+
+  if image == blank
+    assign image = section.settings.image
+  endif
+
+  # Those sources have different shapes: image_picker gives a plain image, a
   # file_reference gives a media_image wrapping one, product.media gives a media
   # object. Normalise first so image_url / alt / width / height work on all of
   # them — and so the check below sees a real image.
