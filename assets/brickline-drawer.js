@@ -94,3 +94,16 @@ document.addEventListener('click', (event) => {
   group?.classList.add('is-expanded');
   button.hidden = true;
 });
+
+// Each filter group's header collapses/expands its own option list.
+document.addEventListener('click', (event) => {
+  const toggle = event.target.closest('[data-filter-toggle]');
+  if (!toggle) return;
+
+  event.preventDefault();
+  const group = toggle.closest('[data-filter-group]');
+  if (!group) return;
+
+  const collapsed = group.classList.toggle('is-collapsed');
+  toggle.setAttribute('aria-expanded', String(!collapsed));
+});

@@ -1,0 +1,47 @@
+<!--
+  STRUCTURAL SUMMARY — NOT the verbatim design source.
+
+  This file was not re-fetched via DesignSync (no tool access in the verification
+  subagent that produced it). It records the structural facts relayed by the parent
+  session from a DesignSync fetch of the Brickline Sort Drawer in the source
+  claude.ai/design project, for the purpose of diffing against the built
+  `snippets/brickline-sort-drawer.liquid` + `assets/brickline-drawer.js`.
+  A human/agent with DesignSync access should re-fetch the literal HTML and replace
+  this file to complete the mirror convention used by `Brickline Home.dc.html` and
+  `Brickline Account.dc.html`.
+
+  "Piece Count" and "Rating" sorts in the mock may not correspond to real Shopify
+  sort keys unless the store has metafield-based sort options configured.
+-->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+
+<!-- Slide-in panel from right, 340px wide -->
+<div class="drawer-panel" style="width:340px;position:fixed;right:0;top:0;height:100vh;">
+  <header>
+    <h2>Sort By</h2>
+    <button aria-label="Close">×</button>
+  </header>
+
+  <!-- Radio list, Recommended checked by default -->
+  <div class="sort-options">
+    <label><input type="radio" name="sort" checked> Recommended</label>
+    <label><input type="radio" name="sort"> Newest</label>
+    <label><input type="radio" name="sort"> Price: Low to High</label>
+    <label><input type="radio" name="sort"> Price: High to Low</label>
+    <label><input type="radio" name="sort"> Piece Count: High to Low</label>
+    <label><input type="radio" name="sort"> Rating</label>
+    <label><input type="radio" name="sort"> A-Z</label>
+  </div>
+
+  <!-- Full-width Apply button pinned at bottom, separate footer area,
+       border-top divider from the scrollable list above -->
+  <footer class="drawer-footer" style="border-top:1px solid;">
+    <button class="apply" style="width:100%;">Apply</button>
+  </footer>
+</div>
+
+</body>
+</html>

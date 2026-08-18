@@ -34,6 +34,14 @@
           Cancelled {{ order.cancelled_at | date: '%d %B %Y' }} — {{ order.cancel_reason_label }}
         </p>
       </div>
+    {% else %}
+      <div class="account__confirmation-banner">
+        <div>
+          <span class="account__confirmation-eyebrow">Order {{ order.name }} confirmed</span>
+          <span class="account__confirmation-heading">Thank you, {{ order.customer.first_name | default: order.shipping_address.first_name }}!</span>
+        </div>
+        <span class="account__confirmation-note">A confirmation has been sent to {{ order.email }}</span>
+      </div>
     {% endif %}
 
     <div class="account__panel">
@@ -138,10 +146,49 @@
         {% endif %}
       </div>
     </div>
+
+    <div class="account__actions">
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="account__button account__button--secondary"
+      >
+        Continue shopping
+      </a>
+    </div>
   </div>
 </div>
 
 {% stylesheet %}
+  .account__confirmation-banner {
+    background: var(--brand-green, #00af4d);
+    color: var(--text-inverse, #ffffff);
+    padding: 32px;
+    margin-block-end: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .account__confirmation-eyebrow {
+    display: block;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  .account__confirmation-heading {
+    display: block;
+    font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+  }
+
+  .account__confirmation-note {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
   .account__status-row {
     display: flex;
     gap: 8px;

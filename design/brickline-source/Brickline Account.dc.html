@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/tokens/shape.css">
+  <link rel="stylesheet" href="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/styles.css">
+  <script src="_ds/brickline-design-system-67f79e5c-1110-42bb-80fb-cf1887de56da/_ds_bundle.js"></script>
+  <style>
+    span { font-family: var(--font-body); }
+    input, textarea, select, button, label { font-family: var(--font-body); }
+    body { margin: 0; background: var(--surface-page); }
+    a { color: var(--text-link); font-family: var(--font-body); }
+    a:hover { color: var(--text-link-hover); }
+  </style>
+</helmet>
+
+<div style="font-family: var(--font-body); background: var(--surface-page); color: var(--text-default);">
+
+  <!-- Utility bar -->
+  <div style="background: var(--surface-tertiary); border-bottom: 1px solid var(--color-border-default); display: flex; align-items: center; justify-content: space-between; padding: 8px 24px; font-size: 12px; color: var(--text-subtle);">
+    <span style="font-family: var(--font-display); font-weight: 700; font-size: 11px; text-transform: uppercase; background: var(--surface-muted); padding: 4px 10px; border-radius: 0;">Certified Store</span>
+    <span>Find a store near you</span>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <span>Account</span>
+      <span>Wishlist</span>
+      <span style="font-weight: 700;">In Bag</span>
+    </div>
+  </div>
+
+  <!-- Auth bar -->
+  <header style="background: var(--brand-yellow); position: relative;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="Brickline Home.dc.html" style="width: 120px; height: 32px; background: rgba(0,0,0,0.15); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; text-decoration:none;">
+        <span style="font-family: var(--font-display); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand-black); opacity: 0.6;">Logo</span>
+      </a>
+      <a href="Brickline Home.dc.html" aria-label="Close" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </a>
+    </div>
+  </header>
+
+  <section style="max-width: 480px; margin: 0 auto; padding: 56px 24px 80px; text-align: center;">
+    <h1 style="font-family: var(--font-display); font-weight: 700; font-size: 28px; margin: 0 0 12px;">Sign in or create your Brickline account</h1>
+    <p style="font-size: 15px; color: var(--text-subtle); margin: 0 0 28px;">If you're a new Brickline builder, start by putting in your email.</p>
+
+    <div style="background: var(--surface-page); border: 1px solid var(--color-border-default); padding: 32px; text-align: left;">
+      <div style="display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--color-border-default);">
+        <div onclick="{{ setTab('login') }}" style="flex: 1; text-align: center; padding-bottom: 14px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: {{ tab === 'login' ? 'var(--text-default)' : 'var(--text-meta)' }}; border-bottom: {{ tab === 'login' ? '2px solid var(--brand-black)' : '2px solid transparent' }};">Log In</div>
+        <div onclick="{{ setTab('register') }}" style="flex: 1; text-align: center; padding-bottom: 14px; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: {{ tab === 'register' ? 'var(--text-default)' : 'var(--text-meta)' }}; border-bottom: {{ tab === 'register' ? '2px solid var(--brand-black)' : '2px solid transparent' }};">Register</div>
+      </div>
+
+      <sc-if value="{{ tab === 'login' }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <label style="font-size: 13px; color: var(--text-subtle);">Email or username</label>
+          <input type="email" placeholder="Write your email or username" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0; margin-top: -6px;">
+          <input type="password" placeholder="Password" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+          <a href="#" onclick="{{ setTab('forgot') }}" style="font-size: 13px; margin-top: -2px;">Forgot your password?</a>
+          <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="accent" size="md" style="border-radius:0; width:100%; margin-top: 12px;" hint-size="100%,48px">Continue</x-import>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ tab === 'forgot' }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ !resetSent }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="font-size: 14px; color: var(--text-subtle); margin: 0 0 4px;">Enter your email and we'll send a link to reset your password.</p>
+            <input type="email" value="{{ resetEmail }}" oninput="{{ setResetEmail(event.target.value) }}" placeholder="Email address" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+            <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="accent" size="md" style="border-radius:0; width:100%; margin-top: 4px;" onclick="{{ sendReset }}" hint-size="100%,48px">Send Reset Link</x-import>
+            <a href="#" onclick="{{ setTab('login') }}" style="font-size: 13px; text-align: center;">Back to Log In</a>
+          </div>
+        </sc-if>
+        <sc-if value="{{ resetSent }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align: center; padding: 12px 0;">
+            <span style="font-family: var(--font-display); font-weight: 700; font-size: 16px; display: block; margin-bottom: 8px;">Check your inbox</span>
+            <span style="font-size: 14px; color: var(--text-subtle);">If an account exists for {{ resetEmail }}, a reset link is on its way.</span>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ tab === 'register' }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <input type="text" placeholder="First name" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+            <input type="text" placeholder="Last name" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+          </div>
+          <input type="email" placeholder="Email" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+          <input type="password" placeholder="Password" style="padding: 12px 14px; border: 1px solid var(--color-border-default); font-size: 14px; border-radius: 0;">
+          <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="accent" size="md" style="border-radius:0; width:100%; margin-top: 8px;" hint-size="100%,48px">Create Account</x-import>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <!-- Footer -->
+  <!-- Footer -->
+  <footer style="background: #1A1A1A; color: var(--text-inverse); padding: 64px 24px 28px;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1.1fr repeat(4, 1fr); gap: 32px; padding-bottom: 40px;">
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="width: 96px; height: 96px; background: var(--brand-orange); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--text-inverse);">BL</span>
+          </div>
+          <div style="background: #F2F2F2; border-radius: var(--radius-pill); padding: 10px 16px; display: flex; align-items: center; gap: 8px; width: fit-content;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-black)" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+            <span style="font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--brand-black);">Philippines</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <a href="Brickline Gift Card.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Gift cards</a>
+            <a href="Brickline Collections.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sitemap</a>
+            <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Find inspiration</a>
+            <a href="Brickline Our Stores.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Find a store</a>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">About Us</span>
+          <a href="Brickline About Us.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">About Brickline</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Brickline news</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sustainability</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Supply chain statement</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Product certification</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Support</span>
+          <a href="Brickline Contact Us.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Contact us</a>
+          <a href="Brickline FAQs.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">FAQ</a>
+          <a href="Brickline Returns.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Returns</a>
+          <a href="Brickline Shipping Information.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Delivery &amp; shipping</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Payment methods</a>
+          <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Terms &amp; conditions</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">My Account</span>
+          <a href="Brickline Account.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Sign-in / Sign-up</a>
+          <a href="Brickline Account.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Account</a>
+          <a href="Brickline Order History.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Orders</a>
+          <a href="Brickline Addresses.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">My Addresses</a>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">More From Us</span>
+          <a href="Brickline Loyalty.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Loyalty program</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Ideas &amp; inspiration</a>
+          <a href="Brickline Blog.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Affiliate program</a>
+          <a href="Brickline Loyalty.dc.html" style="color: var(--text-inverse); font-size: 14px; text-decoration: none; opacity: 0.85;">Student &amp; exclusive offers</a>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; padding-bottom: 40px; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Subscribe to Digital Marketing Emails</span>
+          <div style="display: flex; gap: 0; width: 340px; background: #F2F2F2; border-radius: var(--radius-pill); padding: 4px 4px 4px 18px; align-items: center;">
+            <span style="font-size: 14px; color: var(--text-meta); flex: 1;">Your email address</span>
+            <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" size="sm" style="border-radius: var(--radius-pill); width: auto;" hint-size="auto,36px">Subscribe</x-import>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-inverse);">Follow Us</span>
+          <div style="display: flex; gap: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><path d="M16 8h-2a2 2 0 0 0-2 2v2h4l-.5 4H12v8h-4v-8H6v-4h2v-2.5A4.5 4.5 0 0 1 12.5 3H16v5z"></path></svg>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="var(--text-inverse)" stroke="none"></circle></svg>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M9 9l6 3-6 3z" fill="var(--text-inverse)" stroke="none"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; display: flex; gap: 24px; flex-wrap: wrap;">
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Privacy policy</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Cookies</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Cookie settings</a>
+        <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Legal notice</a>
+        <a href="Brickline Terms and Conditions.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Terms of use</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Digital wellbeing</a>
+        <a href="Accessibility Statement.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Accessibility</a>
+        <a href="Brickline Privacy Policy.dc.html" style="color: var(--text-inverse); font-size: 13px; text-decoration: none; opacity: 0.85;">Do not sell/share my personal information</a>
+      </div>
+
+      <div style="padding-top: 16px;">
+        <span style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6">Brickline Trading Co., Makati City, Metro Manila, Philippines. Must be 18 years or older to purchase online. Brickline and the Brickline logo are trademarks of Brickline Trading Co. &copy;2026 Brickline. All rights reserved. Use of this site signifies your agreement to the Terms of Use.</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'login', resetEmail: '', resetSent: false };
+  setTab = (t) => this.setState({ tab: t, resetSent: false });
+  setResetEmail = (v) => this.setState({ resetEmail: v });
+  sendReset = () => { if (this.state.resetEmail.trim()) this.setState({ resetSent: true }); };
+  renderVals() {
+    return {
+      tab: this.state.tab,
+      setTab: this.setTab,
+      resetEmail: this.state.resetEmail,
+      setResetEmail: this.setResetEmail,
+      resetSent: this.state.resetSent,
+      sendReset: this.sendReset,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

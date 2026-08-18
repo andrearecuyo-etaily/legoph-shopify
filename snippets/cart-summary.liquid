@@ -3,6 +3,7 @@
 
   @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
   @param {string} [section_id] - The section ID for cart discount component.
+  @param {boolean} [brickline_show_view_cart_link] - Brickline addition: shows a "View Full Bag" link to the cart page below the checkout button. Only passed true from the cart drawer, where the design has both a checkout button and a link to the full cart page.
 {%- enddoc -%}
 
 {% render 'text-component-shimmer-styles' %}
@@ -282,6 +283,15 @@
     >
       {{ content_for_additional_checkout_buttons }}
     </div>
+  {% endif %}
+
+  {% if brickline_show_view_cart_link %}
+    <a
+      href="{{ routes.cart_url }}"
+      class="brickline-cart-drawer__view-full-bag"
+    >
+      View Full Bag
+    </a>
   {% endif %}
 </div>
 

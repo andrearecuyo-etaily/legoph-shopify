@@ -1,0 +1,126 @@
+<!--
+  STRUCTURAL SUMMARY — NOT the verbatim design source.
+
+  This file was not re-fetched via DesignSync (no tool access in the verification
+  subagent that produced it). It records the structural facts relayed by the parent
+  session from a DesignSync fetch of the Brickline Filters Drawer in the source
+  claude.ai/design project, for the purpose of diffing against the built
+  `snippets/brickline-filters-drawer.liquid` + `assets/brickline-drawer.js`.
+  A human/agent with DesignSync access should re-fetch the literal HTML and replace
+  this file to complete the mirror convention used by `Brickline Home.dc.html` and
+  `Brickline Account.dc.html`.
+
+  Filter categories below (Play Type, Product Type, Price, Theme, Age, Availability,
+  Piece Count) are the MOCK's hardcoded categories, not necessarily what this store's
+  real Shopify collection.filters expose — that's expected translation, not drift.
+-->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+
+<!-- Slide-in panel from right, 380px wide -->
+<div class="drawer-panel" style="width:380px;position:fixed;right:0;top:0;height:100vh;">
+  <header>
+    <h2>Filters</h2>
+    <button aria-label="Close">×</button>
+  </header>
+
+  <!-- Standalone checkbox, no section header -->
+  <label class="filter-toggle">
+    <input type="checkbox"> Show In Stock Only
+  </label>
+
+  <!-- Collapsible filter group: header (name + chevron/expand icon) + checkbox list -->
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Play Type</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <label><input type="checkbox"> Building</label>
+      <label><input type="checkbox"> Racing</label>
+    </div>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Product Type</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <!-- ... checkboxes ... -->
+    </div>
+    <a class="see-more">+ See More</a>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Price</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <label><input type="checkbox"> ₱0 – ₱1,000</label>
+      <label><input type="checkbox"> ₱1,000 – ₱2,500</label>
+      <!-- ... more ranges ... -->
+    </div>
+    <button class="group-apply">Apply</button>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Theme</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <!-- ... checkboxes ... -->
+    </div>
+    <a class="see-more">+ See More</a>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Age</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <label><input type="checkbox"> 1.5+</label>
+      <label><input type="checkbox"> 4+</label>
+      <label><input type="checkbox"> 6+</label>
+      <label><input type="checkbox"> 9+</label>
+      <label><input type="checkbox"> 13+</label>
+      <label><input type="checkbox"> 18+</label>
+    </div>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Availability</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <label><input type="checkbox"> Available Now</label>
+      <label><input type="checkbox"> Coming Soon</label>
+      <label><input type="checkbox"> Pre-order</label>
+      <label><input type="checkbox"> Out of Stock</label>
+    </div>
+  </section>
+
+  <section class="filter-group" data-collapsible>
+    <header class="filter-group__header">
+      <span>Piece Count</span>
+      <svg class="chevron"></svg>
+    </header>
+    <div class="filter-group__options">
+      <!-- ... ranges ... -->
+    </div>
+  </section>
+
+  <!-- Full-width Apply button pinned at very bottom of drawer -->
+  <footer class="drawer-footer" style="border-top:1px solid;">
+    <button class="apply-all" style="width:100%;">Apply</button>
+  </footer>
+</div>
+
+</body>
+</html>

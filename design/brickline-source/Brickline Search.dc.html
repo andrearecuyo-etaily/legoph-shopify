@@ -1,0 +1,59 @@
+<!--
+  STRUCTURAL SUMMARY — NOT the verbatim design source.
+
+  This file was not re-fetched via DesignSync (no tool access in the verification
+  subagent that produced it). It records the structural facts relayed by the parent
+  session from a DesignSync fetch of the Brickline Search page in the source
+  claude.ai/design project, for the purpose of diffing against the built
+  `sections/brickline-search.liquid` (rendered via `templates/search.json`).
+  A human/agent with DesignSync access should re-fetch the literal HTML and replace
+  this file to complete the mirror convention used by `Brickline Home.dc.html` and
+  `Brickline Account.dc.html`.
+
+  Same header/footer as every other page — omitted here, not relevant to the diff.
+-->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+
+<!-- Pill-shaped search input, search icon, max-width 480px, pre-filled with current query -->
+<form class="search-form" style="border-radius:999px;max-width:480px;">
+  <svg class="icon-search"></svg>
+  <input type="search" value="{{ query }}" placeholder="Search sets…">
+</form>
+
+<!-- Results count, live query interpolated -->
+<span class="results-count">Showing {{ N }} results for "{{ query }}"</span>
+
+<!-- If 0 results: row of clickable "suggestion" pills (popular search terms), shown
+     inline near the query text, NOT inside the empty-state block below -->
+<div class="search-suggestions" style="display:{{ N === 0 ? 'flex' : 'none' }}">
+  <a class="suggestion-pill">Everfrost</a>
+  <a class="suggestion-pill">Technic</a>
+  <a class="suggestion-pill">Exclusives</a>
+  <a class="suggestion-pill">City</a>
+</div>
+
+<!-- Results: 4-column grid of product cards -->
+<div class="results-grid" style="display:grid;grid-template-columns:repeat(4,1fr);">
+  <!-- x-import component-from-global-scope="BricklineDesignSystem_67f79e.Card" -->
+  <div class="product-card">
+    <img src="{{ product.image }}">
+    <span class="product-name">{{ product.name }}</span>
+    <!-- x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" -->
+    <span class="product-price">{{ product.price }}</span>
+    <!-- x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" -->
+    <button class="add-to-bag" style="width:100%;">Add to Bag</button>
+  </div>
+</div>
+
+<!-- Empty state: 0 results AND no query, or 0 results with no partial match — centered,
+     no suggestion pills shown in THIS block (they render near the query text instead) -->
+<div class="empty-state" style="text-align:center;margin:0 auto;">
+  <h2>No results found</h2>
+  <p>Try checking your spelling or use a more general term.</p>
+</div>
+
+</body>
+</html>
