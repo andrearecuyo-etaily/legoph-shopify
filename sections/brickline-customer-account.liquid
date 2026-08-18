@@ -125,6 +125,100 @@
             </a>
           </div>
         </div>
+
+        <div
+          class="account__panel"
+          id="account-details"
+        >
+          <h2 class="account__panel-heading">{{ section.settings.details_heading | default: 'Account Details' }}</h2>
+
+          {% form 'customer', customer, class: 'account__form' %}
+            {% if form.errors %}
+              <div
+                class="account__form-field--full account__errors"
+                role="alert"
+              >
+                {{ form.errors | default_errors }}
+              </div>
+            {% endif %}
+
+            <div class="account__form-field account__form-field--half">
+              <label for="account-first-name">First name</label>
+              <input
+                id="account-first-name"
+                type="text"
+                name="customer[first_name]"
+                value="{{ form.first_name }}"
+                autocomplete="given-name"
+              >
+            </div>
+
+            <div class="account__form-field account__form-field--half">
+              <label for="account-last-name">Last name</label>
+              <input
+                id="account-last-name"
+                type="text"
+                name="customer[last_name]"
+                value="{{ form.last_name }}"
+                autocomplete="family-name"
+              >
+            </div>
+
+            <div class="account__form-field account__form-field--full">
+              <label for="account-email">Email</label>
+              <input
+                id="account-email"
+                type="email"
+                name="customer[email]"
+                value="{{ form.email }}"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="account__form-field account__form-field--full">
+              <label for="account-phone">Phone number</label>
+              <input
+                id="account-phone"
+                type="tel"
+                name="customer[phone]"
+                value="{{ form.phone }}"
+                autocomplete="tel"
+              >
+            </div>
+
+            <div class="account__form-field account__form-field--full account__form-field--divider">
+              <label for="account-password">New password</label>
+              <input
+                id="account-password"
+                type="password"
+                name="customer[password]"
+                autocomplete="new-password"
+                placeholder="Leave blank to keep current password"
+              >
+            </div>
+
+            <div class="account__form-field account__form-field--full">
+              <label for="account-password-confirmation">Confirm new password</label>
+              <input
+                id="account-password-confirmation"
+                type="password"
+                name="customer[password_confirmation]"
+                autocomplete="new-password"
+                placeholder="Only needed if setting a new password"
+              >
+            </div>
+
+            <div class="account__actions account__form-field--full">
+              <button
+                type="submit"
+                class="account__button"
+              >
+                {{ section.settings.details_submit | default: 'Save Changes' }}
+              </button>
+            </div>
+          {% endform %}
+        </div>
       </div>
     </div>
   </div>
@@ -168,6 +262,18 @@
       "id": "address_heading",
       "label": "Address heading",
       "default": "Default Address"
+    },
+    {
+      "type": "text",
+      "id": "details_heading",
+      "label": "Account details heading",
+      "default": "Account Details"
+    },
+    {
+      "type": "text",
+      "id": "details_submit",
+      "label": "Account details submit button",
+      "default": "Save Changes"
     },
     {
       "type": "range",

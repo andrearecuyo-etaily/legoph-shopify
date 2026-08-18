@@ -30,8 +30,7 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - [x] About Us — `templates/page.about.json` (inset banner + `brickline-rich-text` sections)
 - [x] Coming Soon — `templates/password.json` (`brickline-coming-soon`, live countdown + storefront password form)
 - [x] Free Shipping — `templates/page.free-shipping.json` (`brickline-cta-banner`, `brickline-product-grid`, small-print `brickline-rich-text`, `brickline-feature-band`)
-- [x] Account / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
-- [ ] Account Details — **no editable form exists** (see Verification pass below); `templates/customers/account.liquid` currently only shows Order History + Default Address
+- [x] Account / Account Details / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
 - [x] Wishlist — `templates/page.wishlist.json` (`brickline-wishlist`, localStorage-backed; see note below)
 - [ ] Checkout — see note below
 
@@ -87,16 +86,18 @@ Shopify `customer` / `order` object model in the established Brickline visual
 language and confirmed (2026-08-18) against their design files — see Verification
 pass below.
 
-**`Account Details` was never built.** `templates/customers/account.liquid` only
-renders Order History + Default Address; there is no first name / last name /
-email / phone / password edit form anywhere in the codebase, despite the CSS for
-it already existing unused (`assets/brickline-account.css:480-527`,
-`.account__form*`). `brickline-account-nav.liquid` has no "Account Details" link
-as a direct consequence. Needs `{% form 'customer', customer %}` with
-`customer[first_name]`, `customer[last_name]`, `customer[email]`,
-`customer[phone]` (valid Liquid property, not blocked by the data model),
-`customer[password]`/`customer[password_confirmation]` — real data-wiring work,
-scoped as follow-up rather than built in this pass.
+**`Account Details` — built 2026-08-18**, as a follow-up to the verification
+pass below. `sections/brickline-customer-account.liquid` now has a third panel
+(`id="account-details"`) with a `{% form 'customer', customer %}` covering
+first name, last name, email, phone (`customer[phone]`), and an optional new
+password + confirmation pair (Shopify's classic-account form requires both
+together, so this is one field more than the design showed). Uses the
+`.account__form*` CSS that already existed unused
+(`assets/brickline-account.css:480-527`, plus new `.account__form-field--divider`
+and `.account__errors` added alongside it). `brickline-account-nav.liquid` gained
+an "Account Details" nav link — classic accounts have no separate route for a
+details page, so it's an in-page anchor (`{{ routes.account_url }}#account-details`)
+to the same `/account` page Order History lives on, not a second URL.
 
 **Wishlist — built, per-browser only.** Saved product ids live in `localStorage`
 under `brickline_wishlist`; `assets/brickline-wishlist.js` owns all reads and
