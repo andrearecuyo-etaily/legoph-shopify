@@ -68,7 +68,11 @@ Every one of these pages already shares the exact same utility bar / header / fo
 - Cart/account/checkout pages (`Brickline Cart`, `Brickline Cart Drawer`, `Brickline Checkout`, `Brickline Account*`, `Brickline Order *`) will need real Shopify data wiring (cart object, customer object, order object) rather than the static/mock JS state used in the design source — these are the highest-effort conversions.
 - `Brickline 404`, `Free Shipping`, `Accessibility Statement`, `Brickline Privacy Policy`, `Brickline Terms and Conditions`, `Brickline Returns`, `Brickline FAQs`, `Brickline Shipping Information` are mostly static content — good candidates to convert early/quickly.
 - `Brickline Collections`, `Brickline Collection 1/2`, `Brickline Search` are full PLP/search patterns — will need real Shopify collection/search objects and filters, not the mock arrays in the source.
-- Footer legal-links menu (spec row 3: Privacy policy, Cookies, Cookie settings, Legal notice, Terms of use, Digital wellbeing, Accessibility, Do not sell/share my personal information) currently has no menu wired in `brickline-footer.liquid`'s `legal_menu` setting (removed as a default because no matching Shopify navigation menu exists yet) — create that menu in Shopify admin and set it in the footer section settings when ready.
+- Footer legal-links menu — the `legal_menu` setting and its render loop were
+  always fully wired in `brickline-footer.liquid`; only the Shopify navigation
+  menu itself was missing. `docs/menus/create-footer-legal-menu.mjs` creates it
+  via the Admin API (see `docs/menus/README.md`) — run it, then set Footer →
+  "Legal links menu" → "Legal" in the theme editor.
 
 ## Blocked / needs a decision
 
@@ -147,13 +151,14 @@ Re-checked Account, Cart Drawer, and Cart against design source.
 - **Cart Drawer** (`snippets/cart-drawer.liquid`, `brickline-shipping-meter.liquid`,
   `brickline-cart-upsells.liquid`) — shipping meter and "You might also like"
   upsell row are both present and wired correctly; fixed a missing 🧱 emoji on the
-  "unlocked" message. **Missing:** a "View Full Bag" link to `/cart` below the
-  Check Out button in the drawer footer (`snippets/cart-summary.liquid`) — the
-  design has both a Check Out button and a secondary text link to the full cart
-  page; only the button exists today. Scoped as follow-up, not built in this pass.
-  `Brickline Cart Drawer.dc.html` in this folder is a structural summary, not the
-  literal fetched HTML (no DesignSync access in the verification pass) — re-fetch
-  it via `DesignSync get_file` before relying on exact copy/markup from it.
+  "unlocked" message. **Fixed (2026-08-18):** added the "View Full Bag" link to
+  `/cart` below the Check Out button — `snippets/cart-summary.liquid` gained an
+  optional `brickline_show_view_cart_link` param (only passed `true` from the
+  drawer, so the full cart page's own summary is unaffected), styled in
+  `assets/brickline-cart.css`. `Brickline Cart Drawer.dc.html` in this folder is
+  a structural summary, not the literal fetched HTML (no DesignSync access in
+  the verification pass) — re-fetch it via `DesignSync get_file` before relying
+  on exact copy/markup from it.
 - **Cart** (`sections/brickline-main-cart.liquid`) — has all five checked features:
   age/pieces meta line, discount code field, order-notes textarea, cross-sell grid,
   and a merchant-configurable "Gift with purchase" block. No structural drift.
@@ -176,12 +181,14 @@ Re-checked Account, Cart Drawer, and Cart against design source.
   items, thumbnails, qty, totals, and shipping-method-in-totals were already
   correct. Fixed: added a "Continue shopping" button at the bottom
   (`routes.all_products_collection_url`), matching the design's closing CTA.
-  **Not fixed, needs a product decision:** no green "Order #X confirmed / Thank
-  you, {name}!" banner — this section doubles as both the post-checkout
-  confirmation and the ordinary order-detail view for old orders, and Liquid has
-  no signal for "just came from checkout" to gate a one-time banner correctly.
-  Also no card-brand/last-4 payment display ("Visa ending in 4242") — that data
-  lives on `order.transactions`, not exposed to storefront Liquid; would need an
+  **Fixed (2026-08-18):** added the green "Order #X confirmed / Thank you,
+  {name}!" banner, shown whenever the order isn't cancelled (there's no Liquid
+  signal for "just came from checkout" vs. viewing an old order from history,
+  so it's persistent rather than one-time — a customer's own order page saying
+  "thank you" regardless of when they view it is a normal pattern, not
+  incorrect). **Still not buildable:** card-brand/last-4 payment display ("Visa
+  ending in 4242") — that data lives on `order.transactions`, which storefront
+  Liquid does not expose at all (not a plan/permission gap); would need an
   Admin-API-backed proxy, out of scope for a theme-only fix.
 - **Search** (`sections/brickline-search.liquid`) — pill search input, live
   results-count text, genuine empty state, 4-column product grid, and popular
@@ -200,8 +207,8 @@ Re-checked Account, Cart Drawer, and Cart against design source.
 - **Sort Drawer** (`snippets/brickline-sort-drawer.liquid`) — radio list bound to
   real `collection.sort_options`/`collection.sort_by`, pinned "Apply" footer, and
   the deliberate absence of "Piece Count"/"Rating" sorts (no metafield-based sort
-  config confirmed) all matched the design's intent — no fixes needed. **Known
-  gap, not fixed:** the shared `.bl-drawer__panel` class is hardcoded to 380px for
-  both Filters and Sort, but the design specifies 340px for Sort specifically.
-  Left unfixed since it touches shared drawer infrastructure used by two pages —
-  a follow-up modifier class (e.g. `bl-drawer--narrow`) would be the low-risk fix.
+  config confirmed) all matched the design's intent — no fixes needed. **Fixed
+  (2026-08-18):** added a `.bl-drawer__panel--narrow` modifier class (340px) in
+  `assets/brickline-drawer.css`, applied only to the Sort drawer's panel — the
+  Filters drawer keeps the base 380px, unaffected since it's an additive
+  modifier, not a change to the shared base rule.

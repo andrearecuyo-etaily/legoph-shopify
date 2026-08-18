@@ -597,3 +597,18 @@
     background: var(--surface-tertiary, #f7f7f7);
   }
 }
+
+.brickline-cart-drawer__view-full-bag {
+  display: block;
+  text-align: center;
+  margin-block-start: 12px;
+  font-family: "Cera Pro", var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-default, #141414);
+  text-decoration: none;
+}
+
+.brickline-cart-drawer__view-full-bag:hover {
+  text-decoration: underline;
+}

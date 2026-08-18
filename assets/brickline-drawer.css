@@ -30,6 +30,11 @@
   animation: bl-drawer-in 220ms ease;
 }
 
+/* Sort's panel is narrower than Filters' in the source design (340px vs 380px). */
+.bl-drawer__panel--narrow {
+  width: 340px;
+}
+
 /* Full-height sheet is fine on phones, but a 380px rail on a 360px screen
    leaves no dismiss target — cap it so the overlay stays tappable. */
 @media screen and (max-width: 480px) {
