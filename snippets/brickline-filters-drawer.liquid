@@ -79,9 +79,15 @@
               class="bl-drawer__group"
               data-filter-group
             >
-              <div class="bl-drawer__group-header">
+              <button
+                type="button"
+                class="bl-drawer__group-header"
+                data-filter-toggle
+                aria-expanded="true"
+              >
                 <span class="bl-drawer__group-title">{{ filter.label }}</span>
-              </div>
+                {%- render 'brickline-icon', icon: 'chevron-down' -%}
+              </button>
               <div class="bl-drawer__options">
                 {% for value in filter.values %}
                   <label
@@ -114,10 +120,19 @@
             </div>
 
           {% when 'price_range' %}
-            <div class="bl-drawer__group">
-              <div class="bl-drawer__group-header">
+            <div
+              class="bl-drawer__group"
+              data-filter-group
+            >
+              <button
+                type="button"
+                class="bl-drawer__group-header"
+                data-filter-toggle
+                aria-expanded="true"
+              >
                 <span class="bl-drawer__group-title">{{ filter.label }}</span>
-              </div>
+                {%- render 'brickline-icon', icon: 'chevron-down' -%}
+              </button>
               <div class="bl-drawer__range">
                 <label>
                   <span class="visually-hidden">{{ filter.min_value.label }}</span>

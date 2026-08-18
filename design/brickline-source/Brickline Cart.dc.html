@@ -1,0 +1,83 @@
+<!--
+  STRUCTURAL SUMMARY — NOT the verbatim design source.
+
+  This file was not re-fetched via DesignSync (no tool access in the verification
+  subagent that produced it). It records the structural facts relayed from a prior
+  DesignSync fetch of `design_handoff_brickline_shopify/pages/Brickline Cart.dc.html`
+  in claude.ai/design project `9f82ee07-e112-4819-bc56-44c8edf43dae`, for the purpose of
+  diffing against the built `sections/brickline-main-cart.liquid`. A human/agent with
+  DesignSync access should re-fetch the literal HTML and replace this file to complete
+  the mirror convention used by `Brickline Home.dc.html` and `Brickline Account.dc.html`.
+
+  Same utility-bar / header / footer as every other page — omitted here, not relevant
+  to the cart-page diff.
+-->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+
+<h1>Your Bag ({{ items.length }})</h1>
+
+<div class="main-cart__layout" style="display:grid;grid-template-columns:1.6fr 1fr;gap:48px;">
+
+  <!-- Left column: line items -->
+  <div class="main-cart__items">
+    <div class="line-item">
+      <img width="120" height="120" src="{item.image}">
+      <span class="line-item__name">{item.name}</span>
+      <span class="line-item__meta">{{ age }} · {{ pieces }} pcs</span>
+      <div class="qty-stepper"><button>−</button><span>{qty}</span><button>+</button></div>
+      <a href="#">Remove</a>
+      <x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{item.price}"></x-import>
+    </div>
+    <!-- ...repeated per line item -->
+
+    <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary">Continue Shopping</x-import>
+
+    <!-- Gift with Purchase banner -->
+    <div class="main-cart__gift" style="background:var(--surface-tertiary);">
+      <span>Gift with Purchase Unlocked</span>
+      <span>Sea Serpent added free with your order</span>
+      <span>Ends {date}</span>
+    </div>
+
+    <!-- Cross-sell -->
+    <div class="main-cart__upsells">
+      <span>Add these to your bag</span>
+      <div class="main-cart__upsell-grid" style="display:grid;grid-template-columns:repeat(3,1fr);">
+        <!-- x3 product cards, each with an Add to Bag button -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Right column: sticky order summary -->
+  <aside class="main-cart__summary" style="position:sticky;">
+    <div class="main-cart__summary-row"><span>Subtotal</span><x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{subtotal}"></x-import></div>
+    <div class="main-cart__summary-row"><span>Shipping</span><span>{shipping}</span></div>
+    <div class="main-cart__summary-row"><span>Estimated Tax</span><span>Calculated at checkout</span></div>
+
+    <div class="main-cart__discount">
+      <input placeholder="Discount code">
+      <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="secondary" size="sm">Apply</x-import>
+      <!-- success/error message shown inline after Apply -->
+    </div>
+
+    <label>Order notes (optional)</label>
+    <textarea></textarea>
+
+    <!-- Conditional discount line, green, only if applied -->
+    <div class="main-cart__summary-row main-cart__summary-row--discount" style="color:var(--status-success-green);display:none;">
+      <span>{discount.title}</span><span>-{discount.amount}</span>
+    </div>
+
+    <div class="main-cart__total"><span>Total</span><x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{total}"></x-import></div>
+
+    <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" style="width:100%;background:var(--brand-black);">Check Out</x-import>
+    <span class="tax-note">Taxes and shipping calculated at checkout</span>
+  </aside>
+
+</div>
+
+</body>
+</html>

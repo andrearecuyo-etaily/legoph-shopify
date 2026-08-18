@@ -31,9 +31,11 @@
                   <tr>
                     <th scope="col">Order</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Items</th>
                     <th scope="col">Payment</th>
                     <th scope="col">Fulfillment</th>
                     <th scope="col">Total</th>
+                    <th scope="col"><span class="visually-hidden">Order actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -43,6 +45,7 @@
                         <a href="{{ order.customer_url }}">{{ order.name }}</a>
                       </td>
                       <td data-label="Date">{{ order.created_at | date: '%d %b %Y' }}</td>
+                      <td data-label="Items">{{ order.item_count }}</td>
                       <td data-label="Payment">
                         <span class="account__status account__status--{{ order.financial_status }}">
                           {{- order.financial_status_label -}}
@@ -54,6 +57,14 @@
                         </span>
                       </td>
                       <td data-label="Total">{{ order.total_price | money }}</td>
+                      <td data-label="">
+                        <a
+                          href="{{ order.customer_url }}"
+                          class="account__button account__button--secondary"
+                        >
+                          View Order
+                        </a>
+                      </td>
                     </tr>
                   {% endfor %}
                 </tbody>

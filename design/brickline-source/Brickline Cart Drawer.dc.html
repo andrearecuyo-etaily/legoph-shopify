@@ -1,0 +1,82 @@
+<!--
+  STRUCTURAL SUMMARY — NOT the verbatim design source.
+
+  This file was not re-fetched via DesignSync (no tool access in the verification
+  subagent that produced it). It records the structural facts relayed from a prior
+  DesignSync fetch of `design_handoff_brickline_shopify/pages/Brickline Cart Drawer.dc.html`
+  in claude.ai/design project `9f82ee07-e112-4819-bc56-44c8edf43dae`, for the purpose of
+  diffing against the built `snippets/cart-drawer.liquid`. A human/agent with DesignSync
+  access should re-fetch the literal HTML and replace this file to complete the mirror
+  convention used by `Brickline Home.dc.html` and `Brickline Account.dc.html`.
+
+  Same utility-bar / header / footer as every other page — omitted here, not relevant
+  to the drawer diff.
+-->
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+
+<!-- Slide-in panel from the right, 420px wide (max-width: 92vw), fixed position -->
+<div class="cart-drawer" style="width:420px;max-width:92vw;position:fixed;right:0;top:0;height:100vh;">
+
+  <!-- Header -->
+  <header>
+    <h2>Your Bag ({{ items.length }})</h2>
+    <button aria-label="Close">×</button>
+  </header>
+
+  <!-- Free shipping progress meter -->
+  <div class="shipping-meter">
+    <!-- Two messaging states -->
+    <span class="shipping-meter__label--unlocked">You've unlocked free shipping! 🧱</span>
+    <!-- OR -->
+    <span class="shipping-meter__label">Add ₱{amount} more for free shipping</span>
+    <div class="shipping-meter__track" style="height:4px;">
+      <div class="shipping-meter__bar" style="width:{shippingProgressPct}%;"></div>
+    </div>
+  </div>
+
+  <!-- Line items -->
+  <div class="cart-drawer__items">
+    <div class="line-item">
+      <img width="72" height="72" src="{product.image}">
+      <span class="line-item__name">{product.name}</span>
+      <div class="qty-stepper">
+        <button>−</button><span>{qty}</span><button>+</button>
+      </div>
+      <a href="#">Remove</a>
+      <x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{item.price}"></x-import>
+    </div>
+    <!-- ...repeated per line item -->
+  </div>
+
+  <!-- Upsell section -->
+  <div class="brickline-drawer-upsells">
+    <span>You might also like</span>
+    <div class="brickline-drawer-upsells__list">
+      <div class="brickline-drawer-upsell">
+        <img width="56" height="56" src="{rec.image}">
+        <span>{rec.name}</span>
+        <x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{rec.price}"></x-import>
+        <button class="add-button">Add</button>
+      </div>
+      <!-- x2 recommended products -->
+    </div>
+  </div>
+
+  <!-- Drawer footer -->
+  <footer class="cart-drawer__summary">
+    <div class="cart-totals__item">
+      <span>Subtotal</span>
+      <x-import component-from-global-scope="BricklineDesignSystem_67f79e.PriceDisplay" price="{subtotal}"></x-import>
+    </div>
+    <span class="tax-note">Taxes and shipping calculated at checkout</span>
+    <x-import component-from-global-scope="BricklineDesignSystem_67f79e.Button" variant="primary" style="width:100%;background:var(--brand-black);">Check Out</x-import>
+    <a href="Brickline Cart.dc.html" style="text-align:center;">View Full Bag</a>
+  </footer>
+
+</div>
+
+</body>
+</html>

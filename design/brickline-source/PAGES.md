@@ -30,7 +30,8 @@ Design tokens are saved in `tokens/` (colors, typography, shape, spacing) — sa
 - [x] About Us — `templates/page.about.json` (inset banner + `brickline-rich-text` sections)
 - [x] Coming Soon — `templates/password.json` (`brickline-coming-soon`, live countdown + storefront password form)
 - [x] Free Shipping — `templates/page.free-shipping.json` (`brickline-cta-banner`, `brickline-product-grid`, small-print `brickline-rich-text`, `brickline-feature-band`)
-- [x] Account / Account Details / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
+- [x] Account / Addresses / Order History / Order Confirmation — `templates/customers/*.liquid` (classic customer accounts)
+- [ ] Account Details — **no editable form exists** (see Verification pass below); `templates/customers/account.liquid` currently only shows Order History + Default Address
 - [x] Wishlist — `templates/page.wishlist.json` (`brickline-wishlist`, localStorage-backed; see note below)
 - [ ] Checkout — see note below
 
@@ -81,10 +82,21 @@ is ever migrated to new accounts, everything under `templates/customers/` become
 dead code.
 
 Only the `Account` design (the login/register card) was converted from its design
-file. `Account Details`, `Addresses`, `Order History` and `Order Confirmation` were
-built against the Shopify `customer` / `order` object model in the established
-Brickline visual language — worth a pass against those four design files before
-sign-off.
+file. `Addresses`, `Order History` and `Order Confirmation` were built against the
+Shopify `customer` / `order` object model in the established Brickline visual
+language and confirmed (2026-08-18) against their design files — see Verification
+pass below.
+
+**`Account Details` was never built.** `templates/customers/account.liquid` only
+renders Order History + Default Address; there is no first name / last name /
+email / phone / password edit form anywhere in the codebase, despite the CSS for
+it already existing unused (`assets/brickline-account.css:480-527`,
+`.account__form*`). `brickline-account-nav.liquid` has no "Account Details" link
+as a direct consequence. Needs `{% form 'customer', customer %}` with
+`customer[first_name]`, `customer[last_name]`, `customer[email]`,
+`customer[phone]` (valid Liquid property, not blocked by the data model),
+`customer[password]`/`customer[password_confirmation]` — real data-wiring work,
+scoped as follow-up rather than built in this pass.
 
 **Wishlist — built, per-browser only.** Saved product ids live in `localStorage`
 under `brickline_wishlist`; `assets/brickline-wishlist.js` owns all reads and
@@ -103,5 +115,92 @@ If that becomes a requirement, `WishlistStore` in `assets/brickline-wishlist.js`
 the only module that changes (make its methods async and point them at the proxy);
 nothing else reads storage directly.
 
-**Checkout.** Not themeable outside Shopify Plus. On non-Plus plans the design can
-only be approximated through the checkout branding settings in admin.
+**Checkout.** Not themeable outside Shopify Plus — no Liquid/section access to
+`/checkout`. `Brickline Checkout.dc.html` was fetched from source (2026-08-18)
+for reference only; nothing under `templates/`/`sections/` should change for
+it. The only lever is **Settings → Checkout → Customize** (Shopify's Checkout
+branding editor, available on all plans). Mapping from the design to that
+editor's controls:
+
+| Design element | Branding editor control | Value to set |
+|---|---|---|
+| Square corners everywhere (inputs, buttons, cards — `border-radius: 0` throughout, no rounding anywhere in the design) | **Corner radius** (Design → Global) | Set to the minimum/"None" option — Brickline's whole visual language (product cards excepted) is sharp corners, not Horizon's default rounded ones |
+| Black "Pay Now" button, full width, bold uppercase-weight display font | **Buttons** → primary button color | `--brand-black` (`#000000`), text white |
+| Section headings ("Contact", "Delivery", "Shipping Method", "Payment") in the display face, semibold, large (28px in source) | **Typography** → Headings | Set heading font to Cera Pro if the branding editor's font picker allows a custom/uploaded font on this plan (verify — non-Plus custom-font support varies); otherwise pick the closest system serif/sans match and flag the gap |
+| Body copy, labels, inputs in the body face | **Typography** → Body | Cera Pro if available, else closest match |
+| Order-summary panel background (`var(--surface-tertiary)`, `#f7f7f7`) | **Design** → Secondary background / summary panel color | `#f7f7f7` |
+| Selected shipping-method row gets a `2px solid var(--brand-black)` border, unselected rows a thin `#d9d9d9` border | Not independently controllable in the branding editor — this is checkout's own interaction state styling, no lever exists | No action possible; note as a known gap |
+| Yellow (`--brand-yellow`, `#ffd400`) header band used on every other page | Checkout has no equivalent header band by default — Shopify checkout's own header just shows the store logo | Set **Logo** and **Header background** if the editor exposes it; otherwise this is inherently checkout's own layout, not fixable |
+
+Whoever has admin access should apply this in **Settings → Checkout →
+Customize** and compare against `Brickline Checkout.dc.html` side by side —
+not something this repo can verify without store access.
+
+## Verification pass (2026-08-18)
+
+Re-checked Account, Cart Drawer, and Cart against design source.
+
+- **Account** (`sections/brickline-customer-login.liquid`) — matches the design's
+  three-state card (Log In / Register / Forgot password) exactly, including the
+  no-JS fallback and the `#recover` hash Shopify redirects to. No drift found.
+- **Cart Drawer** (`snippets/cart-drawer.liquid`, `brickline-shipping-meter.liquid`,
+  `brickline-cart-upsells.liquid`) — shipping meter and "You might also like"
+  upsell row are both present and wired correctly; fixed a missing 🧱 emoji on the
+  "unlocked" message. **Missing:** a "View Full Bag" link to `/cart` below the
+  Check Out button in the drawer footer (`snippets/cart-summary.liquid`) — the
+  design has both a Check Out button and a secondary text link to the full cart
+  page; only the button exists today. Scoped as follow-up, not built in this pass.
+  `Brickline Cart Drawer.dc.html` in this folder is a structural summary, not the
+  literal fetched HTML (no DesignSync access in the verification pass) — re-fetch
+  it via `DesignSync get_file` before relying on exact copy/markup from it.
+- **Cart** (`sections/brickline-main-cart.liquid`) — has all five checked features:
+  age/pieces meta line, discount code field, order-notes textarea, cross-sell grid,
+  and a merchant-configurable "Gift with purchase" block. No structural drift.
+  One known limitation, not a bug: the discount field redirects to
+  `/discount/<code>?redirect=/cart` (`assets/brickline-cart-page.js`) rather than
+  showing an inline success/error message, because Liquid can't validate a
+  discount code on the cart page — this is a documented Shopify constraint, not
+  something to build around in this pass. `Brickline Cart.dc.html` in this folder
+  is likewise a structural summary pending a literal re-fetch.
+- **Account Details** (`sections/brickline-customer-account.liquid`) — **does not
+  exist as an editable page**; see "Blocked / needs a decision" above. This is the
+  one real structural gap this verification pass found, not cosmetic drift.
+- **Order History** (same section as Account Details — no separate section, as
+  already documented) — already used real `order.financial_status`/
+  `order.fulfillment_status` for status badges, not mock data. Fixed: added an
+  "Items" column (`order.item_count`) and an explicit "View Order" button per row
+  (`order.customer_url`) — the design shows both; only the order-number link
+  existed before.
+- **Order Confirmation** (`sections/brickline-customer-order.liquid`) — line
+  items, thumbnails, qty, totals, and shipping-method-in-totals were already
+  correct. Fixed: added a "Continue shopping" button at the bottom
+  (`routes.all_products_collection_url`), matching the design's closing CTA.
+  **Not fixed, needs a product decision:** no green "Order #X confirmed / Thank
+  you, {name}!" banner — this section doubles as both the post-checkout
+  confirmation and the ordinary order-detail view for old orders, and Liquid has
+  no signal for "just came from checkout" to gate a one-time banner correctly.
+  Also no card-brand/last-4 payment display ("Visa ending in 4242") — that data
+  lives on `order.transactions`, not exposed to storefront Liquid; would need an
+  Admin-API-backed proxy, out of scope for a theme-only fix.
+- **Search** (`sections/brickline-search.liquid`) — pill search input, live
+  results-count text, genuine empty state, 4-column product grid, and popular
+  search suggestion pills (via a `suggestion` block type) were all already
+  correctly built — no fixes needed. Minor unfixed nuance: suggestions render
+  inside the empty-state box rather than as a sibling near the query text like
+  the design; cosmetic only, left as-is.
+- **Filters Drawer** (`snippets/brickline-filters-drawer.liquid`) — filter
+  categories are pulled dynamically from `collection.filters` rather than
+  hardcoded, which is correct and better than the design's mock data; no action
+  needed there. Fixed real drift: filter group headers had no collapse/expand
+  affordance (design shows them as accordions with a chevron). Added
+  `data-filter-toggle`/`aria-expanded` buttons, chevron-rotation CSS, and a JS
+  toggle handler in `assets/brickline-drawer.js` and `brickline-drawer.css`;
+  groups still default to expanded.
+- **Sort Drawer** (`snippets/brickline-sort-drawer.liquid`) — radio list bound to
+  real `collection.sort_options`/`collection.sort_by`, pinned "Apply" footer, and
+  the deliberate absence of "Piece Count"/"Rating" sorts (no metafield-based sort
+  config confirmed) all matched the design's intent — no fixes needed. **Known
+  gap, not fixed:** the shared `.bl-drawer__panel` class is hardcoded to 380px for
+  both Filters and Sort, but the design specifies 340px for Sort specifically.
+  Left unfixed since it touches shared drawer infrastructure used by two pages —
+  a follow-up modifier class (e.g. `bl-drawer--narrow`) would be the low-risk fix.

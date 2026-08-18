@@ -112,8 +112,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 16px 0 12px;
+  border: none;
   border-bottom: 1px solid var(--color-border-default, #d9d9d9);
+  background: none;
+  cursor: pointer;
+  text-align: start;
+}
+
+.bl-drawer__group-header svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-meta, #939393);
+  transition: transform 150ms ease;
+}
+
+.bl-drawer__group.is-collapsed .bl-drawer__group-header svg {
+  transform: rotate(-90deg);
 }
 
 .bl-drawer__group-title {
@@ -125,6 +142,12 @@
 .bl-drawer__options {
   display: flex;
   flex-direction: column;
+}
+
+.bl-drawer__group.is-collapsed .bl-drawer__options,
+.bl-drawer__group.is-collapsed .bl-drawer__range,
+.bl-drawer__group.is-collapsed .bl-drawer__more {
+  display: none;
 }
 
 .bl-drawer__option {
