@@ -42,7 +42,10 @@ const FILE = path.resolve(ROOT, args.file || 'data/shopify-import-lego-merged.cs
 const STORE = args.store || process.env.SHOPIFY_STORE;
 const TOKEN = args.token || process.env.SHOPIFY_ADMIN_TOKEN || process.env.SHOPIFY_ACCESS_TOKEN;
 const API_VERSION = args.apiVersion || '2025-01';
-const VENDOR = args.vendor || 'LEGO';
+// Default: no vendor filter. The CSV spans 4 vendor values (LEGO, LEGO D2C,
+// LEGO LEL, GROWN UP LEGO BAGS) — filtering the store side to just "LEGO"
+// undercounts and makes the other 3 vendors' products look "missing".
+const VENDOR = args.vendor ?? '';
 const OUT_LOG = path.join(ROOT, 'data/shopify-verify-log.csv');
 
 if (!STORE || !TOKEN) {
@@ -105,7 +108,7 @@ async function fetchAllHandles() {
 }
 
 (async () => {
-  console.log(`store: ${STORE}  api: ${API_VERSION}  vendor filter: ${VENDOR || '(none)'}`);
+  console.log(`store: ${STORE}  api: ${API_VERSION}  vendor filter: ${VENDOR || '(none — all vendors)'}`);
   console.log(`comparing against ${csvHandles.size} handle(s) in ${path.relative(ROOT, FILE)}`);
   console.log('');
 
